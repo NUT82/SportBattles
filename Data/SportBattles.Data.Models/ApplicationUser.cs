@@ -16,6 +16,7 @@ namespace SportBattles.Data.Models
             this.Claims = new HashSet<IdentityUserClaim<string>>();
             this.Logins = new HashSet<IdentityUserLogin<string>>();
             this.Games = new HashSet<Game>();
+            this.UserTeams = new HashSet<UserTeam>();
         }
 
         public string ProfilePictureId { get; set; }
@@ -33,6 +34,8 @@ namespace SportBattles.Data.Models
         public DateTime? DeletedOn { get; set; }
 
         public virtual ICollection<Game> Games { get; set; }
+
+        public virtual ICollection<UserTeam> UserTeams { get; set; }
 
         public virtual ICollection<IdentityUserRole<string>> Roles { get; set; }
 

@@ -1,25 +1,23 @@
 ﻿namespace SportBattles.Data.Models
 {
+    using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
     using SportBattles.Data.Common.Models;
 
-    public class Team : BaseDeletableModel<int>
+    public class UserTeam : BaseDeletableModel<string>
     {
-        public Team()
+        public UserTeam()
         {
-            this.Tournaments = new HashSet<Tournament>();
+            this.Id = Guid.NewGuid().ToString();
+            this.Users = new HashSet<ApplicationUser>();
         }
 
         [Required]
         [MaxLength(25)]
         public string Name { get; set; }
 
-        public string EmblemId { get; set; }
-
-        public Image Emblem { get; set; }
-
-        public virtual ICollection<Tournament> Tournaments { get; set; }
+        public virtual ICollection<ApplicationUser> Users { get; set; }
     }
 }

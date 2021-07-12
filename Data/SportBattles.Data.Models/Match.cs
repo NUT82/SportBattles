@@ -22,15 +22,15 @@
 
         public DateTime StartTime { get; set; }
 
-        public int? HomeGoals { get; set; }
+        public byte? HomeGoals { get; set; }
 
-        public int? AwayGoals { get; set; }
+        public byte? AwayGoals { get; set; }
 
         public int TournamentId { get; set; }
 
         public Tournament Tournament { get; set; }
 
-        public int DifficultyMultiplier { get; set; } = 1;
+        public byte DifficultyMultiplier { get; set; } = 1;
 
         public virtual ICollection<Game> Games { get; set; }
     }

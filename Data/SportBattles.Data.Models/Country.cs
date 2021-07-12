@@ -1,6 +1,7 @@
 ﻿namespace SportBattles.Data.Models
 {
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
 
     using SportBattles.Data.Common.Models;
 
@@ -12,6 +13,8 @@
             this.Tournaments = new HashSet<Tournament>();
         }
 
+        [Required]
+        [MaxLength(25)]
         public string Name { get; set; }
 
         public string FlagId { get; set; }
