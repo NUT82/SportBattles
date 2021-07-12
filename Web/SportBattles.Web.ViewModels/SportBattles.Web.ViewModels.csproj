@@ -23,4 +23,8 @@
     <ProjectReference Include="..\..\Services\SportBattles.Services.Mapping\SportBattles.Services.Mapping.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Administration\" />
+  </ItemGroup>
+
 </Project>

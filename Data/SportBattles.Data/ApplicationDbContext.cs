@@ -23,7 +23,23 @@
         {
         }
 
-        public DbSet<Setting> Settings { get; set; }
+        public DbSet<Country> Countries { get; set; }
+
+        public DbSet<Game> Games { get; set; }
+
+        public DbSet<GameType> GameTypes { get; set; }
+
+        public DbSet<Prediction> Predictions { get; set; }
+
+        public DbSet<Match> Matches { get; set; }
+
+        public DbSet<Sport> Sports { get; set; }
+
+        public DbSet<Team> Teams { get; set; }
+
+        public DbSet<Tournament> Tournaments { get; set; }
+
+        public DbSet<Image> Images { get; set; }
 
         public override int SaveChanges() => this.SaveChanges(true);
 

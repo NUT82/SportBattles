@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SportBattles.Data;
 
 namespace SportBattles.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210712111856_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -47,21 +49,6 @@ namespace SportBattles.Data.Migrations
                     b.HasIndex("SportsId");
 
                     b.ToTable("CountrySport");
-                });
-
-            modelBuilder.Entity("GameMatch", b =>
-                {
-                    b.Property<int>("GamesId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("MatchesId")
-                        .HasColumnType("int");
-
-                    b.HasKey("GamesId", "MatchesId");
-
-                    b.HasIndex("MatchesId");
-
-                    b.ToTable("GameMatch");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -442,6 +429,9 @@ namespace SportBattles.Data.Migrations
                     b.Property<int>("DifficultyMultiplier")
                         .HasColumnType("int");
 
+                    b.Property<int?>("GameId")
+                        .HasColumnType("int");
+
                     b.Property<int?>("HomeGoals")
                         .HasColumnType("int");
 
@@ -463,6 +453,8 @@ namespace SportBattles.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AwayTeamId");
+
+                    b.HasIndex("GameId");
 
                     b.HasIndex("HomeTeamId");
 
@@ -668,21 +660,6 @@ namespace SportBattles.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("GameMatch", b =>
-                {
-                    b.HasOne("SportBattles.Data.Models.Game", null)
-                        .WithMany()
-                        .HasForeignKey("GamesId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("SportBattles.Data.Models.Match", null)
-                        .WithMany()
-                        .HasForeignKey("MatchesId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("SportBattles.Data.Models.ApplicationRole", null)
@@ -770,6 +747,10 @@ namespace SportBattles.Data.Migrations
                         .HasForeignKey("AwayTeamId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.HasOne("SportBattles.Data.Models.Game", null)
+                        .WithMany("Matches")
+                        .HasForeignKey("GameId");
 
                     b.HasOne("SportBattles.Data.Models.Team", "HomeTeam")
                         .WithMany()
@@ -864,6 +845,11 @@ namespace SportBattles.Data.Migrations
             modelBuilder.Entity("SportBattles.Data.Models.Country", b =>
                 {
                     b.Navigation("Tournaments");
+                });
+
+            modelBuilder.Entity("SportBattles.Data.Models.Game", b =>
+                {
+                    b.Navigation("Matches");
                 });
 
             modelBuilder.Entity("SportBattles.Data.Models.Tournament", b =>
