@@ -35,6 +35,37 @@
         "dist/jquery.validate.unobtrusive.js",
         "dist/jquery.validate.unobtrusive.min.js"
       ]
+    },
+    {
+      "library": "magnific-popup@1.1.0",
+      "destination": "wwwroot/lib/magnific-popup/",
+      "files": [
+        "dist/magnific-popup.css",
+        "dist/jquery.magnific-popup.min.js"
+      ]
+    },
+    {
+      "library": "owl.carousel@2.3.4",
+      "destination": "wwwroot/lib/owl-carousel/",
+      "files": [
+        "dist/assets/owl.carousel.min.css",
+        "dist/owl.carousel.min.js"
+      ]
+    },
+    {
+      "library": "font-awesome@4.7.0",
+      "destination": "wwwroot/lib/font-awesome/",
+      "files": [
+        "css/font-awesome.min.css"
+      ]
+    },
+    {
+      "library": "slicknav@1.0.8",
+      "destination": "wwwroot/lib/slicknav/",
+      "files": [
+        "dist/slicknav.min.css",
+        "jquery.slicknav.js"
+      ]
     }
   ]
 }

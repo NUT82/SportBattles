@@ -16,6 +16,8 @@
 
         public GameType GameType { get; set; }
 
+        public bool IsFinished { get; set; } = false;
+
         public virtual ICollection<ApplicationUser> Users { get; set; }
 
         public virtual ICollection<Match> Matches { get; set; }
