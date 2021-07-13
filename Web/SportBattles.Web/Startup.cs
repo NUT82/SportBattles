@@ -17,6 +17,7 @@
     using SportBattles.Data.Models;
     using SportBattles.Data.Repositories;
     using SportBattles.Data.Seeding;
+    using SportBattles.Services.Data;
     using SportBattles.Services.Mapping;
     using SportBattles.Services.Messaging;
     using SportBattles.Web.ViewModels;
@@ -63,6 +64,7 @@
 
             // Application services
             services.AddTransient<IEmailSender, NullMessageSender>();
+            services.AddTransient<ISportsService, SportsService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

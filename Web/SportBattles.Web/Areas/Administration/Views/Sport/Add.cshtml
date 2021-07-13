@@ -5,29 +5,58 @@
 
 <div class="form-row mt-4">
     <div class="form-group col-md-6">
-        <select id="inputSport" class="form-control" onchange="showManualInput()">
+        <select id="inputSport" class="form-control">
             <option selected>Choose sport...</option>
+            <option>Football</option>
+            <option>Tennis</option>
             <option>Add new sport...</option>
         </select>
     </div>
     <div class="input-group form-group col-md-6" style="display:none" id="manualInputSport">
-        <input type="text" class="form-control" placeholder="Add new sport...">
+        <input type="text" class="form-control" placeholder="Type name of sport...">
         <div class="input-group-append">
             <button class="btn btn-outline-secondary">Add</button>
         </div>
     </div>
 </div>
 
+<script src="~/lib/jquery/dist/jquery.min.js" asp-append-version="true"></script>
 <script>
-    function showManualInput() {
+    $(document).ready(function () {
+        getAllSports();
+    });
+    var getAllSports = function () {
+         $.ajax({
+            url: '@Url.Action("GetAllSports", "Sport", new { Area = "Administration" })',
+            type: 'GET',
+            success: function (data) {
+                $('#inputSport').find('option').remove()
+                $(data).each(
+                    function (index, item) {
+                        $('#inputSport').append('<option value="' + item.id + '">' + item.name + '</option>')
+                    });
+                $('#inputSport').append('<option>Add new sport...</option>');
+            },
+             error: function () {
+                 console.log("Error getting Sports");
+            }
+           });
+    }
+
+    var selectElement = document.getElementById("inputSport");
+    selectElement.addEventListener("change", function () {
         var inputElement = document.getElementById("manualInputSport");
-        var selectElement = document.getElementById("inputSport");
         var selectOption = selectElement.options[selectElement.selectedIndex].value;
         if (selectOption == 'Add new sport...') {
             inputElement.style = "display:flex";
+            inputElement.firstElementChild.focus();
         } else {
             inputElement.style = "display:none";
             inputElement.firstElementChild.value = "";
         }
-    }
+    });
+</script>
+
+<script>
+    
 </script>
