@@ -17,14 +17,26 @@
             this.sportRepository = sportRepository;
         }
 
-        public Task<Sport> AddNewSport(string name)
+        public async Task AddNewSport(string name)
         {
-            throw new System.NotImplementedException();
+            var sport = this.sportRepository.All().Where(s => s.Name == name).FirstOrDefault();
+            if (sport != null)
+            {
+                return;
+            }
+
+            var newSport = new Sport
+            {
+                Name = name,
+            };
+
+            await this.sportRepository.AddAsync(newSport);
+            await this.sportRepository.SaveChangesAsync();
         }
 
         public IEnumerable<T> GetAll<T>()
         {
-            return this.sportRepository.AllAsNoTracking().To<T>().ToList();
+            return this.sportRepository.AllAsNoTracking().OrderBy(s => s.Name).To<T>().ToList();
         }
     }
 }

@@ -9,6 +9,6 @@
     {
         IEnumerable<T> GetAll<T>();
 
-        Task<Sport> AddNewSport(string name);
+        Task AddNewSport(string name);
     }
 }

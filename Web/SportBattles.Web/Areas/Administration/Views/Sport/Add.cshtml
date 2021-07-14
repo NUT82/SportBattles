@@ -1,19 +1,34 @@
-﻿@using SportBattles.Common
+﻿@using Microsoft.AspNetCore.Antiforgery
+@inject IAntiforgery antiforgery
 @{
     this.ViewData["Title"] = "Add Sport";
+    var tokenSet = antiforgery.GetAndStoreTokens(Context);
 }
 
-<div class="form-row mt-4">
+@model SportBattles.Web.ViewModels.Administration.Sport.AddSportInputModel
+<label for="inputSport" class="mt-4">Choose Sport:</label>
+<div class="form-row">
     <div class="form-group col-md-6">
-        <select id="inputSport" class="form-control">
-            <option selected>Choose sport...</option>
-            <option>Football</option>
-            <option>Tennis</option>
-            <option>Add new sport...</option>
+        <select id="inputSport" class="form-control user-select-none">
         </select>
     </div>
     <div class="input-group form-group col-md-6" style="display:none" id="manualInputSport">
-        <input type="text" class="form-control" placeholder="Type name of sport...">
+        <input asp-for="Name" type="text" class="form-control" placeholder="Type name of sport..." id="sportName">
+        <span asp-validation-for="Name" class="text-danger"></span>
+        <div class="input-group-append">
+            <button class="btn btn-outline-secondary" id="buttonAddSport">Add</button>
+        </div>
+    </div>
+</div>
+
+<label for="inputCountry">Choose Country:</label>
+<div class="form-row">
+    <div class="form-group col-md-6">
+        <select id="inputCountry" class="form-control">
+        </select>
+    </div>
+    <div class="input-group form-group col-md-6" style="display:none" id="manualinputCountry">
+        <input type="text" class="form-control" placeholder="Type name of Country...">
         <div class="input-group-append">
             <button class="btn btn-outline-secondary">Add</button>
         </div>
@@ -36,6 +51,7 @@
                         $('#inputSport').append('<option value="' + item.id + '">' + item.name + '</option>')
                     });
                 $('#inputSport').append('<option>Add new sport...</option>');
+                showHideAddNewSport();
             },
              error: function () {
                  console.log("Error getting Sports");
@@ -43,20 +59,72 @@
            });
     }
 
-    var selectElement = document.getElementById("inputSport");
-    selectElement.addEventListener("change", function () {
+
+    var showHideAddNewSport = function () {
+        var selectElement = document.getElementById("inputSport");
         var inputElement = document.getElementById("manualInputSport");
         var selectOption = selectElement.options[selectElement.selectedIndex].value;
         if (selectOption == 'Add new sport...') {
             inputElement.style = "display:flex";
             inputElement.firstElementChild.focus();
+            document.getElementById("inputCountry").disabled = true;
+            $('#inputCountry').find('option').remove();
+            $('#inputCountry').append('<option>Choose sport first</option>');
         } else {
             inputElement.style = "display:none";
             inputElement.firstElementChild.value = "";
+            document.getElementById("inputCountry").disabled = false;
+            GetCountriesForSelectedSport();
         }
-    });
+    }
+
+    $("#inputSport").change(showHideAddNewSport);
+
+    var GetCountriesForSelectedSport = function () {
+        var sportId = $("#inputSport").val();
+        $.ajax({
+            url: '@Url.Action("GetCountriesForSelectedSport", "Country", new { Area = "Administration" })',
+            type: 'GET',
+            data: { sportId: sportId },
+            success: function (data) {
+                $('#inputCountry').find('option').remove()
+                $(data).each(
+                    function (index, item) {
+                        $('#inputCountry').append('<option value="' + item.id + '">' + item.name + '</option>')
+                    });
+                $('#inputCountry').append('<option>Add new country...</option>');
+                
+            },
+             error: function () {
+                 console.log("Error getting Countries");
+            }
+           });
+    }
+
 </script>
 
 <script>
-    
+        $("#buttonAddSport").click(function () {
+        var sportName = $('#sportName').val();
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("AddSport", "Sport", new { Area = "Administration" })',
+                dataType: 'json',
+                contentType: 'application/json',
+                headers: {
+                    '@tokenSet.HeaderName': '@tokenSet.RequestToken'
+                },
+                data: JSON.stringify({
+                    Name: sportName
+                }),
+                success: function (data) {
+                    $("#sportName").val('');
+                    alert(data.name + " added successfully!");
+                    getAllSports();
+                },
+                error: function () {
+                    alert("Sport name must be between 2 and 20 symbols");
+                }
+            });
+        });
 </script>

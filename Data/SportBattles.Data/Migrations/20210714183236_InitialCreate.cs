@@ -31,7 +31,7 @@ namespace SportBattles.Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -48,7 +48,7 @@ namespace SportBattles.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Extension = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Extension = table.Column<string>(type: "nvarchar(5)", maxLength: 5, nullable: false),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
@@ -65,7 +65,7 @@ namespace SportBattles.Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
@@ -74,6 +74,22 @@ namespace SportBattles.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Sports", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserTeams",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(25)", maxLength: 25, nullable: false),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeletedOn = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserTeams", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -104,6 +120,7 @@ namespace SportBattles.Data.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     GameTypeId = table.Column<int>(type: "int", nullable: false),
+                    IsFinished = table.Column<bool>(type: "bit", nullable: false),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
@@ -162,7 +179,7 @@ namespace SportBattles.Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(25)", maxLength: 25, nullable: false),
                     FlagId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -186,7 +203,7 @@ namespace SportBattles.Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(25)", maxLength: 25, nullable: false),
                     EmblemId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -224,6 +241,30 @@ namespace SportBattles.Data.Migrations
                         name: "FK_ApplicationUserGame_Games_GamesId",
                         column: x => x.GamesId,
                         principalTable: "Games",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ApplicationUserUserTeam",
+                columns: table => new
+                {
+                    UserTeamsId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    UsersId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ApplicationUserUserTeam", x => new { x.UserTeamsId, x.UsersId });
+                    table.ForeignKey(
+                        name: "FK_ApplicationUserUserTeam_AspNetUsers_UsersId",
+                        column: x => x.UsersId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_ApplicationUserUserTeam_UserTeams_UserTeamsId",
+                        column: x => x.UserTeamsId,
+                        principalTable: "UserTeams",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -343,7 +384,7 @@ namespace SportBattles.Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     CountryId = table.Column<int>(type: "int", nullable: false),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -370,11 +411,10 @@ namespace SportBattles.Data.Migrations
                     HomeTeamId = table.Column<int>(type: "int", nullable: false),
                     AwayTeamId = table.Column<int>(type: "int", nullable: false),
                     StartTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    HomeGoals = table.Column<int>(type: "int", nullable: true),
-                    AwayGoals = table.Column<int>(type: "int", nullable: true),
+                    HomeGoals = table.Column<byte>(type: "tinyint", nullable: true),
+                    AwayGoals = table.Column<byte>(type: "tinyint", nullable: true),
                     TournamentId = table.Column<int>(type: "int", nullable: false),
-                    DifficultyMultiplier = table.Column<int>(type: "int", nullable: false),
-                    GameId = table.Column<int>(type: "int", nullable: true),
+                    DifficultyMultiplier = table.Column<byte>(type: "tinyint", nullable: false),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
@@ -383,12 +423,6 @@ namespace SportBattles.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Matches", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Matches_Games_GameId",
-                        column: x => x.GameId,
-                        principalTable: "Games",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Matches_Teams_AwayTeamId",
                         column: x => x.AwayTeamId,
@@ -434,6 +468,30 @@ namespace SportBattles.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "GameMatch",
+                columns: table => new
+                {
+                    GamesId = table.Column<int>(type: "int", nullable: false),
+                    MatchesId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_GameMatch", x => new { x.GamesId, x.MatchesId });
+                    table.ForeignKey(
+                        name: "FK_GameMatch_Games_GamesId",
+                        column: x => x.GamesId,
+                        principalTable: "Games",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_GameMatch_Matches_MatchesId",
+                        column: x => x.MatchesId,
+                        principalTable: "Matches",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Predictions",
                 columns: table => new
                 {
@@ -442,8 +500,8 @@ namespace SportBattles.Data.Migrations
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     GameId = table.Column<int>(type: "int", nullable: false),
                     MatchId = table.Column<int>(type: "int", nullable: false),
-                    HomeGoals = table.Column<int>(type: "int", nullable: true),
-                    AwayGoals = table.Column<int>(type: "int", nullable: true),
+                    HomeGoals = table.Column<byte>(type: "tinyint", nullable: true),
+                    AwayGoals = table.Column<byte>(type: "tinyint", nullable: true),
                     ThreeWayWinner = table.Column<int>(type: "int", nullable: true),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -476,6 +534,11 @@ namespace SportBattles.Data.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_ApplicationUserGame_UsersId",
                 table: "ApplicationUserGame",
+                column: "UsersId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ApplicationUserUserTeam_UsersId",
+                table: "ApplicationUserUserTeam",
                 column: "UsersId");
 
             migrationBuilder.CreateIndex(
@@ -548,6 +611,11 @@ namespace SportBattles.Data.Migrations
                 column: "SportsId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_GameMatch_MatchesId",
+                table: "GameMatch",
+                column: "MatchesId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Games_GameTypeId",
                 table: "Games",
                 column: "GameTypeId");
@@ -571,11 +639,6 @@ namespace SportBattles.Data.Migrations
                 name: "IX_Matches_AwayTeamId",
                 table: "Matches",
                 column: "AwayTeamId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Matches_GameId",
-                table: "Matches",
-                column: "GameId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Matches_HomeTeamId",
@@ -641,12 +704,20 @@ namespace SportBattles.Data.Migrations
                 name: "IX_Tournaments_IsDeleted",
                 table: "Tournaments",
                 column: "IsDeleted");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserTeams_IsDeleted",
+                table: "UserTeams",
+                column: "IsDeleted");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
                 name: "ApplicationUserGame");
+
+            migrationBuilder.DropTable(
+                name: "ApplicationUserUserTeam");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
@@ -667,10 +738,16 @@ namespace SportBattles.Data.Migrations
                 name: "CountrySport");
 
             migrationBuilder.DropTable(
+                name: "GameMatch");
+
+            migrationBuilder.DropTable(
                 name: "Predictions");
 
             migrationBuilder.DropTable(
                 name: "TeamTournament");
+
+            migrationBuilder.DropTable(
+                name: "UserTeams");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
@@ -682,19 +759,19 @@ namespace SportBattles.Data.Migrations
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
+                name: "Games");
+
+            migrationBuilder.DropTable(
                 name: "Matches");
 
             migrationBuilder.DropTable(
-                name: "Games");
+                name: "GameTypes");
 
             migrationBuilder.DropTable(
                 name: "Teams");
 
             migrationBuilder.DropTable(
                 name: "Tournaments");
-
-            migrationBuilder.DropTable(
-                name: "GameTypes");
 
             migrationBuilder.DropTable(
                 name: "Countries");

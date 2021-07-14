@@ -10,8 +10,8 @@ using SportBattles.Data;
 namespace SportBattles.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210713073639_IsFinishedToGame")]
-    partial class IsFinishedToGame
+    [Migration("20210714183236_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
