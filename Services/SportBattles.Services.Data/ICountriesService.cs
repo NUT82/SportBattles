@@ -7,6 +7,8 @@
     {
         IEnumerable<T> GetCountriesForSport<T>(int sportId);
 
-        Task AddNewCountryToSport(string name, int sportId);
+        IEnumerable<T> GetAllOtherCountriesForSport<T>(int sportId);
+
+        Task<int> AddNewCountryToSport(int countryId, int sportId);
     }
 }

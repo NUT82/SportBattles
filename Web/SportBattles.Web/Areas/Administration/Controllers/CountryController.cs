@@ -22,17 +22,18 @@
             return this.Json(countries);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> AddCountryToSport([FromBody]CountriesViewModel countryName, int sportId)
+        public JsonResult GetAllOtherCountriesForSelectedSport([FromQuery] int sportId)
         {
-            if (!this.ModelState.IsValid)
-            {
-                return this.ValidationProblem();
-            }
+            var countries = this.countriesService.GetAllOtherCountriesForSport<CountriesViewModel>(sportId);
+            return this.Json(countries);
+        }
 
-            await this.countriesService.AddNewCountryToSport(countryName.Name, sportId);
+        [HttpPost]
+        public async Task<IActionResult> AddCountryToSport([FromBody]AddCountryToSportInputModel inputModel)
+        {
+            var countryId = await this.countriesService.AddNewCountryToSport(inputModel.CountryId, inputModel.SportId);
 
-            return this.Json(countryName);
+            return this.Json(countryId);
         }
     }
 }

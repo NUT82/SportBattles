@@ -8,7 +8,7 @@
 @model SportBattles.Web.ViewModels.Administration.Sport.AddSportInputModel
 <label for="inputSport" class="mt-4">Choose Sport:</label>
 <div class="form-row">
-    <div class="form-group col-md-6">
+    <div class="input-group col-md-6">
         <select id="inputSport" class="form-control user-select-none">
         </select>
     </div>
@@ -18,17 +18,36 @@
         <div class="input-group-append">
             <button class="btn btn-outline-secondary" id="buttonAddSport">Add</button>
         </div>
+
     </div>
 </div>
 
-<label for="inputCountry">Choose Country:</label>
+<label for="inputCountry" class="mt-4">Choose Country:</label>
 <div class="form-row">
-    <div class="form-group col-md-6">
+    <div class="input-group col-md-6">
         <select id="inputCountry" class="form-control">
         </select>
     </div>
-    <div class="input-group form-group col-md-6" style="display:none" id="manualinputCountry">
-        <input type="text" class="form-control" placeholder="Type name of Country...">
+    <div class="input-group form-group col-md-6" style="display:none" id="manualInputCountry">
+        <select class="form-control" id="countryName">
+            <option>Select Country...</option>
+        </select>
+        <div class="input-group-append">
+            <button class="btn btn-outline-secondary" id="buttonAddCountry">Add</button>
+        </div>
+    </div>
+</div>
+
+<label for="inputTournament" class="mt-4">Choose Tournament:</label>
+<div class="form-row">
+    <div class="input-group col-md-6">
+        <select id="inputTournament" class="form-control">
+        </select>
+    </div>
+    <div class="input-group form-group col-md-6" style="display:flex" id="manualInputTournament">
+        <select class="form-control">
+            <option>Select Tornament...</option>
+        </select>
         <div class="input-group-append">
             <button class="btn btn-outline-secondary">Add</button>
         </div>
@@ -61,24 +80,40 @@
 
 
     var showHideAddNewSport = function () {
-        var selectElement = document.getElementById("inputSport");
-        var inputElement = document.getElementById("manualInputSport");
-        var selectOption = selectElement.options[selectElement.selectedIndex].value;
+        var selectOption = $("#inputSport").find(":selected").text();
         if (selectOption == 'Add new sport...') {
-            inputElement.style = "display:flex";
-            inputElement.firstElementChild.focus();
-            document.getElementById("inputCountry").disabled = true;
+            $("#manualInputSport").show();
+            $("#sportName").focus();
+            $("#inputCountry").prop("disabled", true);
             $('#inputCountry').find('option').remove();
             $('#inputCountry').append('<option>Choose sport first</option>');
+            $("#manualInputCountry").hide();
         } else {
-            inputElement.style = "display:none";
-            inputElement.firstElementChild.value = "";
-            document.getElementById("inputCountry").disabled = false;
+            $("#manualInputSport").hide();
+            $("#sportName").val('');
+            $("#inputCountry").prop("disabled", false);
             GetCountriesForSelectedSport();
+            GetAllOtherCountriesForSelectedSport();
+        }
+        $('#inputCountry option').attr('selected', 'selected');
+    }
+
+    var showHideAddCountryToSport = function () {
+        var selectOption = $("#inputCountry").find(":selected").text();
+        if (selectOption == 'Add new country to sport...') {
+            $("#manualInputCountry").show();
+            $("#countryName").focus();
+            $("#inputTournament").prop("disabled", true);
+            $('#inputTournament').find('option').remove();
+            $('#inputTournament').append('<option>Choose country first</option>');
+        } else {
+            $("#manualInputCountry").hide();
+            $("#inputTournament").prop("disabled", false);
         }
     }
 
     $("#inputSport").change(showHideAddNewSport);
+    $("#inputCountry").change(showHideAddCountryToSport);
 
     var GetCountriesForSelectedSport = function () {
         var sportId = $("#inputSport").val();
@@ -92,8 +127,8 @@
                     function (index, item) {
                         $('#inputCountry').append('<option value="' + item.id + '">' + item.name + '</option>')
                     });
-                $('#inputCountry').append('<option>Add new country...</option>');
-                
+                $('#inputCountry').append('<option>Add new country to sport...</option>');
+                showHideAddCountryToSport();
             },
              error: function () {
                  console.log("Error getting Countries");
@@ -101,30 +136,71 @@
            });
     }
 
+    var GetAllOtherCountriesForSelectedSport = function () {
+        var sportId = $("#inputSport").val();
+        $.ajax({
+            url: '@Url.Action("GetAllOtherCountriesForSelectedSport", "Country", new { Area = "Administration" })',
+            type: 'GET',
+            data: { sportId: sportId },
+            success: function (data) {
+                $('#countryName').find('option').remove()
+                $(data).each(
+                    function (index, item) {
+                        $('#countryName').append('<option value="' + item.id + '">' + item.name + '</option>')
+                    });
+            },
+             error: function () {
+                 console.log("Error getting Countries");
+            }
+           });
+    }
+
+    $("#buttonAddCountry").click(function () {
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("AddCountryToSport", "Country", new { Area = "Administration" })',
+            dataType: 'json',
+            contentType: 'application/json',
+            headers: {
+                '@tokenSet.HeaderName': '@tokenSet.RequestToken'
+            },
+            data: JSON.stringify({
+                CountryId: $('#countryName').val(),
+                SportId: $("#inputSport").val(),
+            }),
+            success: function (countryId) {
+                $("#manualInputCountry").hide();
+                GetCountriesForSelectedSport();
+                $('#inputCountry').val(countryId).change();
+            }
+        });
+    });
 </script>
 
 <script>
-        $("#buttonAddSport").click(function () {
-        var sportName = $('#sportName').val();
-            $.ajax({
-                type: 'POST',
-                url: '@Url.Action("AddSport", "Sport", new { Area = "Administration" })',
-                dataType: 'json',
-                contentType: 'application/json',
-                headers: {
-                    '@tokenSet.HeaderName': '@tokenSet.RequestToken'
-                },
-                data: JSON.stringify({
-                    Name: sportName
-                }),
-                success: function (data) {
-                    $("#sportName").val('');
-                    alert(data.name + " added successfully!");
-                    getAllSports();
-                },
-                error: function () {
-                    alert("Sport name must be between 2 and 20 symbols");
-                }
-            });
+    $("#buttonAddSport").click(function () {
+    var sportName = $('#sportName').val();
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("AddSport", "Sport", new { Area = "Administration" })',
+            dataType: 'json',
+            contentType: 'application/json',
+            headers: {
+                '@tokenSet.HeaderName': '@tokenSet.RequestToken'
+            },
+            data: JSON.stringify({
+                Name: sportName
+            }),
+            success: function (data) {
+                $("#sportName").val('');
+                alert(data.name + " added successfully!");
+                getAllSports();
+            },
+            error: function () {
+                alert("Sport name must be between 2 and 20 symbols");
+            }
         });
+    });
+
+    
 </script>
