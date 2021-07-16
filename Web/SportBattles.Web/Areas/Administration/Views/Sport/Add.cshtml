@@ -115,7 +115,7 @@
     $("#inputSport").change(showHideAddNewSport);
     $("#inputCountry").change(showHideAddCountryToSport);
 
-    var GetCountriesForSelectedSport = function () {
+    var GetCountriesForSelectedSport = function (selectedId) {
         var sportId = $("#inputSport").val();
         $.ajax({
             url: '@Url.Action("GetCountriesForSelectedSport", "Country", new { Area = "Administration" })',
@@ -128,6 +128,7 @@
                         $('#inputCountry').append('<option value="' + item.id + '">' + item.name + '</option>')
                     });
                 $('#inputCountry').append('<option>Add new country to sport...</option>');
+                $('#inputCountry option[value=' + selectedId + ']').attr('selected', 'selected');
                 showHideAddCountryToSport();
             },
              error: function () {
@@ -170,8 +171,7 @@
             }),
             success: function (countryId) {
                 $("#manualInputCountry").hide();
-                GetCountriesForSelectedSport();
-                $('#inputCountry').val(countryId).change();
+                GetCountriesForSelectedSport(countryId);
             }
         });
     });
