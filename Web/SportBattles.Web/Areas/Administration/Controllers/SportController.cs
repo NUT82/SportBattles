@@ -21,6 +21,11 @@
             return this.View();
         }
 
+        public IActionResult GetMatches()
+        {
+            return this.View();
+        }
+
         public JsonResult GetAllSports()
         {
             var allSports = this.sportsService.GetAll<AllSportViewModel>();
