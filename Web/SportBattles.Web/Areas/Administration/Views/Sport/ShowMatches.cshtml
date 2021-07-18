@@ -1,0 +1,16 @@
+﻿@{
+    this.ViewData["Title"] = "Football matches today";
+}
+@model IEnumerable<SportBattles.Services.JsonModels.FootballMatch>
+
+<h1>All matches from today:</h1>
+@foreach (var tournament in Model)
+{
+    <ul>
+        <h3>@tournament.Country - @tournament.Tournament</h3>
+        @foreach (var match in tournament.Events)
+        {
+            <li>@match.Status @match.HomeTeam[0].Name @match.HomeGoals - @match.AwayGoals @match.AwayTeam[0].Name</li>
+        }
+    </ul>
+}

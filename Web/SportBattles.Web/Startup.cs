@@ -17,6 +17,7 @@
     using SportBattles.Data.Models;
     using SportBattles.Data.Repositories;
     using SportBattles.Data.Seeding;
+    using SportBattles.Services;
     using SportBattles.Services.Data;
     using SportBattles.Services.Mapping;
     using SportBattles.Services.Messaging;
@@ -66,6 +67,7 @@
             services.AddTransient<IEmailSender, NullMessageSender>();
             services.AddTransient<ISportsService, SportsService>();
             services.AddTransient<ICountriesService, CountriesService>();
+            services.AddTransient<ILiveScoreApi, LiveScoreApi>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
