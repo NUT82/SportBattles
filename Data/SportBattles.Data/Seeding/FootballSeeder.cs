@@ -1,12 +1,16 @@
 ﻿namespace SportBattles.Data.Seeding
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
 
-    using SportBattles.Data.Models;
+    using Microsoft.Extensions.DependencyInjection;
 
-    public class CountriesSeeder : ISeeder
+    using SportBattles.Data.Models;
+    using SportBattles.Services;
+
+    public class FootballSeeder : ISeeder
     {
         public async Task SeedAsync(ApplicationDbContext dbContext, IServiceProvider serviceProvider)
         {
@@ -15,7 +19,7 @@
                 return;
             }
 
-            string[] data = new string[]
+            List<string> data = new List<string>()
             {
                 "ad", "Andorra",
                 "ae", "United Arab Emirates",
@@ -56,11 +60,11 @@
                 "bz", "Belize",
                 "ca", "Canada",
                 "cc", "Cocos (Keeling) Islands",
-                "cd", "DR Congo",
+                "cd", "Congo",
                 "cf", "Central African Republic",
                 "cg", "Republic of the Congo",
                 "ch", "Switzerland",
-                "ci", "Côte d'Ivoire (Ivory Coast)",
+                "ci", "Ivory Coast",
                 "ck", "Cook Islands",
                 "cl", "Chile",
                 "cm", "Cameroon",
@@ -72,7 +76,7 @@
                 "cw", "Curaçao",
                 "cx", "Christmas Island",
                 "cy", "Cyprus",
-                "cz", "Czechia",
+                "cz", "Czech Republic",
                 "de", "Germany",
                 "dj", "Djibouti",
                 "dk", "Denmark",
@@ -143,7 +147,7 @@
                 "km", "Comoros",
                 "kn", "Saint Kitts and Nevis",
                 "kp", "North Korea",
-                "kr", "South Korea",
+                "kr", "Republic of Korea",
                 "kw", "Kuwait",
                 "ky", "Cayman Islands",
                 "kz", "Kazakhstan",
@@ -255,7 +259,7 @@
                 "ug", "Uganda",
                 "um", "United States Minor Outlying Islands",
                 "un", "United Nations",
-                "us", "United States",
+                "us", "USA",
                 "us-ak", "Alaska",
                 "us-al", "Alabama",
                 "us-ar", "Arkansas",
@@ -325,21 +329,42 @@
                 "zw", "Zimbabwe",
             };
 
-            for (int i = 0; i < data.Length; i += 2)
+            var jsonFilePath = @"wwwroot/json/FootballLeagues.json";
+            var footballCountries = serviceProvider.GetService<ILiveScoreApi>().GetFootballCountriesAndTournaments(jsonFilePath);
+
+            foreach (var item in footballCountries)
             {
-                var flagUrl = "https://" + $"flagcdn.com/16x12/{data[i]}.png";
-                var countryCode = data[i];
-                var countryName = data[i + 1];
+                var indexCountryCode = data.IndexOf(item.Country) - 1;
+                var countryCode = indexCountryCode >= 0 ? data[indexCountryCode] : null;
+                var flagUrl = countryCode == null ? null : "https://" + $"flagcdn.com/32x24/{countryCode}.png";
                 var country = new Country
                 {
-                    Name = countryName,
+                    Name = item.Country,
                     Code = countryCode,
                     FlagUrl = flagUrl,
                 };
+
+                var footballSport = dbContext.Sports.Where(s => s.Name == "Football").FirstOrDefault();
+                if (footballSport == null)
+                {
+                    footballSport = new Sport { Name = "Football" };
+                }
+
+                country.Sports.Add(footballSport);
+
+                foreach (var tournament in item.Tournaments)
+                {
+                    var newTournament = new Tournament
+                    {
+                        Country = country,
+                        Sport = footballSport,
+                        Name = tournament.Name,
+                    };
+                    country.Tournaments.Add(newTournament);
+                }
+
                 await dbContext.Countries.AddAsync(country);
             }
-
-            await dbContext.Countries.AddAsync(new Country { Name = "International" });
         }
     }
 }

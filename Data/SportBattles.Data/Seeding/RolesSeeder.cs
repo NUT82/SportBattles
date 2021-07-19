@@ -8,6 +8,7 @@
     using Microsoft.Extensions.DependencyInjection;
     using SportBattles.Common;
     using SportBattles.Data.Models;
+    using SportBattles.Services;
 
     internal class RolesSeeder : ISeeder
     {

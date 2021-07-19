@@ -26,7 +26,7 @@
             var seeders = new List<ISeeder>
                           {
                               new RolesSeeder(),
-                              new CountriesSeeder(),
+                              new FootballSeeder(),
                           };
 
             foreach (var seeder in seeders)

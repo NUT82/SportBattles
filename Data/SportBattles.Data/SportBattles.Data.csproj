@@ -39,6 +39,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Services\SportBattles.Services\SportBattles.Services.csproj" />
     <ProjectReference Include="..\..\SportBattles.Common\SportBattles.Common.csproj" />
     <ProjectReference Include="..\SportBattles.Data.Common\SportBattles.Data.Common.csproj" />
     <ProjectReference Include="..\SportBattles.Data.Models\SportBattles.Data.Models.csproj" />

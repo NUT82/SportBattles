@@ -33,31 +33,18 @@
 
         public async Task<IActionResult> GetMatches()
         {
-            var client = new HttpClient();
-            var request = new HttpRequestMessage
-            {
-                Method = HttpMethod.Get,
-                RequestUri = new Uri("https://livescore6.p.rapidapi.com/matches/v2/list-by-date?Category=soccer&Date=20210718"),
-                Headers =
-                {
-                    { "x-rapidapi-key", this.configuration.GetValue<string>("X-RapidAPI-Key") },
-                    { "x-rapidapi-host", this.configuration.GetValue<string>("X-RapidAPI-Host") },
-                },
-            };
-            using (var response = await client.SendAsync(request))
-            {
-                response.EnsureSuccessStatusCode();
-                using FileStream fileStream = System.IO.File.Create(@"wwwroot/json/data.json");
-                await response.Content.CopyToAsync(fileStream);
-            }
+            await this.liveScoreApi.CreateJsonFilesForAllFootballMatchesAsync(
+                DateTime.Today,
+                DateTime.Today.AddDays(6),
+                this.configuration.GetValue<string>("X-RapidAPI-Key"),
+                this.configuration.GetValue<string>("X-RapidAPI-Host"));
 
             return this.View();
         }
 
-        public IActionResult ShowMatches()
+        public IActionResult ShowMatches(string country, string tournament)
         {
-            var jsonFilePath = @"wwwroot/json/data.json";
-            var matches = this.liveScoreApi.GetFootballMatches(jsonFilePath);
+            var matches = this.liveScoreApi.GetFootballMatches(DateTime.Today, DateTime.Today.AddDays(6), country, tournament);
 
             return this.View(matches);
         }

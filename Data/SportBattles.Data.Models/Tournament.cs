@@ -14,9 +14,15 @@
         }
 
         [Required]
-        [MaxLength(50)]
+        [MaxLength(80)]
         public string Name { get; set; }
 
+        [Required]
+        public int SportId { get; set; }
+
+        public Sport Sport { get; set; }
+
+        [Required]
         public int CountryId { get; set; }
 
         public Country Country { get; set; }
