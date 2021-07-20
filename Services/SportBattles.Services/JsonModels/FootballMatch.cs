@@ -41,6 +41,12 @@
             [JsonProperty("Esd")]
             public string StartTime { get; set; }
 
+            [JsonIgnore]
+            public DateTime StartTimeUTC => @DateTime.ParseExact(this.StartTime, "yyyyMMddHHmmss", null).AddHours(-7);
+
+            [JsonIgnore]
+            public string StartTimeLocalTime => this.StartTimeUTC.ToLocalTime().ToString("dd.MM.yyyy HH:mm");
+
             [JsonProperty("Edf")]
             public string EndTime { get; set; }
         }

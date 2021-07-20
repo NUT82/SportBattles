@@ -46,7 +46,7 @@
         {
             var matches = this.liveScoreApi.GetFootballMatches(DateTime.Today, DateTime.Today.AddDays(6), country, tournament);
 
-            return this.View(matches);
+            return this.Json(matches);
         }
 
         public JsonResult GetAllSports()

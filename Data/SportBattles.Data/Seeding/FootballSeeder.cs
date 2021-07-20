@@ -332,6 +332,13 @@
             var jsonFilePath = @"wwwroot/json/FootballLeagues.json";
             var footballCountries = serviceProvider.GetService<ILiveScoreApi>().GetFootballCountriesAndTournaments(jsonFilePath);
 
+            var footballSport = dbContext.Sports.Where(s => s.Name == "Football").FirstOrDefault();
+            if (footballSport == null)
+            {
+                footballSport = new Sport { Name = "Football" };
+                dbContext.Sports.Add(footballSport);
+            }
+
             foreach (var item in footballCountries)
             {
                 var indexCountryCode = data.IndexOf(item.Country) - 1;
@@ -344,16 +351,15 @@
                     FlagUrl = flagUrl,
                 };
 
-                var footballSport = dbContext.Sports.Where(s => s.Name == "Football").FirstOrDefault();
-                if (footballSport == null)
-                {
-                    footballSport = new Sport { Name = "Football" };
-                }
-
                 country.Sports.Add(footballSport);
 
                 foreach (var tournament in item.Tournaments)
                 {
+                    if (country.Tournaments.Any(t => string.Equals(t.Name, tournament.Name, StringComparison.InvariantCultureIgnoreCase)))
+                    {
+                        continue;
+                    }
+
                     var newTournament = new Tournament
                     {
                         Country = country,

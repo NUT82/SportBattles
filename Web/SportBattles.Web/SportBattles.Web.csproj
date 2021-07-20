@@ -41,5 +41,5 @@
     <Folder Include="wwwroot\json\" />
   </ItemGroup>
 
-  <ProjectExtensions><VisualStudio><UserProperties /></VisualStudio></ProjectExtensions>
+  <ProjectExtensions><VisualStudio><UserProperties wwwroot_4json_4footballleagues_1json__JsonSchema="https://yarnpkg.com/configuration/yarnrc.json" /></VisualStudio></ProjectExtensions>
 </Project>

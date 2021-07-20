@@ -67,6 +67,7 @@
             services.AddTransient<IEmailSender, NullMessageSender>();
             services.AddTransient<ISportsService, SportsService>();
             services.AddTransient<ICountriesService, CountriesService>();
+            services.AddTransient<ITournamentsService, TournamentsService>();
             services.AddTransient<ILiveScoreApi, LiveScoreApi>();
         }
 

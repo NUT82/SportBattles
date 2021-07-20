@@ -18,7 +18,6 @@
         <div class="input-group-append">
             <button class="btn btn-outline-secondary" id="buttonAddSport">Add</button>
         </div>
-
     </div>
 </div>
 
@@ -44,15 +43,29 @@
         <select id="inputTournament" class="form-control">
         </select>
     </div>
-    <div class="input-group form-group col-md-6" style="display:flex" id="manualInputTournament">
-        <select class="form-control">
-            <option>Select Tornament...</option>
-        </select>
+    <div class="input-group form-group col-md-6" style="display:none" id="manualInputTournament">
+        <input type="text" class="form-control" placeholder="Type name of tournament..." id="tournamentName">
         <div class="input-group-append">
-            <button class="btn btn-outline-secondary">Add</button>
+            <button class="btn btn-outline-secondary" id="buttonAddTournament">Add</button>
         </div>
     </div>
 </div>
+
+<button class="btn btn-outline-secondary mt-4" id="buttonShowMatches">Show</button>
+<table class="table mt-4" id="tableMatches" style="display:none">
+    <thead>
+        <tr>
+            <th>Status</th>
+            <th>Start time</th>
+            <th>Home team</th>
+            <th>Away team</th>
+            <th>Result</th>
+        </tr>
+    </thead>
+    <tbody id="body">
+        
+    </tbody>
+</table>
 
 <script src="~/lib/jquery/dist/jquery.min.js" asp-append-version="true"></script>
 <script>
@@ -87,7 +100,11 @@
             $("#inputCountry").prop("disabled", true);
             $('#inputCountry').find('option').remove();
             $('#inputCountry').append('<option>Choose sport first</option>');
+            $("#inputTournament").prop("disabled", true);
+            $('#inputTournament').find('option').remove();
+            $('#inputTournament').append('<option>Choose country first</option>');
             $("#manualInputCountry").hide();
+            $("#manualInputTournament").hide();
         } else {
             $("#manualInputSport").hide();
             $("#sportName").val('');
@@ -101,19 +118,35 @@
     var showHideAddCountryToSport = function () {
         var selectOption = $("#inputCountry").find(":selected").text();
         if (selectOption == 'Add new country to sport...') {
+            GetAllOtherCountriesForSelectedSport();
             $("#manualInputCountry").show();
             $("#countryName").focus();
             $("#inputTournament").prop("disabled", true);
             $('#inputTournament').find('option').remove();
             $('#inputTournament').append('<option>Choose country first</option>');
+            $("#manualInputTournament").hide();
         } else {
             $("#manualInputCountry").hide();
+            $("#inputTournament").prop("disabled", false);
+            GetTournamentsForSelectedSportInCountry();
+        }
+    }
+
+    var showHideAddTournamentToCountryAndSport = function () {
+        var selectOption = $("#inputTournament").find(":selected").text();
+        if (selectOption == 'Add new tournament to sport in country...') {
+            $("#manualInputTournament").show();
+            $("#tournamentName").focus();
+        } else {
+            $("#manualInputTournament").hide();
+            $("#tournamentName").val('');
             $("#inputTournament").prop("disabled", false);
         }
     }
 
     $("#inputSport").change(showHideAddNewSport);
     $("#inputCountry").change(showHideAddCountryToSport);
+    $('#inputTournament').change(showHideAddTournamentToCountryAndSport);
 
     var GetCountriesForSelectedSport = function (selectedId) {
         var sportId = $("#inputSport").val();
@@ -137,13 +170,69 @@
            });
     }
 
+    var GetTournamentsForSelectedSportInCountry = function (selectedId) {
+        var sportId = $("#inputSport").val();
+        var countryId = $("#inputCountry").val();
+        $.ajax({
+            url: '@Url.Action("GetTournamentsForSelectedSportInCountry", "Tournament", new { Area = "Administration" })',
+            type: 'GET',
+            data: { sportId: sportId, countryId: countryId },
+            success: function (data) {
+                $('#inputTournament').find('option').remove()
+                $(data).each(
+                    function (index, item) {
+                        $('#inputTournament').append('<option value="' + item.id + '">' + item.name + '</option>')
+                    });
+                $('#inputTournament').append('<option>Add new tournament to sport in country...</option>');
+                $('#inputTournament option[value=' + selectedId + ']').attr('selected', 'selected');
+                showHideAddTournamentToCountryAndSport();
+            },
+             error: function () {
+                 console.log("Error getting Tournaments");
+            }
+           });
+    }
+
+    $("#buttonShowMatches").click(function () {
+        $("#tableMatches #body").find('tr').remove();
+        $("#tableMatches").show();
+        var tournament = $("#inputTournament").find(":selected").text();
+        var country = $("#inputCountry").find(":selected").text();
+        $.ajax({
+            url: '@Url.Action("ShowMatches", "Sport", new { Area = "Administration" })',
+            type: 'GET',
+            data: { country: country, tournament: tournament },
+            success: function (data) {
+                if (data.length == 0) {
+                    $("<tr><td colspan=5>No matches for selected category</td></tr>").appendTo($("#tableMatches #body"));
+                }
+                else {
+                    $(data).each(
+                        function (index, item) {
+                            $(item.events).each(
+                                function (index, match) {
+                                    var dateTimeUTCNow = new Date('@DateTime.UtcNow.ToString("s")');
+                                    var matchStartTimeUTC = new Date(match.startTimeUTC);
+                                    if (matchStartTimeUTC - dateTimeUTCNow > 0) {
+                                        $(`<tr><td>${match.status}</td><td>${match.startTimeLocalTime}</td><td>${match.homeTeam[0].name}</td><td>${match.awayTeam[0].name}</td><td></td></tr>`).appendTo($("#tableMatches #body"))
+                                    }
+                                });
+                        });
+                }
+            },
+             error: function () {
+                 console.log("Error getting Matches");
+            }
+        });
+    });
+
     var GetAllOtherCountriesForSelectedSport = function () {
         var sportId = $("#inputSport").val();
         $.ajax({
             url: '@Url.Action("GetAllOtherCountriesForSelectedSport", "Country", new { Area = "Administration" })',
             type: 'GET',
             data: { sportId: sportId },
-            success: function (data) {
+            sucToShortTimeStringess: function (data) {
                 $('#countryName').find('option').remove()
                 $(data).each(
                     function (index, item) {
@@ -202,5 +291,5 @@
         });
     });
 
-    
+
 </script>
