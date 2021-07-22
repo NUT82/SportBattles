@@ -26,7 +26,12 @@
             this.liveScoreApi = liveScoreApi;
         }
 
-        public IActionResult Add()
+        public IActionResult CreateGame()
+        {
+            return this.View();
+        }
+
+        public IActionResult Games()
         {
             return this.View();
         }
@@ -66,6 +71,13 @@
             await this.sportsService.AddNewSport(sportName.Name);
 
             return this.Json(sportName);
+        }
+
+        [HttpPost]
+        public IActionResult ShowSelectedMatches([FromBody] ShowSelectedMatchesViewModel data)
+        {
+            ////TODO: add to current game
+            return this.RedirectToAction(nameof(this.Games));
         }
     }
 }

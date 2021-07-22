@@ -10,7 +10,7 @@
     {
         public IEnumerable<FootballMatch> GetFootballMatches(DateTime startDate, DateTime endDate, string country = null, string tournament = null);
 
-        public IEnumerable<FootballLeague> GetFootballCountriesAndTournaments(string jsonFileName);
+        public IEnumerable<FootballLeagueJson> GetFootballCountriesAndTournaments(string jsonFileName);
 
         public Task CreateJsonFilesForAllFootballMatchesAsync(DateTime startDate, DateTime endDate, string apiKey, string apiHost);
     }

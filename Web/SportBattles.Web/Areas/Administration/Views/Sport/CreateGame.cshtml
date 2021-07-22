@@ -1,7 +1,7 @@
 ﻿@using Microsoft.AspNetCore.Antiforgery
 @inject IAntiforgery antiforgery
 @{
-    this.ViewData["Title"] = "Add Sport";
+    this.ViewData["Title"] = "Create new game";
     var tokenSet = antiforgery.GetAndStoreTokens(Context);
 }
 
@@ -51,21 +51,23 @@
     </div>
 </div>
 
-<button class="btn btn-outline-secondary mt-4" id="buttonShowMatches">Show</button>
+<button class="btn btn-outline-primary mt-4" id="buttonShowMatches">Show</button>
 <table class="table mt-4" id="tableMatches" style="display:none">
     <thead>
         <tr>
-            <th>Status</th>
+            <th>Select</th>
             <th>Start time</th>
             <th>Home team</th>
             <th>Away team</th>
-            <th>Result</th>
         </tr>
     </thead>
     <tbody id="body">
-        
     </tbody>
 </table>
+
+<div class="row justify-content-around mt-4 ">
+    <button class="btn btn-outline-primary col-md-5" id="buttonAddMatchesToGame" disabled>Add selected matches to game</button>
+</div>
 
 <script src="~/lib/jquery/dist/jquery.min.js" asp-append-version="true"></script>
 <script>
@@ -147,6 +149,8 @@
     $("#inputSport").change(showHideAddNewSport);
     $("#inputCountry").change(showHideAddCountryToSport);
     $('#inputTournament').change(showHideAddTournamentToCountryAndSport);
+    
+    
 
     var GetCountriesForSelectedSport = function (selectedId) {
         var sportId = $("#inputSport").val();
@@ -179,6 +183,7 @@
             data: { sportId: sportId, countryId: countryId },
             success: function (data) {
                 $('#inputTournament').find('option').remove()
+                $('#inputTournament').append('<option>All</option>');
                 $(data).each(
                     function (index, item) {
                         $('#inputTournament').append('<option value="' + item.id + '">' + item.name + '</option>')
@@ -208,16 +213,48 @@
                 }
                 else {
                     $(data).each(
-                        function (index, item) {
-                            $(item.events).each(
-                                function (index, match) {
-                                    var dateTimeUTCNow = new Date('@DateTime.UtcNow.ToString("s")');
-                                    var matchStartTimeUTC = new Date(match.startTimeUTC);
-                                    if (matchStartTimeUTC - dateTimeUTCNow > 0) {
-                                        $(`<tr><td>${match.status}</td><td>${match.startTimeLocalTime}</td><td>${match.homeTeam[0].name}</td><td>${match.awayTeam[0].name}</td><td></td></tr>`).appendTo($("#tableMatches #body"))
-                                    }
-                                });
+                        function (index, match) {
+                            var dateTimeUTCNow = new Date('@DateTime.UtcNow.ToString("s")');
+                            var matchStartTimeUTC = new Date(match.startTimeUTC);
+                            if (matchStartTimeUTC - dateTimeUTCNow > 0) {
+                                $(`<tr><td><input type="checkbox" id=${match.id}></td><td>${match.startTimeLocalTime}</td><td>${match.homeTeam}</td><td>${match.awayTeam}</td><td></td></tr>`).appendTo($("#tableMatches #body"))
+                            }
                         });
+
+                    $('#tableMatches tr').click(function (event) {
+                        if (event.target.type !== 'checkbox') {
+                            $(':checkbox', this).trigger('click');
+                        }
+
+                        if ($(this).find('input').is(':checked')) {
+                            $(this).css('background-color', 'lightblue');
+                            $("#buttonAddMatchesToGame").prop("disabled", false);
+                        } else {
+                            $(this).css('background-color', 'white');
+                            if ($('#tableMatches :checked').length == 0) {
+                                $("#buttonAddMatchesToGame").prop("disabled", true);
+                            }
+                        }
+                    });
+
+                    $("#buttonAddMatchesToGame").click(function () {
+                        var checkedIds = $('#tableMatches :checked').toArray().map(i => i.id);
+                        var checkedMatches = data.filter(function (item) {
+                            return (jQuery.inArray(item.id, checkedIds) !== -1)
+                        });
+                        $.ajax({
+                            type: 'POST',
+                            url: '@Url.Action("ShowSelectedMatches", "Sport", new { Area = "Administration" })',
+                            dataType: 'json',
+                            contentType: 'application/json',
+                            headers: {
+                                '@tokenSet.HeaderName': '@tokenSet.RequestToken'
+                            },
+                            data: JSON.stringify({
+                                matches: checkedMatches
+                            }),
+                        });
+                    });
                 }
             },
              error: function () {
@@ -225,6 +262,10 @@
             }
         });
     });
+
+    
+
+    
 
     var GetAllOtherCountriesForSelectedSport = function () {
         var sportId = $("#inputSport").val();

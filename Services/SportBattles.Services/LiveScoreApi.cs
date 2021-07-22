@@ -9,6 +9,7 @@
 
     using Newtonsoft.Json.Linq;
 
+    using SportBattles.Common;
     using SportBattles.Services.JsonModels;
 
     public class LiveScoreApi : ILiveScoreApi
@@ -47,17 +48,34 @@
             }
         }
 
-        public IEnumerable<FootballLeague> GetFootballCountriesAndTournaments(string jsonFileName)
+        public IEnumerable<FootballLeagueJson> GetFootballCountriesAndTournaments(string jsonFileName)
         {
             var jsonObj = JObject.Parse(File.ReadAllText(jsonFileName));
-            var countries = jsonObj["Ccg"].ToObject<IEnumerable<FootballLeague>>();
+            var countries = jsonObj["Ccg"].ToObject<IEnumerable<FootballLeagueJson>>();
 
             return countries;
         }
 
         public IEnumerable<FootballMatch> GetFootballMatches(DateTime startDate, DateTime endDate, string country = null, string tournament = null)
         {
-            var matches = new List<FootballMatch>();
+            var matches = this.GetMatchesFromJsonsApi(startDate, endDate);
+
+            if (country == null || country == "All")
+            {
+                return matches;
+            }
+
+            if (tournament == null || tournament == "All")
+            {
+                return matches.Where(m => m.Country == country);
+            }
+
+            return matches.Where(m => m.Country == country && m.Tournament == tournament);
+        }
+
+        private IEnumerable<FootballMatch> GetMatchesFromJsonsApi(DateTime startDate, DateTime endDate)
+        {
+            var matchesJson = new List<FootballMatchJson>();
             while (startDate <= endDate)
             {
                 var currDate = startDate.ToString("yyyyMMdd");
@@ -68,21 +86,33 @@
                 }
 
                 var jsonObj = JObject.Parse(File.ReadAllText(@"wwwroot/json/Football" + currDate + ".json"));
-                matches.AddRange(jsonObj["Stages"].ToObject<IEnumerable<FootballMatch>>().ToList());
+                matchesJson.AddRange(jsonObj["Stages"].ToObject<IEnumerable<FootballMatchJson>>().ToList());
                 startDate = startDate.AddDays(1);
             }
 
-            if (country == null)
+            var matches = new List<FootballMatch>();
+            foreach (var league in matchesJson)
             {
-                return matches;
+                foreach (var match in league.Events)
+                {
+                    matches.Add(new FootballMatch
+                    {
+                        Id = match.Id,
+                        Country = league.Country,
+                        Tournament = league.Tournament,
+                        StartTimeUTC = DateTime.ParseExact(match.StartTime, "yyyyMMddHHmmss", null).AddHours(-GlobalConstants.LiveScoreAPITimeZoneCorrection),
+                        Status = match.Status,
+                        HomeTeam = match.Home[0].Name,
+                        AwayTeam = match.Away[0].Name,
+                        HomeGoals = string.IsNullOrEmpty(match.HomeGoals) ? null : byte.Parse(match.HomeGoals),
+                        AwayGoals = string.IsNullOrEmpty(match.AwayGoals) ? null : byte.Parse(match.AwayGoals),
+                        HalfHomeGoals = string.IsNullOrEmpty(match.HomeGoalsFirstHalf) ? null : byte.Parse(match.HomeGoalsFirstHalf),
+                        HalfAwayGoals = string.IsNullOrEmpty(match.AwayGoalsFirstHalf) ? null : byte.Parse(match.AwayGoalsFirstHalf),
+                    });
+                }
             }
 
-            if (tournament == null)
-            {
-                return matches.Where(m => m.Country == country);
-            }
-
-            return matches.Where(m => m.Country == country && m.Tournament == tournament);
+            return matches;
         }
     }
 }

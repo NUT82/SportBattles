@@ -4,7 +4,7 @@
 
     using Newtonsoft.Json;
 
-    public class FootballLeague
+    public class FootballLeagueJson
     {
         [JsonProperty("Cnm")]
         public string Country { get; set; }

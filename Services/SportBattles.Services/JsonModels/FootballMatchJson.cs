@@ -5,7 +5,7 @@
 
     using Newtonsoft.Json;
 
-    public class FootballMatch
+    public class FootballMatchJson
     {
         [JsonProperty("Snm")]
         public string Tournament { get; set; }
@@ -17,6 +17,9 @@
 
         public class Event
         {
+            [JsonProperty("Eid")]
+            public string Id { get; set; }
+
             [JsonProperty("Eps")]
             public string Status { get; set; }
 
@@ -33,19 +36,13 @@
             public string AwayGoalsFirstHalf { get; set; }
 
             [JsonProperty("T1")]
-            public IList<Team> HomeTeam { get; set; }
+            public IList<Team> Home { get; set; }
 
             [JsonProperty("T2")]
-            public IList<Team> AwayTeam { get; set; }
+            public IList<Team> Away { get; set; }
 
             [JsonProperty("Esd")]
             public string StartTime { get; set; }
-
-            [JsonIgnore]
-            public DateTime StartTimeUTC => @DateTime.ParseExact(this.StartTime, "yyyyMMddHHmmss", null).AddHours(-7);
-
-            [JsonIgnore]
-            public string StartTimeLocalTime => this.StartTimeUTC.ToLocalTime().ToString("dd.MM.yyyy HH:mm");
 
             [JsonProperty("Edf")]
             public string EndTime { get; set; }
