@@ -66,6 +66,7 @@
             // Application services
             services.AddTransient<IEmailSender, NullMessageSender>();
             services.AddTransient<ISportsService, SportsService>();
+            services.AddTransient<IGamesService, GamesService>();
             services.AddTransient<ICountriesService, CountriesService>();
             services.AddTransient<ITournamentsService, TournamentsService>();
             services.AddTransient<ILiveScoreApi, LiveScoreApi>();

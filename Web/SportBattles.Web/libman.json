@@ -68,6 +68,21 @@
         "dist/slicknav.min.css",
         "jquery.slicknav.js"
       ]
+    },
+    {
+      "library": "datatables.net@1.10.25",
+      "destination": "wwwroot/lib/datatables/",
+      "files": [
+        "js/jquery.dataTables.min.js"
+      ]
+    },
+    {
+      "library": "datatables.net-dt@1.10.25",
+      "destination": "wwwroot/lib/datatables/",
+      "files": [
+        "css/jquery.dataTables.min.css",
+        "images/*"
+      ]
     }
   ]
 }

@@ -16,9 +16,11 @@
         [MaxLength(25)]
         public string Name { get; set; }
 
-        public string EmblemId { get; set; }
+        public string EmblemUrl { get; set; }
 
-        public Image Emblem { get; set; }
+        public int CountryId { get; set; }
+
+        public Country Country { get; set; }
 
         public virtual ICollection<Tournament> Tournaments { get; set; }
     }

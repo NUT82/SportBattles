@@ -12,6 +12,8 @@
             this.Matches = new HashSet<Match>();
         }
 
+        public string Name { get; set; }
+
         public int GameTypeId { get; set; }
 
         public GameType GameType { get; set; }

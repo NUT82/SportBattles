@@ -1,0 +1,49 @@
+﻿@{
+    this.ViewData["Title"] = "Add new game or update current";
+}
+<div class="container text-center mt-2 mb-2 pl-0 pr-0">
+    <a asp-area="Administration" asp-controller="Game" asp-action="Add" title="Add new game" class="btn btn-info col-12">
+        <i class="fa fa-plus"></i> Add new game
+    </a>
+</div>
+<table id="table_id" class="display">
+    <thead>
+        <tr>
+            <th>Column 1</th>
+            <th>Column 2</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Row 1 Data 1</td>
+            <td>Row 1 Data 2</td>
+        </tr>
+        <tr>
+            <td>Row 2 Data 1</td>
+            <td>Row 2 Data 2</td>
+        </tr>
+        <tr>
+            <td>Row 1 Data 1</td>
+            <td>Row 1 Data 2</td>
+        </tr>
+        <tr>
+            <td>Row 2 Data 1</td>
+            <td>Row 2 Data 2</td>
+        </tr>
+        <tr>
+            <td>Row 1 Data 1</td>
+            <td>Row 1 Data 2</td>
+        </tr>
+        <tr>
+            <td>Row 2 Data 1</td>
+            <td>Row 2 Data 2</td>
+        </tr>
+    </tbody>
+</table>
+
+@section Scripts {
+    <script type="text/javascript" charset="utf8" src="~/lib/datatables/js/jquery.dataTables.min.js"></script>
+    <script>
+        $('#table_id').DataTable();
+    </script>
+}

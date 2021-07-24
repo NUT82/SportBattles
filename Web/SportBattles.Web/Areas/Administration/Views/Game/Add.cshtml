@@ -1,0 +1,104 @@
+﻿@using Microsoft.AspNetCore.Antiforgery
+@inject IAntiforgery antiforgery
+@{
+    this.ViewData["Title"] = "Add new game";
+    var tokenSet = antiforgery.GetAndStoreTokens(Context);
+}
+
+@model SportBattles.Web.ViewModels.Administration.Game.AddGameTypeInputModel
+<label for="inputGameType" class="mt-4">Choose game type:</label>
+<div class="form-row">
+    <div class="input-group col-md-6">
+        <select id="inputGameType" class="form-control user-select-none">
+        </select>
+    </div>
+    <form method="dialog" class="input-group form-group col-md-6" style="display:none" id="manualInputGameType">
+        <input asp-for="Name" class="form-control col-md-12" placeholder="Type of game..." id="gameTypeName">
+        <div class="input-group-append">
+            <button class="btn btn-outline-primary" id="buttonAddGameType">Add</button>
+        </div>
+        <span asp-validation-for="Name" class="text-danger input-group-append col-md-12"></span>
+        <div class="input-group">
+            <textarea asp-for="Description" rows="4" class="form-control col-md-12" id="gameTypeDescription" placeholder="Please add description of this game type"></textarea>
+            <span asp-validation-for="Description" class="text-danger col-md-12"></span>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            getAllGameTypes();
+        });
+
+        var getAllGameTypes = function () {
+            $.ajax({
+                url: '@Url.Action("GetAllGameTypes", "Game", new { Area = "Administration" })',
+                type: 'GET',
+                success: function (data) {
+                    $('#inputGameType').find('option').remove()
+                    $(data).each(
+                        function (index, item) {
+                            $('#inputGameType').append('<option value="' + item.id + '">' + item.name + '</option>')
+                        });
+                    $('#inputGameType').append('<option>Add new game type...</option>');
+                    showHideAddNewGameType();
+                },
+                error: function () {
+                    console.log("Error getting GameTypes");
+                }
+            });
+        }
+
+        var showHideAddNewGameType = function () {
+            var selectOption = $("#inputGameType").find(":selected").text();
+            if (selectOption == 'Add new game type...') {
+                $("#manualInputGameType").show();
+                $("#gameTypeName").focus();
+            } else {
+                $("#manualInputGameType").hide();
+                $("#gameTypeName").val('');
+                $("#gameTypeDescription").val('');
+            }
+        }
+
+        $("#inputGameType").change(showHideAddNewGameType);
+
+        $("#buttonAddGameType").click(function () {
+            var gameTypeName = $('#gameTypeName').val();
+            var gameTypeDescription = $("#gameTypeDescription").val();
+            if (jQuery.inArray(gameTypeName, $("#inputGameType option").toArray().map(o => o.textContent)) != -1) {
+                $("#manualInputGameType span").first().removeClass("field-validation-valid").addClass("field-validation-error");
+            }
+            else {
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("Add", "Game", new { Area = "Administration" })',
+                dataType: 'json',
+                contentType: 'application/json',
+                headers: {
+                    '@tokenSet.HeaderName': '@tokenSet.RequestToken'
+                },
+                data: JSON.stringify({
+                    Name: gameTypeName,
+                    Description: gameTypeDescription
+                }),
+                success: function (data) {
+                    $("#gameTypeName").val('');
+                    $("#gameTypeDescription").val('');
+                    getAllGameTypes();
+                },
+                error: function (data) {
+                    console.log(data.status);
+                    if (data.status == 400) {
+                        $("#manualInputGameType span").first().text(data.responseJSON.errors.Name);
+                    }
+                }
+
+            });
+            }
+    });
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.1/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.11/jquery.validate.unobtrusive.min.js"></script>
+}

@@ -26,6 +26,10 @@
 
         public byte? AwayGoals { get; set; }
 
+        public byte? HomeGoalsFirstHalf { get; set; }
+
+        public byte? AwayGoalsFirstHalf { get; set; }
+
         public int TournamentId { get; set; }
 
         public Tournament Tournament { get; set; }
