@@ -1,5 +1,6 @@
 ﻿namespace SportBattles.Web.Areas.Administration.Controllers
 {
+    using System.Linq;
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Mvc;
@@ -34,7 +35,7 @@
                 if (this.gamesService.DuplicateName(gameType.Name))
                 {
                     this.ModelState.AddModelError(nameof(AddGameTypeInputModel.Name), "Duplicate name of game type");
-                    return this.ValidationProblem();
+                    return this.View(gameType);
                 }
                 else
                 {
