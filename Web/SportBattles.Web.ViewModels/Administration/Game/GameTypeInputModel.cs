@@ -1,17 +1,16 @@
 ﻿namespace SportBattles.Web.ViewModels.Administration.Game
 {
-    using System;
     using System.ComponentModel.DataAnnotations;
 
-    public class AddGameTypeInputModel
+    public class GameTypeInputModel
     {
         [Required]
         [MinLength(3)]
         [MaxLength(50)]
-        public string Name { get; set; }
+        public string TypeName { get; set; }
 
         [Required]
         [MinLength(10)]
-        public string Description { get; set; }
+        public string TypeDescription { get; set; }
     }
 }

@@ -1,11 +1,10 @@
 ﻿@using Microsoft.AspNetCore.Antiforgery
 @inject IAntiforgery antiforgery
 @{
-    this.ViewData["Title"] = "Create new game";
+    this.ViewData["Title"] = "Add matches to game";
     var tokenSet = antiforgery.GetAndStoreTokens(Context);
 }
 
-@model SportBattles.Web.ViewModels.Administration.Sport.AddSportInputModel
 <label for="inputSport" class="mt-4">Choose Sport:</label>
 <div class="form-row">
     <div class="input-group col-md-6">
@@ -13,8 +12,7 @@
         </select>
     </div>
     <div class="input-group form-group col-md-6" style="display:none" id="manualInputSport">
-        <input asp-for="Name" type="text" class="form-control" placeholder="Type name of sport..." id="sportName">
-        <span asp-validation-for="Name" class="text-danger"></span>
+        <input type="text" class="form-control" placeholder="Type name of sport..." id="sportName">
         <div class="input-group-append">
             <button class="btn btn-outline-secondary" id="buttonAddSport">Add</button>
         </div>
@@ -149,8 +147,8 @@
     $("#inputSport").change(showHideAddNewSport);
     $("#inputCountry").change(showHideAddCountryToSport);
     $('#inputTournament').change(showHideAddTournamentToCountryAndSport);
-    
-    
+
+
 
     var GetCountriesForSelectedSport = function (selectedId) {
         var sportId = $("#inputSport").val();
@@ -250,12 +248,16 @@
                                 '@tokenSet.HeaderName': '@tokenSet.RequestToken'
                             },
                             data: JSON.stringify({
-                                matches: checkedMatches
+                                Matches: checkedMatches,
+                                GameId: @Model,
                             }),
+                            success: function (response) {
+                                window.location.href = response.redirectToUrl;
+                            }
                         });
                     });
                 }
-                
+
             },
              error: function () {
                  console.log("Error getting Matches");
@@ -263,9 +265,9 @@
         });
     });
 
-    
 
-    
+
+
 
     var GetAllOtherCountriesForSelectedSport = function () {
         var sportId = $("#inputSport").val();

@@ -4,8 +4,10 @@
 
     using SportBattles.Services;
 
-    public class ShowSelectedMatchesViewModel
+    public class AddSelectedMatchesInputModel
     {
         public IEnumerable<FootballMatch> Matches { get; set; }
+
+        public int GameId { get; set; }
     }
 }

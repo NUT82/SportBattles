@@ -26,9 +26,9 @@
             this.liveScoreApi = liveScoreApi;
         }
 
-        public IActionResult CreateGame()
+        public IActionResult AddMatchesToGame(int gameId)
         {
-            return this.View();
+            return this.View(gameId);
         }
 
         public IActionResult Games()
@@ -74,10 +74,10 @@
         }
 
         [HttpPost]
-        public IActionResult ShowSelectedMatches([FromBody] ShowSelectedMatchesViewModel data)
+        public JsonResult ShowSelectedMatches([FromBody] AddSelectedMatchesInputModel data)
         {
             ////TODO: add to current game
-            return this.RedirectToAction(nameof(this.Games));
+            return this.Json(new { redirectToUrl = this.Url.Action("Index", "Game") });
         }
     }
 }

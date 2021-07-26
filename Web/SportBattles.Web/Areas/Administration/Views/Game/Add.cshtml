@@ -5,32 +5,42 @@
     var tokenSet = antiforgery.GetAndStoreTokens(Context);
 }
 
-@model SportBattles.Web.ViewModels.Administration.Game.AddGameTypeInputModel
-<label for="inputGameType" class="mt-4">Choose game type:</label>
-<div class="form-row">
-    <div class="input-group col-md-6">
-        <select id="inputGameType" class="form-control user-select-none">
-        </select>
+@model SportBattles.Web.ViewModels.Administration.Game.AddGameInputModel
+
+<form method="post" class="col-md-12 g-4" >
+    
+    <label for="inputGameType">Choose game type:</label>
+    <div class="form-row">
+        <select asp-for="Game.TypeID" id="inputGameType" class="form-control user-select-none"></select>
     </div>
-    <form method="post" class="input-group form-group g-4 col-md-6" style="display:none" id="manualInputGameType">
-        <input asp-for="Name" class="form-control col-md-12" id="gameTypeName" placeholder="Input game type">
-        <div class="input-group-append">
-            <button class="btn btn-outline-primary" id="buttonAddGameType">Add</button>
-        </div>
-        <div class="alert text-danger input-group-append col-md-12" style="display:none">This type name already exists!</div>
-        <span asp-validation-for="Name" class="text-danger input-group-append col-md-12"></span>
-        <div class="input-group">
-            <textarea asp-for="Description" rows="4" class="form-control col-md-12" id="gameTypeDescription" placeholder="Please add description of this game type"></textarea>
-            <span asp-validation-for="Description" class="text-danger col-md-12"></span>
-        </div>
-    </form>
-</div>
+    <div class="form-row input-game-name">
+        <label asp-for="Game.Name">Input game name:</label>
+        <input asp-for="Game.Name" class="form-control" id="Name">
+        <span asp-validation-for="Game.Name" class="text-danger"></span>
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <button type="submit" class="btn btn-outline-primary col-md-12">Add</button>
+    </div>
+</form>
+
+<form method="post" class="g-4 col-md-12" style="display:none" id="manualInputGameType">
+    <div class="form-row">
+        <input asp-for="GameType.TypeName" class="form-control" id="gameTypeName" placeholder="Input game type">
+        <div class="alert text-danger" style="display:none">This type name already exists!</div>
+        <span asp-validation-for="GameType.TypeName" class="text-danger"></span>
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    </div>
+    <div class="form-row">
+        <textarea asp-for="GameType.TypeDescription" rows="4" class="form-control" id="gameTypeDescription" placeholder="Please add description of this game type"></textarea>
+        <span asp-validation-for="GameType.TypeDescription" class="text-danger"></span>
+        <button class="btn btn-outline-primary col-md-12" id="buttonAddGameType">Add</button>
+    </div>
+</form>
 
 @section Scripts {
-    <script>
-    $(document).ready(function() {
-        getAllGameTypes();
-    });
+<script>
+$(document).ready(function() {
+    getAllGameTypes();
+});
 
 var getAllGameTypes = function() {
     $.ajax({
@@ -52,12 +62,16 @@ var getAllGameTypes = function() {
 }
 
 var showHideAddNewGameType = function() {
+    $("#Name").val('');
+    $(".alert").hide();
     var selectOption = $("#inputGameType").find(":selected").text();
     if (selectOption == 'Add new game type...') {
+        $(".input-game-name").hide();
         $("#manualInputGameType").show();
         $("#gameTypeName").focus();
     } else {
         $("#manualInputGameType").hide();
+        $(".input-game-name").show();
         $("#gameTypeName").val('');
         $("#gameTypeDescription").val('');
     }
@@ -65,21 +79,37 @@ var showHideAddNewGameType = function() {
 
 $("#inputGameType").change(showHideAddNewGameType);
 
+$("#buttonAddGameType").click(function () {
+    var gameTypeName = $('#gameTypeName').val();
+    var duplicateGameType = jQuery.inArray(gameTypeName, $("#inputGameType option").toArray().map(o => o.textContent)) != -1;
+    if ($("#manualInputGameType").valid()) {
+        if (duplicateGameType) {
+            $(".alert").show();
+            $("#gameTypeName").mousedown(function () {
+                $(".alert").hide();
+            });
+            return false;
+        };
+    } else {
+        return false;
+    }
+});
+
 $("#manualInputGameType").on("submit", function (event) {
     event.preventDefault();
     var gameTypeName = $('#gameTypeName').val();
     var gameTypeDescription = $("#gameTypeDescription").val();
     $.ajax({
             type: 'POST',
-            url: '@Url.Action("Add", "Game", new { Area = "Administration" })',
+            url: '@Url.Action("AddGameType", "Game", new { Area = "Administration" })',
             dataType: 'json',
             contentType: 'application/json',
             headers: {
                 '@tokenSet.HeaderName': '@tokenSet.RequestToken'
             },
             data: JSON.stringify({
-                Name: gameTypeName,
-                Description: gameTypeDescription
+                TypeName: gameTypeName,
+                TypeDescription: gameTypeDescription
             }),
             success: function(data) {
                 $("#gameTypeName").val('');
@@ -91,25 +121,7 @@ $("#manualInputGameType").on("submit", function (event) {
             }
         });
 });
-
-$("#buttonAddGameType").click(function() {
-    var gameTypeName = $('#gameTypeName').val();
-    var duplicateGameType = jQuery.inArray(gameTypeName, $("#inputGameType option").toArray().map(o => o.textContent)) != -1;
-    if ($("#manualInputGameType").valid()) {
-        if (duplicateGameType) {
-            $(".alert").show();
-            $("#gameTypeName").mousedown(function() {
-                $(".alert").hide();
-            });
-            return false;
-        } else {
-            $("#manualInputGameType").submit();
-        };
-    } else {
-        return false;
-    }
-});
-    </script>
+</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.1/jquery.validate.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.11/jquery.validate.unobtrusive.min.js"></script>
 }

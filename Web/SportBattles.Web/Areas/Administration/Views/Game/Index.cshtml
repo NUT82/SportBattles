@@ -1,43 +1,48 @@
 ﻿@{
     this.ViewData["Title"] = "Add new game or update current";
 }
+@model IEnumerable<SportBattles.Web.ViewModels.Administration.Game.GameViewModel>
 <div class="container text-center mt-2 mb-2 pl-0 pr-0">
     <a asp-area="Administration" asp-controller="Game" asp-action="Add" title="Add new game" class="btn btn-info col-12">
         <i class="fa fa-plus"></i> Add new game
     </a>
 </div>
-<table id="table_id" class="display">
+<table id="table_id" class="display" style="width: 100%">
     <thead>
         <tr>
-            <th>Column 1</th>
-            <th>Column 2</th>
+            <th style="width: 35%">Name</th>
+            <th style="width: 15%">Game type</th>
+            <th style="width: 7%">Matches</th>
+            <th style="width: 7%">Users</th>
+            <th style="width: 6%">Finish</th>
+            <th style="width: 30%">Actions</th>
         </tr>
     </thead>
     <tbody>
-        <tr>
-            <td>Row 1 Data 1</td>
-            <td>Row 1 Data 2</td>
-        </tr>
-        <tr>
-            <td>Row 2 Data 1</td>
-            <td>Row 2 Data 2</td>
-        </tr>
-        <tr>
-            <td>Row 1 Data 1</td>
-            <td>Row 1 Data 2</td>
-        </tr>
-        <tr>
-            <td>Row 2 Data 1</td>
-            <td>Row 2 Data 2</td>
-        </tr>
-        <tr>
-            <td>Row 1 Data 1</td>
-            <td>Row 1 Data 2</td>
-        </tr>
-        <tr>
-            <td>Row 2 Data 1</td>
-            <td>Row 2 Data 2</td>
-        </tr>
+        @foreach (var game in Model)
+        {
+            <tr>
+                <td>@game.Name</td>
+                <td>@game.GameTypeName</td>
+                <td>@game.MatchesCount</td>
+                <td>@game.UsersCount</td>
+                <td>@(game.IsFinished ? "Yes" : "No")</td>
+                <td>
+                    @if (!game.IsFinished)
+                    {
+                        <a asp-area="Administration" asp-controller="Sport" asp-action="AddMatchesToGame" asp-route-gameId="@game.Id" title="Add matches to game" class="btn btn-primary">
+                            <i class="fa fa-plus-circle"></i>
+                        </a>
+                        <a asp-area="Administration" asp-controller="Game" asp-action="Finish" asp-route-gameId="@game.Id" title="Finish game" class="btn btn-warning">
+                            <i class="fa fa-flag-checkered"></i>
+                        </a>
+                    }
+                    <a asp-area="Administration" asp-controller="Game" asp-action="Delete" asp-route-gameId="@game.Id" title="Delete game" class="btn btn-danger">
+                        <i class="fa fa-minus-circle"></i>
+                    </a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
 
