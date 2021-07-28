@@ -16,17 +16,17 @@
             this.tournamentsService = tournamentsService;
         }
 
-        public JsonResult GetTournamentsForSelectedSportInCountry([FromQuery] int sportId, [FromQuery] int countryId)
+        public JsonResult GetAllForSelectedSportInCountry([FromQuery] int sportId, [FromQuery] int countryId)
         {
-            var tournaments = this.tournamentsService.GetTournamentsForSportInCountry<TournamentsViewModel>(sportId, countryId);
+            var tournaments = this.tournamentsService.GetAllForSportInCountry<TournamentsViewModel>(sportId, countryId);
             return this.Json(tournaments);
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddTournamentToSportInCountry([FromBody] TournamentsViewModel inputModel)
+        public async Task<IActionResult> AddToSportInCountry([FromBody] TournamentsViewModel inputModel)
         {
             ////TODO
-            await this.tournamentsService.AddNewTournamentToSportInCountry(1, 2, "not implement");
+            await this.tournamentsService.AddToSportInCountry(1, 2, "not implement");
             return this.Json(inputModel);
         }
     }

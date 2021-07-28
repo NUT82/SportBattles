@@ -9,7 +9,6 @@
     {
         public Tournament()
         {
-            this.Teams = new HashSet<Team>();
             this.Matches = new HashSet<Match>();
         }
 
@@ -17,17 +16,13 @@
         [MaxLength(80)]
         public string Name { get; set; }
 
-        [Required]
         public int SportId { get; set; }
 
-        public Sport Sport { get; set; }
+        public virtual Sport Sport { get; set; }
 
-        [Required]
         public int CountryId { get; set; }
 
-        public Country Country { get; set; }
-
-        public virtual ICollection<Team> Teams { get; set; }
+        public virtual Country Country { get; set; }
 
         public virtual ICollection<Match> Matches { get; set; }
     }

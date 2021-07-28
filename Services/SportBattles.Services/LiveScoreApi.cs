@@ -21,11 +21,11 @@
             while (startDate <= endDate)
             {
                 var currDate = startDate.ToString("yyyyMMdd");
-                if (File.Exists(@"wwwroot/json/Football" + currDate + ".json"))
-                {
-                    startDate = startDate.AddDays(1);
-                    continue;
-                }
+                ////if (File.Exists(@"wwwroot/json/Football" + currDate + ".json"))
+                ////{
+                ////    startDate = startDate.AddDays(1);
+                ////    continue;
+                ////}
 
                 var request = new HttpRequestMessage
                 {
@@ -103,7 +103,11 @@
                         StartTimeUTC = DateTime.ParseExact(match.StartTime, "yyyyMMddHHmmss", null).AddHours(-GlobalConstants.LiveScoreAPITimeZoneCorrection),
                         Status = match.Status,
                         HomeTeam = match.Home[0].Name,
+                        HomeTeamCountry = match.Home[0].Country,
+                        HomeTeamEmblemUrl = this.MakeEmblemUrl(match.Home[0].EmblemUrl),
                         AwayTeam = match.Away[0].Name,
+                        AwayTeamCountry = match.Away[0].Country,
+                        AwayTeamEmblemUrl = this.MakeEmblemUrl(match.Away[0].EmblemUrl),
                         HomeGoals = string.IsNullOrEmpty(match.HomeGoals) ? null : byte.Parse(match.HomeGoals),
                         AwayGoals = string.IsNullOrEmpty(match.AwayGoals) ? null : byte.Parse(match.AwayGoals),
                         HalfHomeGoals = string.IsNullOrEmpty(match.HomeGoalsFirstHalf) ? null : byte.Parse(match.HomeGoalsFirstHalf),
@@ -113,6 +117,11 @@
             }
 
             return matches;
+        }
+
+        private string MakeEmblemUrl(string emblemFromApi)
+        {
+            return emblemFromApi?.Replace("enet", @"https://es-img.enetscores.com/logos").Replace(".png", "z");
         }
     }
 }

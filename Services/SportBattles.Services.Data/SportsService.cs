@@ -17,7 +17,7 @@
             this.sportRepository = sportRepository;
         }
 
-        public async Task AddNewSport(string name)
+        public async Task Add(string name)
         {
             var sport = this.sportRepository.All().Where(s => s.Name == name).FirstOrDefault();
             if (sport != null)

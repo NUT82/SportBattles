@@ -12,7 +12,10 @@
     if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
     {
         <li>
-            <a asp-area="Administration" asp-controller="Dashboard" asp-action="Index" title="Admin">Admin</a>
+            <a asp-area="Administration" asp-controller="Game" asp-action="Index" title="Admin">Admin</a>
+        </li>
+        <li>
+            <a asp-area="Administration" asp-controller="Sport" asp-action="GetMatches" title="Get matches for week">Get matches</a>
         </li>
     }
     <li>

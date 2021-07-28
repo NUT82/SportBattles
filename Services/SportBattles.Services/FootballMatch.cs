@@ -18,7 +18,15 @@
 
         public string HomeTeam { get; set; }
 
+        public string HomeTeamCountry { get; set; }
+
+        public string HomeTeamEmblemUrl { get; set; }
+
         public string AwayTeam { get; set; }
+
+        public string AwayTeamCountry { get; set; }
+
+        public string AwayTeamEmblemUrl { get; set; }
 
         public byte? HomeGoals { get; set; }
 

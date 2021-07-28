@@ -75,7 +75,7 @@
 
     var getAllSports = function () {
          $.ajax({
-            url: '@Url.Action("GetAllSports", "Sport", new { Area = "Administration" })',
+            url: '@Url.Action("GetAll", "Sport", new { Area = "Administration" })',
             type: 'GET',
             success: function (data) {
                 $('#inputSport').find('option').remove()
@@ -153,7 +153,7 @@
     var GetCountriesForSelectedSport = function (selectedId) {
         var sportId = $("#inputSport").val();
         $.ajax({
-            url: '@Url.Action("GetCountriesForSelectedSport", "Country", new { Area = "Administration" })',
+            url: '@Url.Action("GetAllForSelectedSport", "Country", new { Area = "Administration" })',
             type: 'GET',
             data: { sportId: sportId },
             success: function (data) {
@@ -176,7 +176,7 @@
         var sportId = $("#inputSport").val();
         var countryId = $("#inputCountry").val();
         $.ajax({
-            url: '@Url.Action("GetTournamentsForSelectedSportInCountry", "Tournament", new { Area = "Administration" })',
+            url: '@Url.Action("GetAllForSelectedSportInCountry", "Tournament", new { Area = "Administration" })',
             type: 'GET',
             data: { sportId: sportId, countryId: countryId },
             success: function (data) {
@@ -202,7 +202,7 @@
         var tournament = $("#inputTournament").find(":selected").text();
         var country = $("#inputCountry").find(":selected").text();
         $.ajax({
-            url: '@Url.Action("ShowMatches", "Sport", new { Area = "Administration" })',
+            url: '@Url.Action("Show", "Match", new { Area = "Administration" })',
             type: 'GET',
             data: { country: country, tournament: tournament },
             success: function (data) {
@@ -233,15 +233,14 @@
                             }
                         }
                     });
-
                     $("#buttonAddMatchesToGame").click(function () {
                         var checkedIds = $('#tableMatches :checked').toArray().map(i => i.id);
                         var checkedMatches = data.filter(function (item) {
-                            return (jQuery.inArray(item.id, checkedIds) !== -1)
+                                            return (jQuery.inArray(item.id, checkedIds) !== -1)
                         });
                         $.ajax({
                             type: 'POST',
-                            url: '@Url.Action("ShowSelectedMatches", "Sport", new { Area = "Administration" })',
+                            url: '@Url.Action("AddSelectedMatches", "Game", new { Area = "Administration" })',
                             dataType: 'json',
                             contentType: 'application/json',
                             headers: {
@@ -257,7 +256,6 @@
                         });
                     });
                 }
-
             },
              error: function () {
                  console.log("Error getting Matches");
@@ -267,12 +265,10 @@
 
 
 
-
-
     var GetAllOtherCountriesForSelectedSport = function () {
         var sportId = $("#inputSport").val();
         $.ajax({
-            url: '@Url.Action("GetAllOtherCountriesForSelectedSport", "Country", new { Area = "Administration" })',
+            url: '@Url.Action("GetAllOthersForSelectedSport", "Country", new { Area = "Administration" })',
             type: 'GET',
             data: { sportId: sportId },
             sucToShortTimeStringess: function (data) {
@@ -291,7 +287,7 @@
     $("#buttonAddCountry").click(function () {
         $.ajax({
             type: 'POST',
-            url: '@Url.Action("AddCountryToSport", "Country", new { Area = "Administration" })',
+            url: '@Url.Action("AddToSport", "Country", new { Area = "Administration" })',
             dataType: 'json',
             contentType: 'application/json',
             headers: {
@@ -314,7 +310,7 @@
     var sportName = $('#sportName').val();
         $.ajax({
             type: 'POST',
-            url: '@Url.Action("AddSport", "Sport", new { Area = "Administration" })',
+            url: '@Url.Action("Add", "Sport", new { Area = "Administration" })',
             dataType: 'json',
             contentType: 'application/json',
             headers: {
@@ -333,6 +329,4 @@
             }
         });
     });
-
-
 </script>

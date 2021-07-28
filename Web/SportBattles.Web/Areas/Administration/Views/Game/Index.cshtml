@@ -14,7 +14,7 @@
             <th style="width: 15%">Game type</th>
             <th style="width: 7%">Matches</th>
             <th style="width: 7%">Users</th>
-            <th style="width: 6%">Finish</th>
+            <th style="width: 6%">Status</th>
             <th style="width: 30%">Actions</th>
         </tr>
     </thead>
@@ -24,17 +24,23 @@
             <tr>
                 <td>@game.Name</td>
                 <td>@game.GameTypeName</td>
-                <td>@game.MatchesCount</td>
-                <td>@game.UsersCount</td>
-                <td>@(game.IsFinished ? "Yes" : "No")</td>
+                <td><a asp-area="Administration" asp-controller="Match" asp-action="AllInGame" asp-route-gameId="@game.Id" title="Show matches in game" class="btn-link">@game.MatchesCount</a></td>
+                <td><a asp-area="Administration" asp-controller="User" asp-action="AllInGame" asp-route-gameId="@game.Id" title="Show users in game" class="btn-link">@game.UsersCount</a></td>
+                <td>@(game.Started ? "Started" : "Not started")</td>
                 <td>
-                    @if (!game.IsFinished)
+                    @if (!game.Started)
                     {
-                        <a asp-area="Administration" asp-controller="Sport" asp-action="AddMatchesToGame" asp-route-gameId="@game.Id" title="Add matches to game" class="btn btn-primary">
+                        <a asp-area="Administration" asp-controller="Match" asp-action="AddToGame" asp-route-gameId="@game.Id" title="Add matches to game" class="btn btn-primary">
                             <i class="fa fa-plus-circle"></i>
                         </a>
-                        <a asp-area="Administration" asp-controller="Game" asp-action="Finish" asp-route-gameId="@game.Id" title="Finish game" class="btn btn-warning">
-                            <i class="fa fa-flag-checkered"></i>
+                        <a asp-area="Administration" asp-controller="Game" asp-action="ChangeStatus" asp-route-gameId="@game.Id" title="Start game" class="btn btn-warning">
+                            <i class="fa fa-play-circle"></i>
+                        </a>
+                    }
+                    else
+                    {
+                        <a asp-area="Administration" asp-controller="Game" asp-action="ChangeStatus" asp-route-gameId="@game.Id" title="Stop game" class="btn btn-warning">
+                            <i class="fa fa-stop-circle"></i>
                         </a>
                     }
                     <a asp-area="Administration" asp-controller="Game" asp-action="Delete" asp-route-gameId="@game.Id" title="Delete game" class="btn btn-danger">

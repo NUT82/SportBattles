@@ -5,20 +5,22 @@
 
     public interface IGamesService
     {
-        public IEnumerable<T> GetAllGames<T>();
+        public IEnumerable<T> GetAll<T>();
 
         public IEnumerable<T> GetAllTypes<T>();
 
-        public Task AddGame(string name, int typeId);
+        public Task Add(string name, int typeId);
 
-        public Task DeleteGame(int gameId);
+        public Task AddMatches(int gameId, IEnumerable<FootballMatch> footballMatches);
 
-        public Task FinishGame(int gameId);
+        public Task Delete(int gameId);
+
+        public Task ChangeStatus(int gameId);
 
         public Task AddType(string name, string description);
 
-        public bool DuplicateGame(string name, int typeId);
+        public bool IsDuplicate(string name, int typeId);
 
-        public bool DuplicateTypeName(string name);
+        public bool IsDuplicateTypeName(string name);
     }
 }

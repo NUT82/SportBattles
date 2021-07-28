@@ -1,0 +1,59 @@
+﻿@{
+    this.ViewData["Title"] = "All matches in game";
+}
+@model IEnumerable<SportBattles.Web.ViewModels.Administration.Match.MatchInGameViewModel>
+<div class="container mt-2">
+    <table id="table_id" class="display" style="width: 100%">
+        <thead>
+            <tr>
+                <th>Start time</th>
+                <th>Tournament</th>
+                <th>Home team</th>
+                <th>Away team</th>
+                <th>Result (HT)</th>
+                <th>Difficulty</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var @match in Model)
+            {
+                <tr>
+                    <td>@match.StartTimeLocalTime</td>
+                    <td>@match.TournamentCountryName - @match.TournamentName</td>
+                    <td>@match.HomeTeamName</td>
+                    <td>@match.AwayTeamName</td>
+                    @if (match.HomeGoals == null)
+                    {
+                        <td>? - ? (? - ?)</td>
+                    }
+                    else
+                    {
+                        <td>@match.HomeGoals - @match.AwayGoals (@match.HomeGoalsFirstHalf - @match.AwayGoalsFirstHalf)</td>
+                    }
+                    <td>
+                        @match.DifficultyMultiplier
+                        @if (match.DifficultyMultiplier == 1)
+                        {
+                            <a asp-area="Administration" asp-controller="Game" asp-action="ChangeStatus" asp-route-gameId="@match.Id" title="Start game" class="btn btn-warning">
+                                <i class="fa fa-arrow-circle-up"></i>
+                            </a>
+                        }
+                        else
+                        {
+                            <a asp-area="Administration" asp-controller="Game" asp-action="ChangeStatus" asp-route-gameId="@match.Id" title="Start game" class="btn btn-warning">
+                                <i class="fa fa-arrow-circle-down"></i>
+                            </a>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@section Scripts {
+    <script type="text/javascript" charset="utf8" src="~/lib/datatables/js/jquery.dataTables.min.js"></script>
+    <script>
+        $('#table_id').DataTable();
+    </script>
+}

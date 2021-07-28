@@ -3,10 +3,12 @@
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
+    using SportBattles.Data.Models;
+
     public interface ITournamentsService
     {
-        IEnumerable<T> GetTournamentsForSportInCountry<T>(int sportId, int countryId);
+        IEnumerable<T> GetAllForSportInCountry<T>(int sportId, int countryId);
 
-        Task<int> AddNewTournamentToSportInCountry(int sportId, int countryId, string name);
+        Task<int> AddToSportInCountry(int sportId, int countryId, string name);
     }
 }

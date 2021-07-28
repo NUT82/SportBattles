@@ -16,22 +16,22 @@
             this.countriesService = countriesService;
         }
 
-        public JsonResult GetCountriesForSelectedSport([FromQuery] int sportId)
+        public JsonResult GetAllForSelectedSport([FromQuery] int sportId)
         {
-            var countries = this.countriesService.GetCountriesForSport<CountriesViewModel>(sportId);
+            var countries = this.countriesService.GetAllForSport<CountriesViewModel>(sportId);
             return this.Json(countries);
         }
 
-        public JsonResult GetAllOtherCountriesForSelectedSport([FromQuery] int sportId)
+        public JsonResult GetAllOthersForSelectedSport([FromQuery] int sportId)
         {
-            var countries = this.countriesService.GetAllOtherCountriesForSport<CountriesViewModel>(sportId);
+            var countries = this.countriesService.GetAllOthersForSport<CountriesViewModel>(sportId);
             return this.Json(countries);
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddCountryToSport([FromBody]AddCountryToSportInputModel inputModel)
+        public async Task<IActionResult> AddToSport([FromBody]AddCountryToSportInputModel inputModel)
         {
-            var countryId = await this.countriesService.AddNewCountryToSport(inputModel.CountryId, inputModel.SportId);
+            var countryId = await this.countriesService.AddToSport(inputModel.CountryId, inputModel.SportId);
 
             return this.Json(countryId);
         }

@@ -14,11 +14,11 @@
 
         public int HomeTeamId { get; set; }
 
-        public Team HomeTeam { get; set; }
+        public virtual Team HomeTeam { get; set; }
 
         public int AwayTeamId { get; set; }
 
-        public Team AwayTeam { get; set; }
+        public virtual Team AwayTeam { get; set; }
 
         public DateTime StartTime { get; set; }
 
@@ -32,7 +32,7 @@
 
         public int TournamentId { get; set; }
 
-        public Tournament Tournament { get; set; }
+        public virtual Tournament Tournament { get; set; }
 
         public byte DifficultyMultiplier { get; set; } = 1;
 

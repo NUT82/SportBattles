@@ -21,7 +21,7 @@ namespace SportBattles.Data.Models
 
         public string ProfilePictureId { get; set; }
 
-        public Image ProfilePicture { get; set; }
+        public virtual Image ProfilePicture { get; set; }
 
         // Audit info
         public DateTime CreatedOn { get; set; }

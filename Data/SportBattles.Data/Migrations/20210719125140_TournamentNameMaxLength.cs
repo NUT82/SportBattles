@@ -1,7 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
-
-namespace SportBattles.Data.Migrations
+﻿namespace SportBattles.Data.Migrations
 {
+    using Microsoft.EntityFrameworkCore.Migrations;
+
     public partial class TournamentNameMaxLength : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)

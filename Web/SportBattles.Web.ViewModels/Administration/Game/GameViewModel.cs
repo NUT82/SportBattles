@@ -15,6 +15,6 @@
 
         public int UsersCount { get; set; }
 
-        public bool IsFinished { get; set; }
+        public bool Started { get; set; }
     }
 }

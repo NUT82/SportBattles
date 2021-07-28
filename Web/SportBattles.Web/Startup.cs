@@ -36,7 +36,7 @@
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ApplicationDbContext>(
-                options => options.UseSqlServer(this.configuration.GetConnectionString("DefaultConnection")));
+                options => options.UseSqlServer(this.configuration.GetConnectionString("DefaultConnection")).UseLazyLoadingProxies());
 
             services.AddDefaultIdentity<ApplicationUser>(IdentityOptionsProvider.GetIdentityOptions)
                 .AddRoles<ApplicationRole>().AddEntityFrameworkStores<ApplicationDbContext>();
@@ -66,7 +66,9 @@
             // Application services
             services.AddTransient<IEmailSender, NullMessageSender>();
             services.AddTransient<ISportsService, SportsService>();
+            services.AddTransient<IMatchesService, MatchesService>();
             services.AddTransient<IGamesService, GamesService>();
+            services.AddTransient<ITeamService, TeamService>();
             services.AddTransient<ICountriesService, CountriesService>();
             services.AddTransient<ITournamentsService, TournamentsService>();
             services.AddTransient<ILiveScoreApi, LiveScoreApi>();

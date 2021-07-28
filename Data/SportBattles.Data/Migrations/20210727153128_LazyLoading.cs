@@ -2,32 +2,32 @@
 {
     using Microsoft.EntityFrameworkCore.Migrations;
 
-    public partial class ChangeMaxLengthOfCountryName : Migration
+    public partial class LazyLoading : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AlterColumn<string>(
                 name: "Name",
-                table: "Countries",
-                type: "nvarchar(45)",
-                maxLength: 45,
+                table: "Games",
+                type: "nvarchar(50)",
+                maxLength: 50,
                 nullable: false,
+                defaultValue: string.Empty,
                 oldClrType: typeof(string),
-                oldType: "nvarchar(25)",
-                oldMaxLength: 25);
+                oldType: "nvarchar(max)",
+                oldNullable: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AlterColumn<string>(
                 name: "Name",
-                table: "Countries",
-                type: "nvarchar(25)",
-                maxLength: 25,
-                nullable: false,
+                table: "Games",
+                type: "nvarchar(max)",
+                nullable: true,
                 oldClrType: typeof(string),
-                oldType: "nvarchar(45)",
-                oldMaxLength: 45);
+                oldType: "nvarchar(50)",
+                oldMaxLength: 50);
         }
     }
 }

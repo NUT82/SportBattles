@@ -19,9 +19,9 @@
 
         public int GameTypeId { get; set; }
 
-        public GameType GameType { get; set; }
+        public virtual GameType GameType { get; set; }
 
-        public bool IsFinished { get; set; } = false;
+        public bool Started { get; set; } = false;
 
         public virtual ICollection<ApplicationUser> Users { get; set; }
 

@@ -3,8 +3,10 @@
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Mvc;
+
     using SportBattles.Services.Data;
     using SportBattles.Web.ViewModels.Administration.Game;
+    using SportBattles.Web.ViewModels.Administration.Sport;
 
     public class GameController : AdministrationController
     {
@@ -17,7 +19,7 @@
 
         public IActionResult Index()
         {
-            var games = this.gamesService.GetAllGames<GameViewModel>();
+            var games = this.gamesService.GetAll<GameViewModel>();
             return this.View(games);
         }
 
@@ -31,14 +33,14 @@
         {
             if (this.ModelState.IsValid)
             {
-                if (this.gamesService.DuplicateGame(inputModel.Game.Name, inputModel.Game.TypeID))
+                if (this.gamesService.IsDuplicate(inputModel.Game.Name, inputModel.Game.TypeID))
                 {
                     this.ModelState.AddModelError(string.Empty, "Duplicate name of game of this type");
                     return this.View(inputModel);
                 }
                 else
                 {
-                    await this.gamesService.AddGame(inputModel.Game.Name, inputModel.Game.TypeID);
+                    await this.gamesService.Add(inputModel.Game.Name, inputModel.Game.TypeID);
                     return this.RedirectToAction(nameof(this.Index));
                 }
             }
@@ -47,11 +49,30 @@
         }
 
         [HttpPost]
+        public async Task<JsonResult> AddSelectedMatches([FromBody] AddSelectedMatchesInputModel inputModel)
+        {
+            await this.gamesService.AddMatches(inputModel.GameId, inputModel.Matches);
+            return this.Json(new { redirectToUrl = this.Url.Action("Index", "Game") });
+        }
+
+        public async Task<IActionResult> ChangeStatus(int gameId)
+        {
+            await this.gamesService.ChangeStatus(gameId);
+            return this.RedirectToAction(nameof(this.Index));
+        }
+
+        public async Task<IActionResult> Delete(int gameId)
+        {
+            await this.gamesService.Delete(gameId);
+            return this.RedirectToAction(nameof(this.Index));
+        }
+
+        [HttpPost]
         public async Task<IActionResult> AddGameType([FromBody] GameTypeInputModel inputModel)
         {
             if (this.ModelState.IsValid)
             {
-                if (this.gamesService.DuplicateTypeName(inputModel.TypeName))
+                if (this.gamesService.IsDuplicateTypeName(inputModel.TypeName))
                 {
                     this.ModelState.AddModelError(string.Empty, "Duplicate name of game type");
                     return this.View(nameof(this.Add), inputModel);
@@ -70,18 +91,6 @@
         {
             var gameTypes = this.gamesService.GetAllTypes<GameTypeViewModel>();
             return this.Json(gameTypes);
-        }
-
-        public async Task<IActionResult> Finish(int gameId)
-        {
-            await this.gamesService.FinishGame(gameId);
-            return this.RedirectToAction(nameof(this.Index));
-        }
-
-        public async Task<IActionResult> Delete(int gameId)
-        {
-            await this.gamesService.DeleteGame(gameId);
-            return this.RedirectToAction(nameof(this.Index));
         }
     }
 }

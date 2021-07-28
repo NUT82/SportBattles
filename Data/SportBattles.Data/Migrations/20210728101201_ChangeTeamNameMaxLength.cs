@@ -2,15 +2,15 @@
 {
     using Microsoft.EntityFrameworkCore.Migrations;
 
-    public partial class ChangeMaxLengthOfCountryName : Migration
+    public partial class ChangeTeamNameMaxLength : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AlterColumn<string>(
                 name: "Name",
-                table: "Countries",
-                type: "nvarchar(45)",
-                maxLength: 45,
+                table: "Teams",
+                type: "nvarchar(50)",
+                maxLength: 50,
                 nullable: false,
                 oldClrType: typeof(string),
                 oldType: "nvarchar(25)",
@@ -21,13 +21,13 @@
         {
             migrationBuilder.AlterColumn<string>(
                 name: "Name",
-                table: "Countries",
+                table: "Teams",
                 type: "nvarchar(25)",
                 maxLength: 25,
                 nullable: false,
                 oldClrType: typeof(string),
-                oldType: "nvarchar(45)",
-                oldMaxLength: 45);
+                oldType: "nvarchar(50)",
+                oldMaxLength: 50);
         }
     }
 }

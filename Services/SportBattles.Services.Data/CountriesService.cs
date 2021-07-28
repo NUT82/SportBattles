@@ -20,7 +20,7 @@
             this.sportRepository = sportRepository;
         }
 
-        public async Task<int> AddNewCountryToSport(int countryId, int sportId)
+        public async Task<int> AddToSport(int countryId, int sportId)
         {
             var country = this.countryRepository.All().Where(c => c.Id == countryId).FirstOrDefault();
             var sport = this.sportRepository.All().Where(s => s.Id == sportId).FirstOrDefault();
@@ -39,12 +39,12 @@
             return country.Id;
         }
 
-        public IEnumerable<T> GetAllOtherCountriesForSport<T>(int sportId)
+        public IEnumerable<T> GetAllOthersForSport<T>(int sportId)
         {
             return this.countryRepository.AllAsNoTracking().Where(c => !c.Sports.Any(s => s.Id == sportId)).OrderBy(c => c.Name).To<T>().ToList();
         }
 
-        public IEnumerable<T> GetCountriesForSport<T>(int sportId)
+        public IEnumerable<T> GetAllForSport<T>(int sportId)
         {
             return this.countryRepository.AllAsNoTracking().Where(c => c.Sports.Any(s => s.Id == sportId)).OrderBy(c => c.Name).To<T>().ToList();
         }

@@ -5,10 +5,10 @@
 
     public interface ICountriesService
     {
-        IEnumerable<T> GetCountriesForSport<T>(int sportId);
+        IEnumerable<T> GetAllForSport<T>(int sportId);
 
-        IEnumerable<T> GetAllOtherCountriesForSport<T>(int sportId);
+        IEnumerable<T> GetAllOthersForSport<T>(int sportId);
 
-        Task<int> AddNewCountryToSport(int countryId, int sportId);
+        Task<int> AddToSport(int countryId, int sportId);
     }
 }

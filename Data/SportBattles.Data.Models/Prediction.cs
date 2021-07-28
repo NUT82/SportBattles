@@ -10,15 +10,15 @@
         [Required]
         public string UserId { get; set; }
 
-        public ApplicationUser User { get; set; }
+        public virtual ApplicationUser User { get; set; }
 
         public int GameId { get; set; }
 
-        public Game Game { get; set; }
+        public virtual Game Game { get; set; }
 
         public int MatchId { get; set; }
 
-        public Match Match { get; set; }
+        public virtual Match Match { get; set; }
 
         public byte? HomeGoals { get; set; }
 
