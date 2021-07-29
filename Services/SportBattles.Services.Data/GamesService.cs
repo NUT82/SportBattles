@@ -116,12 +116,12 @@
                     await this.matchRepository.SaveChangesAsync();
                 }
 
-                if (game.Matches.Any(m => m.Id == currMatch.Id))
+                if (game.Matches.Any(m => m.MatchId == currMatch.Id))
                 {
                     continue;
                 }
 
-                game.Matches.Add(currMatch);
+                game.Matches.Add(new GameMatch { Match = currMatch });
                 await this.gameRepository.SaveChangesAsync();
             }
         }

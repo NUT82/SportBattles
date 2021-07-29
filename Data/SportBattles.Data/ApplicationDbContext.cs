@@ -43,6 +43,8 @@
 
         public DbSet<UserTeam> UserTeams { get; set; }
 
+        public DbSet<GameMatch> GameMatch { get; set; }
+
         public override int SaveChanges() => this.SaveChanges(true);
 
         public override int SaveChanges(bool acceptAllChangesOnSuccess)

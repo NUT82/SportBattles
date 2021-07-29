@@ -1,7 +1,7 @@
 ﻿@{
     this.ViewData["Title"] = "All matches in game";
 }
-@model IEnumerable<SportBattles.Web.ViewModels.Administration.Match.MatchInGameViewModel>
+@model SportBattles.Web.ViewModels.Administration.Match.AllInGameViewModel
 <div class="container mt-2">
     <table id="table_id" class="display" style="width: 100%">
         <thead>
@@ -11,11 +11,11 @@
                 <th>Home team</th>
                 <th>Away team</th>
                 <th>Result (HT)</th>
-                <th>Difficulty</th>
+                <th>Double points</th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var @match in Model)
+            @foreach (var @match in Model.Matches)
             {
                 <tr>
                     <td>@match.StartTimeLocalTime</td>
@@ -30,21 +30,24 @@
                     {
                         <td>@match.HomeGoals - @match.AwayGoals (@match.HomeGoalsFirstHalf - @match.AwayGoalsFirstHalf)</td>
                     }
-                    <td>
-                        @match.DifficultyMultiplier
-                        @if (match.DifficultyMultiplier == 1)
+                <td>
+                    @if (match.StartTime > DateTime.UtcNow)
+                    {
+                        @if (Model.MatchesDoublePoints[match.Id])
                         {
-                            <a asp-area="Administration" asp-controller="Game" asp-action="ChangeStatus" asp-route-gameId="@match.Id" title="Start game" class="btn btn-warning">
-                                <i class="fa fa-arrow-circle-up"></i>
+                            <a asp-area="Administration" asp-controller="Match" asp-action="DoublePoints" asp-route-matchId="@match.Id" asp-route-gameId="@Model.GameId" title="Standart points" class="btn btn-danger">
+                                <i class="fa fa-arrow-circle-down"></i>
                             </a>
                         }
                         else
                         {
-                            <a asp-area="Administration" asp-controller="Game" asp-action="ChangeStatus" asp-route-gameId="@match.Id" title="Start game" class="btn btn-warning">
-                                <i class="fa fa-arrow-circle-down"></i>
+                            <a asp-area="Administration" asp-controller="Match" asp-action="DoublePoints" asp-route-matchId="@match.Id" asp-route-gameId="@Model.GameId" title="Double points" class="btn btn-success">
+                                <i class="fa fa-arrow-circle-up"></i>
                             </a>
                         }
-                    </td>
+                    }
+                    @(Model.MatchesDoublePoints[match.Id] ? "Yes" : "No")
+                </td>
                 </tr>
             }
         </tbody>

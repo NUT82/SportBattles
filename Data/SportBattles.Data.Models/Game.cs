@@ -10,7 +10,7 @@
         public Game()
         {
             this.Users = new HashSet<ApplicationUser>();
-            this.Matches = new HashSet<Match>();
+            this.Matches = new HashSet<GameMatch>();
         }
 
         [Required]
@@ -25,6 +25,6 @@
 
         public virtual ICollection<ApplicationUser> Users { get; set; }
 
-        public virtual ICollection<Match> Matches { get; set; }
+        public virtual ICollection<GameMatch> Matches { get; set; }
     }
 }

@@ -32,7 +32,5 @@
         public byte? HomeGoalsFirstHalf { get; set; }
 
         public byte? AwayGoalsFirstHalf { get; set; }
-
-        public byte DifficultyMultiplier { get; set; }
     }
 }

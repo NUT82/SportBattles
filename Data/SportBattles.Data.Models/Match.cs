@@ -9,7 +9,7 @@
     {
         public Match()
         {
-            this.Games = new HashSet<Game>();
+            this.Games = new HashSet<GameMatch>();
         }
 
         public int HomeTeamId { get; set; }
@@ -34,8 +34,6 @@
 
         public virtual Tournament Tournament { get; set; }
 
-        public byte DifficultyMultiplier { get; set; } = 1;
-
-        public virtual ICollection<Game> Games { get; set; }
+        public virtual ICollection<GameMatch> Games { get; set; }
     }
 }

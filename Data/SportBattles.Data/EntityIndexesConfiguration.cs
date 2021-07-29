@@ -4,6 +4,7 @@
 
     using Microsoft.EntityFrameworkCore;
     using SportBattles.Data.Common.Models;
+    using SportBattles.Data.Models;
 
     internal static class EntityIndexesConfiguration
     {
@@ -17,6 +18,10 @@
             {
                 modelBuilder.Entity(deletableEntityType.ClrType).HasIndex(nameof(IDeletableEntity.IsDeleted));
             }
+
+            modelBuilder.Entity<GameMatch>().HasKey(k => new { k.GameId, k.MatchId });
+            modelBuilder.Entity<GameMatch>().HasOne(gm => gm.Match).WithMany(g => g.Games).HasForeignKey(gm => gm.MatchId);
+            modelBuilder.Entity<GameMatch>().HasOne(gm => gm.Game).WithMany(m => m.Matches).HasForeignKey(gm => gm.GameId);
         }
     }
 }

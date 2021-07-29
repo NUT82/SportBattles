@@ -26,13 +26,25 @@
 
         public IActionResult AllInGame(int gameId)
         {
-            var matches = this.matchesService.GetAllByGameId<MatchInGameViewModel>(gameId);
-            return this.View(matches);
+            var viewModel = new AllInGameViewModel
+            {
+                GameId = gameId,
+                MatchesDoublePoints = this.matchesService.GetMatchesDoublePointsByGameId(gameId),
+                Matches = this.matchesService.GetAllByGameId<MatchInGameViewModel>(gameId),
+            };
+
+            return this.View(viewModel);
         }
 
         public IActionResult AddToGame(int gameId)
         {
             return this.View(gameId);
+        }
+
+        public async Task<IActionResult> DoublePoints(int matchId, int gameId)
+        {
+            await this.matchesService.ChangeDoublePoints(matchId, gameId);
+            return this.RedirectToAction(nameof(this.AllInGame), new { gameId });
         }
 
         public async Task<IActionResult> GetAll()
