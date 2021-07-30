@@ -3,13 +3,24 @@
     using System.Diagnostics;
 
     using Microsoft.AspNetCore.Mvc;
+
+    using SportBattles.Services.Data;
     using SportBattles.Web.ViewModels;
+    using SportBattles.Web.ViewModels.Home;
 
     public class HomeController : BaseController
     {
+        private readonly IGamesService gamesService;
+
+        public HomeController(IGamesService gamesService)
+        {
+            this.gamesService = gamesService;
+        }
+
         public IActionResult Index()
         {
-            return this.View();
+            var games = this.gamesService.GetAllStarted<IndexGameViewModel>();
+            return this.View(games);
         }
 
         public IActionResult Privacy()

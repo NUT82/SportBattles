@@ -4,12 +4,11 @@
 }
 @model IEnumerable<SportBattles.Web.ViewModels.Home.IndexGameViewModel>
 
-<h2>Choose a game you want to participate in</h2>
 <table id="table_id" class="responsive display" style="width: 100%">
     <thead>
         <tr>
             <th data-priority="1" style="width: 35%">Name</th>
-            <th data-priority="3" style="width: 15%">Game type</th>
+            <th style="width: 15%">Game type</th>
             <th style="width: 10%">Matches</th>
             <th style="width: 10%">Users</th>
             <th data-priority="2" style="width: 30%">Actions</th>
@@ -24,8 +23,8 @@
                 <td>@game.MatchesCount</td>
                 <td>@game.UsersCount</td>
                 <td>
-                    <a asp-controller="Game" asp-action="Join" asp-route-gameId="@game.Id" title="Join game" class="btn btn-success">
-                        <i class="fa fa-sign-in"></i>
+                    <a asp-controller="Game" asp-action="Predictions" asp-route-gameId="@game.Id" title="Predict matches" class="btn btn-success">
+                        <i class="fa fa-question"></i>:<i class="fa fa-question"></i>
                     </a>
                 </td>
             </tr>

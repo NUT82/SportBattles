@@ -1,0 +1,81 @@
+div.match {
+  margin-top: 1%;
+  padding-top: 1%;
+  padding-bottom: 1%;
+  width: 100%;
+  border-radius: 26px;
+  background-color: aqua;
+}
+
+div.startDate, div.league {
+  text-align: center;
+  font-size: 14px;
+}
+
+div.teams-result {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    font-size: 22px;
+}
+
+div.home_team {
+  width: 30%;
+  margin: auto;
+  text-align: right;
+}
+
+div.away_team {
+    width: 30%;
+    margin: auto;
+    text-align: left;
+}
+
+div.emblem {
+  margin: auto;
+}
+
+.emblem img {
+  width: 60px;
+}
+
+div.separator {
+    padding: 3px;
+    margin: auto;
+  font-size: 30px;
+}
+
+div.result {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  text-align: center;
+  margin: auto;
+}
+
+input {
+  border: solid 4px;
+  text-align: center;
+  padding: 0;
+  font-size: 30px;
+  width: 30px;
+  letter-spacing: 0;
+  color: red;
+  caret-color: transparent;
+}
+
+input:focus {
+  outline: none;
+  color: blue;
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type=number] {
+  -moz-appearance: textfield;
+}
+/*# sourceMappingURL=style.css.map */

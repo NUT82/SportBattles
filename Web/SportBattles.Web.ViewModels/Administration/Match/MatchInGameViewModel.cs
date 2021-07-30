@@ -13,6 +13,8 @@
 
         public string HomeTeamEmblemUrl { get; set; }
 
+        public string HomeTeamEmblemSrc => this.HomeTeamEmblemUrl ?? "/img/noTeamEmblem.png";
+
         public string AwayTeamName { get; set; }
 
         public string AwayTeamEmblemUrl { get; set; }

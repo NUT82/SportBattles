@@ -7,7 +7,13 @@
     {
         public IEnumerable<T> GetAll<T>();
 
+        public IEnumerable<T> GetUserGames<T>(string userId);
+
+        public IEnumerable<T> GetAllStarted<T>();
+
         public IEnumerable<T> GetAllTypes<T>();
+
+        public Task Join(int gameId, string userId);
 
         public Task Add(string name, int typeId);
 

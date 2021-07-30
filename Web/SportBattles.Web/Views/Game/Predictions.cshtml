@@ -1,0 +1,28 @@
+﻿@using SportBattles.Common
+
+@{
+    this.ViewData["Title"] = "Matches in this game";
+}
+
+@section Heads{
+    <link rel="stylesheet" href="~/css/matches.css" type="text/css" asp-append-version="true" />
+}
+@model IEnumerable<SportBattles.Web.ViewModels.Administration.Match.MatchInGameViewModel>
+@foreach (var match in Model)
+{
+    <div class="match">
+        <div class="league">@match.TournamentCountryName - @match.TournamentName</div>
+        <div class="startDate">@match.StartTimeLocalTime</div>
+        <div class="teams-result">
+            <div class="home_team">@match.HomeTeamName</div>
+            <div class="emblem"><img src="@match.HomeTeamEmblemSrc" alt=""></div>
+            <div class="result">
+                <input type="number" class="home_team" maxlength='1' value='@match.HomeGoals' />
+                <div class="separator">-</div>
+                <input type="number" class="away_team" maxlength='1' value='@match.AwayGoals' />
+            </div>
+            <div class="emblem"><img src="@match.AwayTeamEmblemUrl" alt=""></div>
+            <div class="away_team">@match.AwayTeamName</div>
+        </div>
+    </div>
+}

@@ -14,6 +14,7 @@
         private readonly IDeletableEntityRepository<GameType> gameTypeRepository;
         private readonly IDeletableEntityRepository<Game> gameRepository;
         private readonly IDeletableEntityRepository<Match> matchRepository;
+        private readonly IDeletableEntityRepository<ApplicationUser> userRepository;
         private readonly IDeletableEntityRepository<Tournament> tournamentRepository;
         private readonly ITeamService teamService;
 
@@ -21,14 +22,34 @@
             IDeletableEntityRepository<GameType> gameTypeRepository,
             IDeletableEntityRepository<Game> gameRepository,
             IDeletableEntityRepository<Match> matchRepository,
+            IDeletableEntityRepository<ApplicationUser> userRepository,
             IDeletableEntityRepository<Tournament> tournamentRepository,
             ITeamService teamService)
         {
             this.gameTypeRepository = gameTypeRepository;
             this.gameRepository = gameRepository;
             this.matchRepository = matchRepository;
+            this.userRepository = userRepository;
             this.tournamentRepository = tournamentRepository;
             this.teamService = teamService;
+        }
+
+        public async Task Join(int gameId, string userId)
+        {
+            var game = this.gameRepository.All().FirstOrDefault(g => g.Id == gameId);
+            var user = this.userRepository.All().FirstOrDefault(u => u.Id == userId);
+            if (game == null || user == null)
+            {
+                return;
+            }
+
+            if (game.Users.Any(u => u.Id == userId))
+            {
+                return;
+            }
+
+            game.Users.Add(user);
+            await this.gameRepository.SaveChangesAsync();
         }
 
         public async Task Add(string name, int typeId)
@@ -84,6 +105,16 @@
         public IEnumerable<T> GetAll<T>()
         {
             return this.gameRepository.AllAsNoTracking().OrderBy(g => g.Name).To<T>().ToList();
+        }
+
+        public IEnumerable<T> GetUserGames<T>(string userId)
+        {
+            return this.gameRepository.AllAsNoTracking().Where(g => g.Started && g.Users.Any(u => u.Id == userId)).OrderBy(g => g.Name).To<T>().ToList();
+        }
+
+        public IEnumerable<T> GetAllStarted<T>()
+        {
+            return this.gameRepository.AllAsNoTracking().Where(g => g.Started).OrderBy(g => g.Name).To<T>().ToList();
         }
 
         public IEnumerable<T> GetAllTypes<T>()

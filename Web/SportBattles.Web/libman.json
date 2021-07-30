@@ -83,6 +83,13 @@
         "css/jquery.dataTables.min.css",
         "images/*"
       ]
+    },
+    {
+      "library": "datatables.net-responsive@2.2.9",
+      "destination": "wwwroot/lib/datatables/",
+      "files": [
+        "js/dataTables.responsive.min.js"
+      ]
     }
   ]
 }

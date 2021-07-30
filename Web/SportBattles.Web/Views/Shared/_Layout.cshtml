@@ -17,6 +17,7 @@
     <link rel="stylesheet" href="~/lib/slicknav/dist/slicknav.min.css" type="text/css" asp-append-version="true" />
     <link rel="stylesheet" href="~/lib/datatables/css/jquery.dataTables.min.css" type="text/css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/style.css" type="text/css" asp-append-version="true" />
+    @await this.RenderSectionAsync("Heads", required: false)
 </head>
 <body>
     <!-- Page Preloder -->
@@ -50,7 +51,10 @@
         </div>
         <ul class="main-menu mobile-menu">
             <li class="active"><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-            <li><a asp-area="" asp-controller="Home" asp-action="Index">Club</a></li>
+            @if (this.User.Identity.IsAuthenticated)
+            {
+                <li><a asp-area="" asp-controller="Game" asp-action="MyGames">My Games</a></li>
+            }
             <li><a asp-area="" asp-controller="Home" asp-action="Index">Schedule</a></li>
             <li><a asp-area="" asp-controller="Home" asp-action="Index">Results</a></li>
             <li><a asp-area="" asp-controller="Home" asp-action="Index">Sport</a></li>
@@ -105,7 +109,10 @@
                         <div class="nav-menu">
                             <ul class="main-menu">
                                 <li class="active"><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-                                <li><a asp-area="" asp-controller="Home" asp-action="Index">Club</a></li>
+                                @if (this.User.Identity.IsAuthenticated)
+                                {
+                                    <li><a asp-area="" asp-controller="Game" asp-action="MyGames">My Games</a></li>
+                                }
                                 <li><a asp-area="" asp-controller="Home" asp-action="Index">Schedule</a></li>
                                 <li><a asp-area="" asp-controller="Home" asp-action="Index">Results</a></li>
                                 <li><a asp-area="" asp-controller="Home" asp-action="Index">Sport</a></li>
