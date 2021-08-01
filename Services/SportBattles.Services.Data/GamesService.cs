@@ -128,7 +128,7 @@
 
             foreach (var match in footballMatches)
             {
-                var tournamentId = this.tournamentRepository.AllAsNoTracking().Where(t => t.Name == match.Tournament).Select(t => t.Id).FirstOrDefault();
+                var tournamentId = this.tournamentRepository.AllAsNoTracking().Where(t => t.Name == match.Tournament && t.Country.Name == match.Country).Select(t => t.Id).FirstOrDefault();
 
                 var homeTeamId = await this.teamService.Add(match.HomeTeam, match.HomeTeamEmblemUrl, match.HomeTeamCountry);
                 var awayTeamId = await this.teamService.Add(match.AwayTeam, match.AwayTeamEmblemUrl, match.AwayTeamCountry);

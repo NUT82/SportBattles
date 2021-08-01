@@ -15,14 +15,63 @@
         <div class="startDate">@match.StartTimeLocalTime</div>
         <div class="teams-result">
             <div class="home_team">@match.HomeTeamName</div>
-            <div class="emblem"><img src="@match.HomeTeamEmblemSrc" alt=""></div>
+            <div class="emblem"><img src="@(match.HomeTeamEmblemUrl?? "/img/noTeamEmblem.png")" alt=""></div>
             <div class="result">
-                <input type="number" class="home_team" maxlength='1' value='@match.HomeGoals' />
+                <input type="number" class="home_team_goals" maxlength='1' value='@match.HomeGoals' />
                 <div class="separator">-</div>
-                <input type="number" class="away_team" maxlength='1' value='@match.AwayGoals' />
+                <input type="number" class="away_team_goals" maxlength='1' value='@match.AwayGoals' />
             </div>
-            <div class="emblem"><img src="@match.AwayTeamEmblemUrl" alt=""></div>
+            <div class="emblem"><img src="@(match.AwayTeamEmblemUrl?? "/img/noTeamEmblem.png")" alt=""></div>
             <div class="away_team">@match.AwayTeamName</div>
         </div>
     </div>
+}
+
+@section Scripts{
+    <script>
+        $(".match").click(function (e) {
+            if (e.target.className != "away_team_goals") {
+                e.currentTarget.querySelector(".home_team_goals").select();
+            }
+        });
+
+        $("input").click(function () {
+            $(this).select();
+        });
+
+        $("input").keypress(function (e) {
+            if (e.keyCode >= 48 && e.keyCode <= 57) {
+                if (this.value.length == this.maxLength) {
+                    this.value = "";
+                }
+            }
+            else {
+                return false;
+            }
+        });
+
+        $("input").keyup(function (e) {
+            var parentResultElement = e.currentTarget.parentNode;
+            
+            if (this.value.length == this.maxLength && Array.from(this.parentNode.querySelectorAll("input")).some(e => e.value == "")) {
+                if (e.target.className == "away_team_goals") {
+                    e.currentTarget.parentNode.querySelector(".home_team_goals").focus();
+                }
+                else {
+                    e.currentTarget.parentNode.querySelector(".away_team_goals").focus();
+                }
+            }
+            else {
+                $(parentResultElement).find("input").css("color", "green");
+            }
+        });
+
+        $("input").change(function () {
+            if (this.value.length == 0) {
+                $(this.parentNode).find("input").css("color", "red");
+            };
+        });
+
+
+    </script>
 }

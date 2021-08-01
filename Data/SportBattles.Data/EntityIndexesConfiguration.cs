@@ -22,6 +22,7 @@
             modelBuilder.Entity<GameMatch>().HasKey(k => new { k.GameId, k.MatchId });
             modelBuilder.Entity<GameMatch>().HasOne(gm => gm.Match).WithMany(g => g.Games).HasForeignKey(gm => gm.MatchId);
             modelBuilder.Entity<GameMatch>().HasOne(gm => gm.Game).WithMany(m => m.Matches).HasForeignKey(gm => gm.GameId);
+            modelBuilder.Entity<Team>(t => t.HasIndex(cn => new { cn.CountryId, cn.Name }).IsUnique());
         }
     }
 }
