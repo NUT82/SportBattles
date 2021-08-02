@@ -6,12 +6,12 @@
     using SportBattles.Data.Common.Repositories;
     using SportBattles.Data.Models;
 
-    public class TeamService : ITeamService
+    public class TeamsService : ITeamsService
     {
         private readonly IDeletableEntityRepository<Team> teamRepository;
         private readonly IDeletableEntityRepository<Country> countryRepository;
 
-        public TeamService(
+        public TeamsService(
             IDeletableEntityRepository<Team> teamRepository,
             IDeletableEntityRepository<Country> countryRepository)
         {

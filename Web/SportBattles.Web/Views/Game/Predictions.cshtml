@@ -1,34 +1,74 @@
-﻿@using SportBattles.Common
+﻿@using Microsoft.AspNetCore.Antiforgery
+@inject IAntiforgery antiforgery
 
 @{
     this.ViewData["Title"] = "Matches in this game";
+    var tokenSet = antiforgery.GetAndStoreTokens(Context);
 }
 
 @section Heads{
     <link rel="stylesheet" href="~/css/matches.css" type="text/css" asp-append-version="true" />
 }
-@model IEnumerable<SportBattles.Web.ViewModels.Administration.Match.MatchInGameViewModel>
-@foreach (var match in Model)
+@model SportBattles.Web.ViewModels.Game.PredictionsViewModel
+@foreach (var match in Model.Matches)
 {
     <div class="match">
-        <div class="league">@match.TournamentCountryName - @match.TournamentName</div>
+
+        <input type="hidden" class="matchId" value="@match.Id" />
+        <div class="league">
+            @match.TournamentCountryName - @match.TournamentName
+            <div class="points" data-toggle="tooltip" title="Points">?</div>
+        </div>
         <div class="startDate">@match.StartTimeLocalTime</div>
         <div class="teams-result">
             <div class="home_team">@match.HomeTeamName</div>
             <div class="emblem"><img src="@(match.HomeTeamEmblemUrl?? "/img/noTeamEmblem.png")" alt=""></div>
-            <div class="result">
-                <input type="number" class="home_team_goals" maxlength='1' value='@match.HomeGoals' />
-                <div class="separator">-</div>
-                <input type="number" class="away_team_goals" maxlength='1' value='@match.AwayGoals' />
-            </div>
+            @if (match.StartTime > DateTime.UtcNow)
+            {
+                <div class="result">
+                    <input type="number" class="home_team_goals" maxlength='1' value='@(Model.MatchesPredictions.ContainsKey(match.Id) ? Model.MatchesPredictions[match.Id].HomeGoals : "")' />
+                    <div class="separator">-</div>
+                    <input type="number" class="away_team_goals" maxlength='1' value='@(Model.MatchesPredictions.ContainsKey(match.Id) ? Model.MatchesPredictions[match.Id].AwayGoals : "")' />
+                </div>
+            }
+            else
+            {
+                <div class="finished_result">
+                    <div class="prediction" data-toggle="tooltip" title="Your prediction">
+                        @(Model.MatchesPredictions.ContainsKey(match.Id) ? Model.MatchesPredictions[match.Id].HomeGoals : "?")
+                        -
+                        @(Model.MatchesPredictions.ContainsKey(match.Id) ? Model.MatchesPredictions[match.Id].AwayGoals : "?")
+                    </div>
+                    <div class="real_result" data-toggle="tooltip" title="Result">
+                        @(match.HomeGoals?.ToString()?? "?")
+                        -
+                        @(match.AwayGoals?.ToString() ?? "?")
+                    </div>
+                </div>
+            }
+
             <div class="emblem"><img src="@(match.AwayTeamEmblemUrl?? "/img/noTeamEmblem.png")" alt=""></div>
             <div class="away_team">@match.AwayTeamName</div>
         </div>
+        <div class="error"></div>
     </div>
 }
 
 @section Scripts{
     <script>
+        $(document).ready(function () {
+            //Disable whole page
+            $(this).bind('cut copy paste', function (e) {
+                e.preventDefault();
+            });
+            $("input").each(function() {
+                if (this.value.length == 1) {
+                    $(this).css("color", "green");
+                }
+            });
+        });
+
+        var previousValue = null;
         $(".match").click(function (e) {
             if (e.target.className != "away_team_goals") {
                 e.currentTarget.querySelector(".home_team_goals").select();
@@ -39,8 +79,10 @@
             $(this).select();
         });
 
-        $("input").keypress(function (e) {
-            if (e.keyCode >= 48 && e.keyCode <= 57) {
+        $("input").keydown(function (e) {
+            previousValue = this.value;
+            var numbers = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+            if (numbers.some(n => n == e.key) && e.keyCode != 32) {
                 if (this.value.length == this.maxLength) {
                     this.value = "";
                 }
@@ -52,7 +94,10 @@
 
         $("input").keyup(function (e) {
             var parentResultElement = e.currentTarget.parentNode;
-            
+            if (this.value.length == 0 || this.value == previousValue) {
+                this.select();
+                return false;
+            }
             if (this.value.length == this.maxLength && Array.from(this.parentNode.querySelectorAll("input")).some(e => e.value == "")) {
                 if (e.target.className == "away_team_goals") {
                     e.currentTarget.parentNode.querySelector(".home_team_goals").focus();
@@ -63,6 +108,44 @@
             }
             else {
                 $(parentResultElement).find("input").css("color", "green");
+                var home_goals = $(parentResultElement).find(".home_team_goals").val();
+                var away_goals = $(parentResultElement).find(".away_team_goals").val();
+                var match_id = $(parentResultElement).closest(".match").find(".matchId").val();
+                $.ajax({
+                            type: 'POST',
+                            url: '@Url.Action("SavePredictions", "Game")',
+                            dataType: 'json',
+                            contentType: 'application/json',
+                            headers: {
+                                '@tokenSet.HeaderName': '@tokenSet.RequestToken'
+                            },
+                            data: JSON.stringify({
+                                HomeGoals: home_goals,
+                                AwayGoals: away_goals,
+                                MatchId: match_id,
+                                GameId: @Model.GameId,
+                            }),
+                    success: function (data) {
+                        var matchElement = $(parentResultElement).closest(".match");
+                        var currentColor = matchElement.css("background");
+                        if (data.isValid) {
+                            matchElement.css("background", "green");
+                            setTimeout(function () {
+                                matchElement.css("background", currentColor);
+                            }, 300);
+                            matchElement.next(".match").click();
+                        }
+                        else {
+                            matchElement.find("input").css("color", "red");
+                            matchElement.css("background", "red");
+                            matchElement.find(".error").text(data.error).show();
+                            setTimeout(function () {
+                                matchElement.css("background", currentColor);
+                                matchElement.find(".error").hide();
+                            }, 600);
+                        }
+                    },
+                        });
             }
         });
 

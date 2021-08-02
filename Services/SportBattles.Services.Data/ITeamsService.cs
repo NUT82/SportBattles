@@ -2,7 +2,7 @@
 {
     using System.Threading.Tasks;
 
-    public interface ITeamService
+    public interface ITeamsService
     {
         public Task<int> Add(string name, string emblemUrl, string country);
     }

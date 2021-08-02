@@ -15,7 +15,10 @@
             <a asp-area="Administration" asp-controller="Game" asp-action="Index" title="Admin">Admin</a>
         </li>
         <li>
-            <a asp-area="Administration" asp-controller="Sport" asp-action="GetMatches" title="Get matches for week">Get matches</a>
+            <a asp-area="Administration" asp-controller="Match" asp-action="GetAll" title="Get matches for week">Get matches</a>
+        </li>
+        <li>
+            <a asp-area="Administration" asp-controller="Match" asp-action="GetResults" title="Get previous day results">Get results</a>
         </li>
     }
     <li>

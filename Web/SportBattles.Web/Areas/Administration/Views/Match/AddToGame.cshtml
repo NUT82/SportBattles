@@ -210,14 +210,20 @@
                     $("<tr><td colspan=5>No matches for selected category</td></tr>").appendTo($("#tableMatches #body"));
                 }
                 else {
+                    var count = 0;
                     $(data).each(
                         function (index, match) {
                             var dateTimeUTCNow = new Date('@DateTime.UtcNow.ToString("s")');
                             var matchStartTimeUTC = new Date(match.startTimeUTC);
                             if (matchStartTimeUTC - dateTimeUTCNow > 0) {
-                                $(`<tr><td><input type="checkbox" id=${match.id}></td><td>${match.startTimeLocalTime}</td><td>${match.homeTeam}</td><td>${match.awayTeam}</td><td></td></tr>`).appendTo($("#tableMatches #body"))
+                                $(`<tr><td><input type="checkbox" id=${match.id}></td><td>${match.startTimeLocalTime}</td><td>${match.homeTeam}</td><td>${match.awayTeam}</td><td></td></tr>`).appendTo($("#tableMatches #body"));
+                                count++;
                             }
                         });
+                    if (count == 0) {
+                        $("<tr><td colspan=5>No matches for selected category</td></tr>").appendTo($("#tableMatches #body"));
+                        return;
+                    }
                     $('#tableMatches tr').click(function (event) {
                         if (event.target.type !== 'checkbox') {
                             $(':checkbox', this).trigger('click');

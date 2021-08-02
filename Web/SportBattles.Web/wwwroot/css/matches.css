@@ -7,7 +7,31 @@ div.match {
   background-color: aqua;
 }
 
+.points{
+    background-color: dimgray;
+    font-weight: bold;
+    border-radius: 50%;
+    width: 38px;
+    height: 38px;
+    position: absolute;
+    color: white;
+    font-size: 26px;
+    top: 5px;
+    right: 15px;
+}
+
+div.error {
+    margin-top: 2px;
+    color: white;
+    background-color: red;
+    border-radius: inherit;
+    text-align: center;
+    font-size: 22px;
+    display: none;
+}
+
 div.startDate, div.league {
+  position: relative;
   text-align: center;
   font-size: 14px;
 }
@@ -53,6 +77,34 @@ div.result {
   margin: auto;
 }
 
+div.finished_result {
+    position: relative;
+    width: 70px;
+    height: 40px;
+    background-color: darkblue;
+    border-radius: 10px;
+    margin-top: auto;
+    padding: 6px;
+    font-weight: bold;
+}
+
+div.real_result {
+    color: white;
+    text-align: center;
+    font-size: 26px;
+}
+
+div.prediction {
+    padding: 4px;
+    background-color: dimgray;
+    border-radius: 10px;
+    color: white;
+    position: absolute;
+    top: -55%;
+    left: 13px;
+    font-size: 18px;
+}
+
 input {
   border: solid 4px;
   text-align: center;
@@ -61,7 +113,6 @@ input {
   width: 30px;
   letter-spacing: 0;
   color: red;
-  caret-color: transparent;
 }
 
 input:focus {

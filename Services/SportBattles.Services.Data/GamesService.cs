@@ -16,7 +16,7 @@
         private readonly IDeletableEntityRepository<Match> matchRepository;
         private readonly IDeletableEntityRepository<ApplicationUser> userRepository;
         private readonly IDeletableEntityRepository<Tournament> tournamentRepository;
-        private readonly ITeamService teamService;
+        private readonly ITeamsService teamService;
 
         public GamesService(
             IDeletableEntityRepository<GameType> gameTypeRepository,
@@ -24,7 +24,7 @@
             IDeletableEntityRepository<Match> matchRepository,
             IDeletableEntityRepository<ApplicationUser> userRepository,
             IDeletableEntityRepository<Tournament> tournamentRepository,
-            ITeamService teamService)
+            ITeamsService teamService)
         {
             this.gameTypeRepository = gameTypeRepository;
             this.gameRepository = gameRepository;

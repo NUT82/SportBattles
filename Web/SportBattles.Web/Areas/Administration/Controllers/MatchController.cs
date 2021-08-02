@@ -58,10 +58,21 @@
             return this.RedirectToAction("Index", "Game");
         }
 
+        public async Task<IActionResult> GetResults()
+        {
+            var matches = this.liveScoreApi.GetFootballMatches(
+                DateTime.Today.AddDays(-1),
+                DateTime.Today.AddDays(-1));
+
+            await this.matchesService.PopulateYesterdayResult(matches);
+
+            return this.RedirectToAction("Index", "Game");
+        }
+
         public JsonResult Show(string country, string tournament)
         {
             var matches = this.liveScoreApi.GetFootballMatches(
-                DateTime.Today,
+                DateTime.Today.AddDays(-1),
                 DateTime.Today.AddDays(GlobalConstants.LiveScoreAPIDaysAhead),
                 country,
                 tournament);

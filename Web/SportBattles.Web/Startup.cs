@@ -68,7 +68,8 @@
             services.AddTransient<ISportsService, SportsService>();
             services.AddTransient<IMatchesService, MatchesService>();
             services.AddTransient<IGamesService, GamesService>();
-            services.AddTransient<ITeamService, TeamService>();
+            services.AddTransient<IPredictionsService, PredictionsService>();
+            services.AddTransient<ITeamsService, TeamsService>();
             services.AddTransient<ICountriesService, CountriesService>();
             services.AddTransient<ITournamentsService, TournamentsService>();
             services.AddTransient<ILiveScoreApi, LiveScoreApi>();
