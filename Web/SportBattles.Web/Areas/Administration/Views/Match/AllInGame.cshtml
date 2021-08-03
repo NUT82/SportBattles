@@ -17,19 +17,26 @@
         <tbody>
             @foreach (var @match in Model.Matches)
             {
-                <tr>
-                    <td>@match.StartTimeLocalTime</td>
-                    <td>@match.TournamentCountryName - @match.TournamentName</td>
-                    <td>@match.HomeTeamName</td>
-                    <td>@match.AwayTeamName</td>
-                    @if (match.HomeGoals == null)
+            <tr>
+                <td>@match.StartTimeLocalTime</td>
+                <td>@match.TournamentCountryName - @match.TournamentName</td>
+                <td>@match.HomeTeamName</td>
+                <td>@match.AwayTeamName</td>
+                @if (match.HomeGoals == null)
+                {
+                    if (match.Status == "Canc." || match.Status == "Postp.")
                     {
-                        <td>? - ? (? - ?)</td>
+                        <td>@match.Status</td>
                     }
                     else
                     {
-                        <td>@match.HomeGoals - @match.AwayGoals (@match.HomeGoalsFirstHalf - @match.AwayGoalsFirstHalf)</td>
+                        <td>? - ? (? - ?)</td>
                     }
+                }
+                else
+                {
+                    <td>@match.HomeGoals - @match.AwayGoals (@match.HomeGoalsFirstHalf - @match.AwayGoalsFirstHalf)</td>
+                }
                 <td>
                     @if (match.StartTime > DateTime.UtcNow)
                     {
@@ -48,7 +55,7 @@
                     }
                     @(Model.MatchesDoublePoints[match.Id] ? "Yes" : "No")
                 </td>
-                </tr>
+            </tr>
             }
         </tbody>
     </table>

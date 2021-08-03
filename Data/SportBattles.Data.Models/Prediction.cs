@@ -25,5 +25,7 @@
         public byte? AwayGoals { get; set; }
 
         public ThreeWayResult? ThreeWayWinner { get; set; }
+
+        public byte Points => 0;
     }
 }

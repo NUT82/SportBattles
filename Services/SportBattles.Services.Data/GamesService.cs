@@ -139,6 +139,7 @@
                     currMatch = new Match
                     {
                         StartTime = match.StartTimeUTC,
+                        Status = match.Status,
                         TournamentId = tournamentId,
                         HomeTeamId = homeTeamId,
                         AwayTeamId = awayTeamId,

@@ -21,6 +21,8 @@
 
         public string StartTimeLocalTime => this.StartTime.ToLocalTime().ToString("dd.MM.yyyy HH:mm");
 
+        public string Status { get; set; }
+
         public string TournamentName { get; set; }
 
         public string TournamentCountryName { get; set; }

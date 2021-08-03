@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+
     using SportBattles.Common;
     using SportBattles.Data.Common.Repositories;
     using SportBattles.Data.Models;
@@ -31,7 +32,10 @@
 
         public IEnumerable<T> GetAllByGameId<T>(int gameId)
         {
-            return this.matchesRepository.AllAsNoTracking().Where(m => m.Games.Any(g => g.GameId == gameId)).OrderByDescending(m => m.StartTime).To<T>().ToList();
+            var notStarted = this.matchesRepository.AllAsNoTracking().Where(m => m.Games.Any(g => g.GameId == gameId) && m.StartTime > DateTime.UtcNow).OrderBy(m => m.StartTime).To<T>().ToList();
+            var startedOrFinished = this.matchesRepository.AllAsNoTracking().Where(m => m.Games.Any(g => g.GameId == gameId) && m.StartTime <= DateTime.UtcNow).OrderByDescending(m => m.StartTime).To<T>().ToList();
+
+            return notStarted.Concat(startedOrFinished);
         }
 
         public IDictionary<int, bool> GetMatchesDoublePointsByGameId(int gameId)
@@ -44,11 +48,10 @@
             return this.matchesRepository.AllAsNoTracking().FirstOrDefault(m => m.Id == matchId).StartTime;
         }
 
-        public async Task PopulateYesterdayResult(IEnumerable<FootballMatch> matches)
+        public async Task PopulateResults(IEnumerable<FootballMatch> matches, DateTime startDate, DateTime endDate)
         {
-            matches = matches.OrderBy(m => m.StartTimeUTC);
-            var startDate = DateTime.UtcNow.AddDays(-1).Date.AddHours(-GlobalConstants.LiveScoreAPITimeZoneCorrection);
-            var endDate = DateTime.UtcNow.Date.AddHours(-GlobalConstants.LiveScoreAPITimeZoneCorrection);
+            startDate = startDate.Date.AddHours(-GlobalConstants.LiveScoreAPITimeZoneCorrection);
+            endDate = endDate.Date.AddHours(-GlobalConstants.LiveScoreAPITimeZoneCorrection);
             var yesterdayMatches = this.matchesRepository.All()
                 .Where(m => m.StartTime >= startDate && m.StartTime <= endDate)
                 .ToList();
@@ -56,7 +59,7 @@
             foreach (var match in yesterdayMatches.Where(m => m.HomeGoals == null || m.AwayGoals == null))
             {
                 var currentMatch = matches.Where(m => m.HomeTeam == match.HomeTeam.Name && m.AwayTeam == match.AwayTeam.Name).FirstOrDefault();
-                if (currentMatch == null || (currentMatch.Status != "FT" && currentMatch.Status != "AP" && currentMatch.Status != "AET"))
+                if (currentMatch == null || currentMatch.Status == "NS" || currentMatch.Status == "HT" || currentMatch.Status.Contains("'"))
                 {
                     continue;
                 }
@@ -65,6 +68,7 @@
                 match.AwayGoals = currentMatch.AwayGoals;
                 match.HomeGoalsFirstHalf = currentMatch.HalfHomeGoals;
                 match.AwayGoalsFirstHalf = currentMatch.HalfAwayGoals;
+                match.Status = currentMatch.Status;
             }
 
             await this.matchesRepository.SaveChangesAsync();

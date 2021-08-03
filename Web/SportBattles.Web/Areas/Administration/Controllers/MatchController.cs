@@ -17,6 +17,9 @@
         private readonly ILiveScoreApi liveScoreApi;
         private readonly IMatchesService matchesService;
 
+        private readonly DateTime startDateForResults = DateTime.UtcNow.AddDays(-3).AddHours(GlobalConstants.LiveScoreAPITimeZoneCorrection);
+        private readonly DateTime yesterday = DateTime.UtcNow.AddDays(-1).AddHours(GlobalConstants.LiveScoreAPITimeZoneCorrection);
+
         public MatchController(IConfiguration configuration, ILiveScoreApi liveScoreApi, IMatchesService matchesService)
         {
             this.configuration = configuration;
@@ -50,8 +53,8 @@
         public async Task<IActionResult> GetAll()
         {
             await this.liveScoreApi.CreateJsonFilesForAllFootballMatchesAsync(
-                DateTime.Today.AddDays(-1),
-                DateTime.Today.AddDays(GlobalConstants.LiveScoreAPIDaysAhead),
+                this.yesterday,
+                this.yesterday.AddDays(GlobalConstants.LiveScoreAPIDaysAhead),
                 this.configuration.GetValue<string>("X-RapidAPI-Key"),
                 this.configuration.GetValue<string>("X-RapidAPI-Host"));
 
@@ -60,11 +63,9 @@
 
         public async Task<IActionResult> GetResults()
         {
-            var matches = this.liveScoreApi.GetFootballMatches(
-                DateTime.Today.AddDays(-1),
-                DateTime.Today.AddDays(-1));
+            var matches = this.liveScoreApi.GetFootballMatches(this.startDateForResults, this.yesterday);
 
-            await this.matchesService.PopulateYesterdayResult(matches);
+            await this.matchesService.PopulateResults(matches, this.startDateForResults, this.yesterday.AddDays(1));
 
             return this.RedirectToAction("Index", "Game");
         }
@@ -72,8 +73,8 @@
         public JsonResult Show(string country, string tournament)
         {
             var matches = this.liveScoreApi.GetFootballMatches(
-                DateTime.Today.AddDays(-1),
-                DateTime.Today.AddDays(GlobalConstants.LiveScoreAPIDaysAhead),
+                this.yesterday.AddDays(1),
+                this.yesterday.AddDays(GlobalConstants.LiveScoreAPIDaysAhead),
                 country,
                 tournament);
 

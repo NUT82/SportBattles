@@ -7,6 +7,6 @@
         public const string AdministratorRoleName = "Administrator";
 
         public const byte LiveScoreAPITimeZoneCorrection = 7;
-        public const byte LiveScoreAPIDaysAhead = 6;
+        public const byte LiveScoreAPIDaysAhead = 7;
     }
 }

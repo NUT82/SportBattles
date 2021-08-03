@@ -16,6 +16,6 @@
 
         public Task ChangeDoublePoints(int matchId, int gameId);
 
-        public Task PopulateYesterdayResult(IEnumerable<FootballMatch> matches);
+        public Task PopulateResults(IEnumerable<FootballMatch> matches, DateTime startDate, DateTime endDate);
     }
 }

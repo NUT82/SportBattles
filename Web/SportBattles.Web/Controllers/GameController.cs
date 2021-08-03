@@ -38,6 +38,7 @@
             {
                 Matches = this.matchesService.GetAllByGameId<MatchInPredictionsViewModel>(gameId),
                 GameId = gameId,
+                MatchesDoublePoints = this.matchesService.GetMatchesDoublePointsByGameId(gameId),
                 MatchesPredictions = this.predictionsService.GetMatchesPredictions(gameId, this.User.FindFirstValue(ClaimTypes.NameIdentifier)),
             };
 

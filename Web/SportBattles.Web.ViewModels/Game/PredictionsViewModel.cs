@@ -9,5 +9,7 @@
         public IEnumerable<MatchInPredictionsViewModel> Matches { get; set; }
 
         public IDictionary<int, PredictionViewModel> MatchesPredictions { get; set; }
+
+        public IDictionary<int, bool> MatchesDoublePoints { get; set; }
     }
 }

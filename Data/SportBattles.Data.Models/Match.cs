@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
 
     using SportBattles.Data.Common.Models;
 
@@ -21,6 +22,9 @@
         public virtual Team AwayTeam { get; set; }
 
         public DateTime StartTime { get; set; }
+
+        [MaxLength(10)]
+        public string Status { get; set; }
 
         public byte? HomeGoals { get; set; }
 

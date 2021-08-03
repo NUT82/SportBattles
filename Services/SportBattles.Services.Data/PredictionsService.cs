@@ -40,7 +40,7 @@
 
         public IDictionary<int, PredictionViewModel> GetMatchesPredictions(int gameId, string userId)
         {
-            return this.predictionRepository.AllAsNoTracking().Where(p => p.GameId == gameId && p.UserId == userId).Select(m => new KeyValuePair<int, PredictionViewModel>(m.MatchId, new PredictionViewModel { HomeGoals = m.HomeGoals, AwayGoals = m.AwayGoals })).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+            return this.predictionRepository.AllAsNoTracking().Where(p => p.GameId == gameId && p.UserId == userId).Select(m => new KeyValuePair<int, PredictionViewModel>(m.MatchId, new PredictionViewModel { HomeGoals = m.HomeGoals, AwayGoals = m.AwayGoals, Points = m.Points })).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
         }
     }
 }
