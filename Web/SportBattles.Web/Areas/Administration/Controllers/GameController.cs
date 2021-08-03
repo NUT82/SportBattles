@@ -72,14 +72,14 @@
         {
             if (this.ModelState.IsValid)
             {
-                if (this.gamesService.IsDuplicateTypeName(inputModel.TypeName))
+                if (this.gamesService.IsDuplicateTypeName(inputModel.Name))
                 {
                     this.ModelState.AddModelError(string.Empty, "Duplicate name of game type");
                     return this.View(nameof(this.Add), inputModel);
                 }
                 else
                 {
-                    await this.gamesService.AddType(inputModel.TypeName, inputModel.TypeDescription);
+                    await this.gamesService.AddType(inputModel);
                     return this.Json(inputModel);
                 }
             }

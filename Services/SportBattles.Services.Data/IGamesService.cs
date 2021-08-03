@@ -3,6 +3,8 @@
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
+    using SportBattles.Web.ViewModels.Administration.Game;
+
     public interface IGamesService
     {
         public IEnumerable<T> GetAll<T>();
@@ -23,7 +25,7 @@
 
         public Task ChangeStatus(int gameId);
 
-        public Task AddType(string name, string description);
+        public Task AddType(GameTypeInputModel input);
 
         public bool IsDuplicate(string name, int typeId);
 

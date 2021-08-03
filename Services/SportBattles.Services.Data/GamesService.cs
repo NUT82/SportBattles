@@ -8,6 +8,7 @@
     using SportBattles.Data.Models;
     using SportBattles.Services;
     using SportBattles.Services.Mapping;
+    using SportBattles.Web.ViewModels.Administration.Game;
 
     public class GamesService : IGamesService
     {
@@ -80,12 +81,16 @@
             await this.gameRepository.SaveChangesAsync();
         }
 
-        public async Task AddType(string name, string description)
+        public async Task AddType(GameTypeInputModel input)
         {
             var gameType = new GameType
             {
-                Name = name,
-                Description = description,
+                Name = input.Name,
+                Description = input.Description,
+                ExactScorelinePoints = input.ExactScorelinePoints,
+                GoalDifferencePoints = input.GoalDifferencePoints,
+                OneTeamGoalsPoints = input.OneTeamGoalsPoints,
+                OutcomePoints = input.OutcomePoints,
             };
 
             await this.gameTypeRepository.AddAsync(gameType);

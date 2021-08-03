@@ -7,10 +7,26 @@
         [Required]
         [MinLength(3)]
         [MaxLength(50)]
-        public string TypeName { get; set; }
+        public string Name { get; set; }
 
         [Required]
         [MinLength(10)]
-        public string TypeDescription { get; set; }
+        public string Description { get; set; }
+
+        [Required]
+        [RegularExpression("[0-9]{1}")]
+        public byte ExactScorelinePoints { get; set; }
+
+        [Required]
+        [RegularExpression("[0-9]{1}")]
+        public byte GoalDifferencePoints { get; set; }
+
+        [Required]
+        [RegularExpression("[0-9]{1}")]
+        public byte OneTeamGoalsPoints { get; set; }
+
+        [Required]
+        [RegularExpression("[0-9]{1}")]
+        public byte OutcomePoints { get; set; }
     }
 }
