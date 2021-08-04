@@ -12,6 +12,8 @@
 
         public DateTime GetStartTimeUTC(int matchId);
 
+        public bool IsDoublePoint(int gameId, int matchId);
+
         public IDictionary<int, bool> GetMatchesDoublePointsByGameId(int gameId);
 
         public Task ChangeDoublePoints(int matchId, int gameId);

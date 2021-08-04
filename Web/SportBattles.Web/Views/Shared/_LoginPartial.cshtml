@@ -20,6 +20,9 @@
         <li>
             <a asp-area="Administration" asp-controller="Match" asp-action="GetResults" title="Get previous day results">Get results</a>
         </li>
+        <li>
+            <a asp-area="Administration" asp-controller="Prediction" asp-action="GetPoints" title="Get points for users">Get points</a>
+        </li>
     }
     <li>
         <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@this.Url.Action("Index", "Home", new { area = string.Empty })">

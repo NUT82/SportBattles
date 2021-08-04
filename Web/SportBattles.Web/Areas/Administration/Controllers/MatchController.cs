@@ -61,6 +61,22 @@
             return this.RedirectToAction("Index", "Game");
         }
 
+        public async Task<IActionResult> GetForDate(DateTime? date)
+        {
+            if (date is null)
+            {
+                throw new NullReferenceException("You must specify the date");
+            }
+
+            await this.liveScoreApi.CreateJsonFilesForAllFootballMatchesAsync(
+                date.Value,
+                date.Value,
+                this.configuration.GetValue<string>("X-RapidAPI-Key"),
+                this.configuration.GetValue<string>("X-RapidAPI-Host"));
+
+            return this.RedirectToAction("Index", "Game");
+        }
+
         public async Task<IActionResult> GetResults()
         {
             var matches = this.liveScoreApi.GetFootballMatches(this.startDateForResults, this.yesterday);

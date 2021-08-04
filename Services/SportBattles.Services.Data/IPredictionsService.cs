@@ -10,5 +10,7 @@
         public Task Add(PredictionInputModel input, string userId);
 
         public IDictionary<int, PredictionViewModel> GetMatchesPredictions(int gameId, string userId);
+
+        public Task PopulatePoints();
     }
 }

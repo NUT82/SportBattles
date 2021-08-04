@@ -8,11 +8,11 @@
     using SportBattles.Data.Common.Models;
 
     [Index(nameof(Name), IsUnique = true)]
-    public class GameType : BaseDeletableModel<int>
+    public class GamePoint : BaseDeletableModel<int>
     {
-        public GameType()
+        public GamePoint()
         {
-            this.GamePoints = new HashSet<GamePoint>();
+            this.GameTypes = new HashSet<GameType>();
         }
 
         [Required]
@@ -22,14 +22,8 @@
         [Required]
         public string Description { get; set; }
 
-        public virtual ICollection<GamePoint> GamePoints { get; set; }
+        public byte Value { get; set; }
 
-        ////public byte ExactScorelinePoints { get; set; }
-
-        ////public byte GoalDifferencePoints { get; set; }
-
-        ////public byte OneTeamGoalsPoints { get; set; }
-
-        ////public byte OutcomePoints { get; set; }
+        public virtual ICollection<GameType> GameTypes { get; set; }
     }
 }

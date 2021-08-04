@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SportBattles.Data;
 
 namespace SportBattles.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210804085642_MakePointsNullable")]
+    partial class MakePointsNullable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -62,21 +64,6 @@ namespace SportBattles.Data.Migrations
                     b.HasIndex("SportsId");
 
                     b.ToTable("CountrySport");
-                });
-
-            modelBuilder.Entity("GamePointGameType", b =>
-                {
-                    b.Property<int>("GamePointsId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("GameTypesId")
-                        .HasColumnType("int");
-
-                    b.HasKey("GamePointsId", "GameTypesId");
-
-                    b.HasIndex("GameTypesId");
-
-                    b.ToTable("GamePointGameType");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -403,47 +390,6 @@ namespace SportBattles.Data.Migrations
                     b.ToTable("GameMatch");
                 });
 
-            modelBuilder.Entity("SportBattles.Data.Models.GamePoint", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DeletedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("ModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<byte>("Value")
-                        .HasColumnType("tinyint");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("IsDeleted");
-
-                    b.HasIndex("Name")
-                        .IsUnique();
-
-                    b.ToTable("GamePoint");
-                });
-
             modelBuilder.Entity("SportBattles.Data.Models.GameType", b =>
                 {
                     b.Property<int>("Id")
@@ -461,6 +407,12 @@ namespace SportBattles.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<byte>("ExactScorelinePoints")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("GoalDifferencePoints")
+                        .HasColumnType("tinyint");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
@@ -472,12 +424,15 @@ namespace SportBattles.Data.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<byte>("OneTeamGoalsPoints")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("OutcomePoints")
+                        .HasColumnType("tinyint");
+
                     b.HasKey("Id");
 
                     b.HasIndex("IsDeleted");
-
-                    b.HasIndex("Name")
-                        .IsUnique();
 
                     b.ToTable("GameTypes");
                 });
@@ -807,21 +762,6 @@ namespace SportBattles.Data.Migrations
                     b.HasOne("SportBattles.Data.Models.Sport", null)
                         .WithMany()
                         .HasForeignKey("SportsId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("GamePointGameType", b =>
-                {
-                    b.HasOne("SportBattles.Data.Models.GamePoint", null)
-                        .WithMany()
-                        .HasForeignKey("GamePointsId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("SportBattles.Data.Models.GameType", null)
-                        .WithMany()
-                        .HasForeignKey("GameTypesId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });

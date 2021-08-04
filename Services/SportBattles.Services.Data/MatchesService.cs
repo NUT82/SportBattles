@@ -48,6 +48,17 @@
             return this.matchesRepository.AllAsNoTracking().FirstOrDefault(m => m.Id == matchId).StartTime;
         }
 
+        public bool IsDoublePoint(int gameId, int matchId)
+        {
+            var gameMatch = this.gameMatchRepository.AllAsNoTracking().FirstOrDefault(gm => gm.GameId == gameId && gm.MatchId == matchId);
+            if (gameMatch == null)
+            {
+                throw new NullReferenceException("No GameMatch with this Id's");
+            }
+
+            return gameMatch.DoublePoints;
+        }
+
         public async Task PopulateResults(IEnumerable<FootballMatch> matches, DateTime startDate, DateTime endDate)
         {
             startDate = startDate.Date.AddHours(-GlobalConstants.LiveScoreAPITimeZoneCorrection);

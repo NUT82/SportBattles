@@ -68,7 +68,7 @@
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddGameType([FromBody] GameTypeInputModel inputModel)
+        public async Task<IActionResult> AddGameType(GameTypeInputModel inputModel)
         {
             if (this.ModelState.IsValid)
             {
@@ -91,6 +91,12 @@
         {
             var gameTypes = this.gamesService.GetAllTypes<GameTypeViewModel>();
             return this.Json(gameTypes);
+        }
+
+        public JsonResult GetAllGamePoints()
+        {
+            var gamePoints = this.gamesService.GetAllGamePoints<GamePointViewModel>();
+            return this.Json(gamePoints);
         }
     }
 }

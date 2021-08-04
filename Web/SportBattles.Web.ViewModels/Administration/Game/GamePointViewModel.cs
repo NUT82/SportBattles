@@ -1,11 +1,9 @@
 ﻿namespace SportBattles.Web.ViewModels.Administration.Game
 {
-    using System.Collections.Generic;
-
     using SportBattles.Data.Models;
     using SportBattles.Services.Mapping;
 
-    public class GameTypeViewModel : IMapFrom<GameType>
+    public class GamePointViewModel : IMapFrom<GamePoint>
     {
         public int Id { get; set; }
 
@@ -13,6 +11,6 @@
 
         public string Description { get; set; }
 
-        public ICollection<GamePointViewModel> GamePoints { get; set; }
+        public byte Value { get; set; }
     }
 }

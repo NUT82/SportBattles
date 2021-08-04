@@ -26,6 +26,6 @@
 
         public ThreeWayResult? ThreeWayWinner { get; set; }
 
-        public byte Points { get; set; } = 0;
+        public byte? Points { get; set; }
     }
 }

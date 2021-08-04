@@ -6,6 +6,6 @@
 
         public byte? AwayGoals { get; set; }
 
-        public byte Points { get; set; }
+        public byte? Points { get; set; }
     }
 }

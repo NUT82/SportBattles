@@ -27,6 +27,7 @@
                           {
                               new RolesSeeder(),
                               new FootballSeeder(),
+                              new GameTypesSeeder(),
                           };
 
             foreach (var seeder in seeders)

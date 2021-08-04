@@ -336,7 +336,7 @@
             if (footballSport == null)
             {
                 footballSport = new Sport { Name = "Football" };
-                dbContext.Sports.Add(footballSport);
+                await dbContext.Sports.AddAsync(footballSport);
             }
 
             foreach (var item in footballCountries)

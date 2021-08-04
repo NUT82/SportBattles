@@ -9,25 +9,22 @@
 
 <form method="post" class="col-md-12 g-4">
     <label for="inputGameType" class="text-uppercase">Choose game type:</label>
-    <div class="form-row">
-        <select asp-for="Game.TypeID" id="inputGameType" class="form-control user-select-none" data-toggle="tooltip" title=""></select>
+    <div class="d-flex">
+        <select asp-for="Game.TypeID" id="inputGameType" class="form-control user-select-none"></select>
+        <a title="Scoring points" class="btn btn-success rounded-circle form-control w-auto" id="scoringPoints">
+            <i class="fa fa-question-circle"></i>
+        </a>
     </div>
-    <div class="form-row input-game-name">
-        <label asp-for="Game.Name">Input game name:</label>
+    <div class="input-game-name">
+        <label for="name">Input game name:</label>
         <input asp-for="Game.Name" class="form-control" id="name">
         <span asp-validation-for="Game.Name" class="text-danger"></span>
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        <div class="shadow-lg p-4 mb-4 bg-light rounded-lg mx-auto">
-            <div class="exactScorelinePoints" data-toggle="tooltip" title="Predicting the final result of the regular game time perfectly"></div>
-            <div class="goalDifferencePoints" data-toggle="tooltip" title="Correctly predicting the difference of the goals scored by the teams (when also predicting the outcome correctly)"></div>
-            <div class="oneTeamGoalsPoints" data-toggle="tooltip" title="Correctly predicting the number of goals scored by one of the teams"></div>
-            <div class="outcomePoints" data-toggle="tooltip" title="Predicting the winning team or draw correctly"></div>
-        </div>
         <button type="submit" class="btn btn-outline-primary col-md-12">Add</button>
     </div>
 </form>
 
-<form method="post" class="g-4 col-md-12" style="display:none" id="manualInputGameType">
+<form method="post" asp-action="AddGameType" class="g-4 col-md-12" style="display:none" id="manualInputGameType">
     <div class="shadow-lg p-4 mb-4 bg-light rounded-lg">
         <div class="form-row">
             <input asp-for="GameType.Name" class="form-control" id="gameTypeName" placeholder="Input game type">
@@ -41,42 +38,65 @@
         </div>
     </div>
 
-    <div class="form-row text-uppercase">
+    @*<label for="inputPoint">Add Scoring points:</label>
+    <div class="form-row">
+        <div class="col-md-6">
+            <select id="inputPoint" class="form-control user-select-none">
+            </select>
+        </div>
+
+        <div class="col-md-6" id="manualInputPoint">
+            <input asp-for="GameType.GamePoint.Name" class="form-control" placeholder="Type name of point..." id="pointName">
+            <textarea asp-for="GameType.GamePoint.Description" rows="4" class="form-control" id="pointDescription" placeholder="Please add description of this point"></textarea>
+            <button class="btn btn-outline-secondary form-control" id="buttonAddPoint">Add</button>
+        </div>
+    </div>*@
+
+    <div class="form-row form-check-inline text-uppercase">
         Scoring points
     </div>
-    <div class="shadow-lg p-4 mb-4 bg-light rounded-lg">
-        <div class="d-flex justify-content-center" data-toggle="tooltip" title="Predicting the final result of the regular game time perfectly">
+    <div class="shadow-lg p-4 mb-4 bg-light rounded-lg" id="inputPoint">
+        
+        @*<div class="d-flex justify-content-center" data-toggle="tooltip" title="Predicting the final result of the regular game time perfectly">
             <label class="form-control" for="exactScorelinePoints">Exact scoreline</label>
-            <input class="form-control w-25" asp-for="GameType.ExactScorelinePoints" id="exactScorelinePoints">
+            <input class="form-control w-25" asp-for="GameType.GamePoint.Value" id="exactScorelinePoints">
         </div>
-        <span asp-validation-for="GameType.ExactScorelinePoints" class="text-danger"></span>
-        <div class="d-flex justify-content-center" data-toggle="tooltip" title="Correctly predicting the difference of the goals scored by the teams (when also predicting the outcome correctly)">
-            <label class="form-control" for="goalDifferencePoints">Goal difference</label>
-            <input class="form-control w-25" asp-for="GameType.GoalDifferencePoints" id="goalDifferencePoints">
-        </div>
-        <span asp-validation-for="GameType.GoalDifferencePoints" class="text-danger"></span>
-
-        <div class="d-flex justify-content-center" data-toggle="tooltip" title="Correctly predicting the number of goals scored by one of the teams">
-            <label class="form-control" for="oneTeamGoalsPoints">Goals scored by one of the teams</label>
-            <input class="form-control w-25" asp-for="GameType.OneTeamGoalsPoints" id="oneTeamGoalsPoints">
-        </div>
-        <span asp-validation-for="GameType.OneTeamGoalsPoints" class="text-danger"></span>
-
-        <div class="d-flex justify-content-center" data-toggle="tooltip" title="Predicting the winning team or draw correctly">
-            <label class="form-control" for="outcomePoints">Outcome</label>
-            <input class="form-control w-25" asp-for="GameType.OutcomePoints" id="outcomePoints">
-        </div>
-        <span asp-validation-for="GameType.OutcomePoints" class="text-danger"></span>
+        <span asp-validation-for="GameType.GamePoint.Value" class="text-danger"></span></div>*@
     </div>
-    <button class="btn btn-outline-primary col-md-12" id="buttonAddGameType">Add</button>
+    @*<div class="shadow-lg p-4 mb-4 bg-light rounded-lg">
+            <div class="d-flex justify-content-center" data-toggle="tooltip" title="Predicting the final result of the regular game time perfectly">
+                <label class="form-control" for="exactScorelinePoints">Exact scoreline</label>
+                <input class="form-control w-25" asp-for="GameType.ExactScorelinePoints" id="exactScorelinePoints">
+            </div>
+            <span asp-validation-for="GameType.ExactScorelinePoints" class="text-danger"></span>
+            <div class="d-flex justify-content-center" data-toggle="tooltip" title="Correctly predicting the difference of the goals scored by the teams (when also predicting the outcome correctly)">
+                <label class="form-control" for="goalDifferencePoints">Goal difference</label>
+                <input class="form-control w-25" asp-for="GameType.GoalDifferencePoints" id="goalDifferencePoints">
+            </div>
+            <span asp-validation-for="GameType.GoalDifferencePoints" class="text-danger"></span>
+
+            <div class="d-flex justify-content-center" data-toggle="tooltip" title="Correctly predicting the number of goals scored by one of the teams">
+                <label class="form-control" for="oneTeamGoalsPoints">Goals scored by one of the teams</label>
+                <input class="form-control w-25" asp-for="GameType.OneTeamGoalsPoints" id="oneTeamGoalsPoints">
+            </div>
+            <span asp-validation-for="GameType.OneTeamGoalsPoints" class="text-danger"></span>
+
+            <div class="d-flex justify-content-center" data-toggle="tooltip" title="Predicting the winning team or draw correctly">
+                <label class="form-control" for="outcomePoints">Outcome</label>
+                <input class="form-control w-25" asp-for="GameType.OutcomePoints" id="outcomePoints">
+            </div>
+            <span asp-validation-for="GameType.OutcomePoints" class="text-danger"></span>
+        </div>*@
+    <button type="submit" class="btn btn-outline-primary col-md-12" id="buttonAddGameType">Add</button>
 </form>
 
 @section Scripts {
     <script>
 $(document).ready(function() {
     getAllGameTypes();
+    getAllScoringPoints();
 });
-
+        var scoringPoints = [];
 var getAllGameTypes = function() {
     $.ajax({
         url: '@Url.Action("GetAllGameTypes", "Game", new { Area = "Administration" })',
@@ -85,8 +105,10 @@ var getAllGameTypes = function() {
             $('#inputGameType').find('option').remove()
             $(data).each(
                 function(index, item) {
-                    $('#inputGameType').append('<option value="' + item.id + '" exactScorelinePoints="' + item.exactScorelinePoints + '" goalDifferencePoints="' + item.goalDifferencePoints + '" oneTeamGoalsPoints="' + item.oneTeamGoalsPoints + '" outcomePoints="' + item.outcomePoints + '">' + item.name + '</option>')
+                    $('#inputGameType').append('<option value="' + item.id + '">' + item.name + '</option>');
+                    scoringPoints[item.id] = item.gamePoints;
                 });
+            console.log(scoringPoints);
             $('#inputGameType').append('<option>Add new game type...</option>');
             showHideAddNewGameType();
         },
@@ -94,6 +116,22 @@ var getAllGameTypes = function() {
             console.log("Error getting GameTypes");
         }
     });
+        }
+
+var getAllScoringPoints = function () {
+ $.ajax({
+    url: '@Url.Action("GetAllGamePoints", "Game", new { Area = "Administration" })',
+    type: 'GET',
+    success: function (data) {
+        $(data).each(
+            function (index, item) {
+                $('#inputPoint').append('<div class="d-flex justify-content-center" data-toggle="tooltip" title="' + item.description + '"><div class="form-check-inline"><input type="checkbox" class="" id="' + item.id + '" /></div><label class="form-control" for="' + item.id + '">' + item.name + '</label><input class="form-control w-25" id="' + item.id + '"></div><span asp-validation-for="' + item.id + '" class="text-danger"></span>');
+            });
+    },
+     error: function () {
+         console.log("Error getting Points");
+    }
+   });
 }
 
 var showHideAddNewGameType = function() {
@@ -102,15 +140,22 @@ var showHideAddNewGameType = function() {
     var selectOption = $("#inputGameType").find(":selected").text();
     if (selectOption == 'Add new game type...') {
         $(".input-game-name").hide();
+        $('#scoringPoints').hide();
         $("#manualInputGameType").show();
         $("#gameTypeName").focus();
     } else {
         $("#manualInputGameType").hide();
         $(".input-game-name").show();
-        $(".exactScorelinePoints").text("Exact scoreline: " + $("#inputGameType").find(":selected").attr("exactScorelinePoints") + " points");
-        $(".goalDifferencePoints").text("Goal difference: " + $("#inputGameType").find(":selected").attr("goalDifferencePoints") + " points");
-        $(".oneTeamGoalsPoints").text("Goals scored by one of the teams: " + $("#inputGameType").find(":selected").attr("oneTeamGoalsPoints") + " points");
-        $(".outcomePoints").text("Outcome: " + $("#inputGameType").find(":selected").attr("outcomePoints") + " points");
+        $('#scoringPoints').show();
+        var selectGameTypeId = $("#inputGameType").find(":selected").val();
+        console.log(selectGameTypeId);
+        $('#scoringPoints').popover({ html: true, placement: "left", trigger: "hover" });
+        var popoverData = new String();
+        $(scoringPoints[selectGameTypeId]).each(function (index, score) {
+            popoverData += '<div class"row">' + score.name + ': ' + score.value + '</div>';
+        });
+        $('#scoringPoints').data("bs.popover").element.dataset.content = popoverData;
+        $('#scoringPoints').data("bs.popover").setContent();
         $("#gameTypeName").val('');
         $("#gameTypeDescription").val('');
     }
@@ -118,23 +163,23 @@ var showHideAddNewGameType = function() {
 
 $("#inputGameType").change(showHideAddNewGameType);
 
-$("#buttonAddGameType").click(function () {
-    var gameTypeName = $('#gameTypeName').val();
-    var duplicateGameType = jQuery.inArray(gameTypeName, $("#inputGameType option").toArray().map(o => o.textContent)) != -1;
-    if ($("#manualInputGameType").valid()) {
-        if (duplicateGameType) {
-            $(".alert").show();
-            $("#gameTypeName").mousedown(function () {
-                $(".alert").hide();
-            });
-            return false;
-        };
-    } else {
-        return false;
-    }
-});
+//$("#buttonAddGameType").click(function () {
+//    var gameTypeName = $('#gameTypeName').val();
+//    var duplicateGameType = jQuery.inArray(gameTypeName, $("#inputGameType option").toArray().map(o => o.textContent)) != -1;
+//    if ($("#manualInputGameType").valid()) {
+//        if (duplicateGameType) {
+//            $(".alert").show();
+//            $("#gameTypeName").mousedown(function () {
+//                $(".alert").hide();
+//            });
+//            return false;
+//        };
+//    } else {
+//        return false;
+//    }
+//});
 
-$("#manualInputGameType").on("submit", function (event) {
+@*$("#manualInputGameType").on("submit", function (event) {
     event.preventDefault();
     var gameTypeName = $('#gameTypeName').val();
     var gameTypeDescription = $("#gameTypeDescription").val();
@@ -163,7 +208,7 @@ $("#manualInputGameType").on("submit", function (event) {
                 alert("Error adding game type!");
             }
         });
-});
+});*@
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.1/jquery.validate.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.11/jquery.validate.unobtrusive.min.js"></script>

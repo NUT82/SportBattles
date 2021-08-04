@@ -13,6 +13,7 @@
     public class GamesService : IGamesService
     {
         private readonly IDeletableEntityRepository<GameType> gameTypeRepository;
+        private readonly IDeletableEntityRepository<GamePoint> gamePointRepository;
         private readonly IDeletableEntityRepository<Game> gameRepository;
         private readonly IDeletableEntityRepository<Match> matchRepository;
         private readonly IDeletableEntityRepository<ApplicationUser> userRepository;
@@ -21,6 +22,7 @@
 
         public GamesService(
             IDeletableEntityRepository<GameType> gameTypeRepository,
+            IDeletableEntityRepository<GamePoint> gamePointRepository,
             IDeletableEntityRepository<Game> gameRepository,
             IDeletableEntityRepository<Match> matchRepository,
             IDeletableEntityRepository<ApplicationUser> userRepository,
@@ -28,6 +30,7 @@
             ITeamsService teamService)
         {
             this.gameTypeRepository = gameTypeRepository;
+            this.gamePointRepository = gamePointRepository;
             this.gameRepository = gameRepository;
             this.matchRepository = matchRepository;
             this.userRepository = userRepository;
@@ -87,10 +90,6 @@
             {
                 Name = input.Name,
                 Description = input.Description,
-                ExactScorelinePoints = input.ExactScorelinePoints,
-                GoalDifferencePoints = input.GoalDifferencePoints,
-                OneTeamGoalsPoints = input.OneTeamGoalsPoints,
-                OutcomePoints = input.OutcomePoints,
             };
 
             await this.gameTypeRepository.AddAsync(gameType);
@@ -125,6 +124,11 @@
         public IEnumerable<T> GetAllTypes<T>()
         {
             return this.gameTypeRepository.AllAsNoTracking().OrderBy(g => g.Name).To<T>().ToList();
+        }
+
+        public IEnumerable<T> GetAllGamePoints<T>()
+        {
+            return this.gamePointRepository.AllAsNoTracking().OrderBy(gp => gp.Name).To<T>().ToList();
         }
 
         public async Task AddMatches(int gameId, IEnumerable<FootballMatch> footballMatches)

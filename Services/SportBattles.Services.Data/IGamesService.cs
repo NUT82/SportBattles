@@ -15,6 +15,8 @@
 
         public IEnumerable<T> GetAllTypes<T>();
 
+        public IEnumerable<T> GetAllGamePoints<T>();
+
         public Task Join(int gameId, string userId);
 
         public Task Add(string name, int typeId);
