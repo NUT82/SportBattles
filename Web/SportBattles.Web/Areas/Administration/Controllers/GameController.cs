@@ -68,7 +68,7 @@
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddGameType(GameTypeInputModel inputModel)
+        public async Task<IActionResult> AddGameType([FromBody]GameTypeInputModel inputModel)
         {
             if (this.ModelState.IsValid)
             {

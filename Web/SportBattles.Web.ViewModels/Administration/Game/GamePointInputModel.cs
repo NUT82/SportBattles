@@ -1,11 +1,15 @@
 ﻿namespace SportBattles.Web.ViewModels.Administration.Game
+
 {
+    using System.ComponentModel.DataAnnotations;
+
     public class GamePointInputModel
     {
-        public string Name { get; set; }
+        [Required]
+        public int Id { get; set; }
 
-        public string Description { get; set; }
-
+        [Required]
+        [Range(0, 10)]
         public byte Value { get; set; }
     }
 }

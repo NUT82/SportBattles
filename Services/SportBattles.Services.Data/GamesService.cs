@@ -1,5 +1,6 @@
 ﻿namespace SportBattles.Services.Data
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -91,6 +92,18 @@
                 Name = input.Name,
                 Description = input.Description,
             };
+
+            foreach (var scoringPoint in input.SelectedScoringPoints)
+            {
+                var gamePoint = this.gamePointRepository.All().FirstOrDefault(gp => gp.Id == scoringPoint.Id);
+                if (gamePoint == null)
+                {
+                    throw new ArgumentNullException("No GamePoint with this Id");
+                }
+
+                gamePoint.Value = scoringPoint.Value;
+                gameType.GamePoints.Add(gamePoint);
+            }
 
             await this.gameTypeRepository.AddAsync(gameType);
             await this.gameTypeRepository.SaveChangesAsync();

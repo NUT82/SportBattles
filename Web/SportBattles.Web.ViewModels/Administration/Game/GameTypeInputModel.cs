@@ -15,6 +15,8 @@
         [MinLength(10, ErrorMessage = "Description field must be with a minimum length of 10 characters.")]
         public string Description { get; set; }
 
-        public ICollection<GamePointInputModel> GamePoint { get; set; }
+        [Required]
+        [MinLength(1)]
+        public ICollection<GamePointInputModel> SelectedScoringPoints { get; set; }
     }
 }

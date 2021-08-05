@@ -24,7 +24,7 @@
     </div>
 </form>
 
-<form method="post" asp-action="AddGameType" class="g-4 col-md-12" style="display:none" id="manualInputGameType">
+<form method="post" class="g-4 col-md-12" style="display:none" id="manualInputGameType">
     <div class="shadow-lg p-4 mb-4 bg-light rounded-lg">
         <div class="form-row">
             <input asp-for="GameType.Name" class="form-control" id="gameTypeName" placeholder="Input game type">
@@ -87,7 +87,8 @@
             </div>
             <span asp-validation-for="GameType.OutcomePoints" class="text-danger"></span>
         </div>*@
-    <button type="submit" class="btn btn-outline-primary col-md-12" id="buttonAddGameType">Add</button>
+    <span class="text-danger" style="display:none" id="points_select">You must select minimum one scoring point.</span>
+    <button class="btn btn-outline-primary col-md-12" id="buttonAddGameType">Add</button>
 </form>
 
 @section Scripts {
@@ -125,7 +126,7 @@ var getAllScoringPoints = function () {
     success: function (data) {
         $(data).each(
             function (index, item) {
-                $('#inputPoint').append('<div class="d-flex justify-content-center" data-toggle="tooltip" title="' + item.description + '"><div class="form-check-inline"><input type="checkbox" class="" id="' + item.id + '" /></div><label class="form-control" for="' + item.id + '">' + item.name + '</label><input class="form-control w-25" id="' + item.id + '"></div><span asp-validation-for="' + item.id + '" class="text-danger"></span>');
+                $('#inputPoint').append('<div class="d-flex justify-content-center" data-toggle="tooltip" title="' + item.description + '"><div class="form-check-inline"><input type="checkbox" class="" id="' + item.id + '" /></div><label class="form-control" for="' + item.id + '">' + item.name + '</label><input type="number" class="form-control w-25" id="' + item.id + '"></div><span style="display:none" asp-validation-for="' + item.id + '" class="text-danger text-right">Points must be between 0 and 10</span>');
             });
     },
      error: function () {
@@ -161,25 +162,50 @@ var showHideAddNewGameType = function() {
     }
 }
 
-$("#inputGameType").change(showHideAddNewGameType);
+        $("#inputGameType").change(showHideAddNewGameType);
+        var selectedScoringPoints = [];
+$("#buttonAddGameType").click(function () {
+    var gameTypeName = $('#gameTypeName').val();
+    var duplicateGameType = jQuery.inArray(gameTypeName, $("#inputGameType option").toArray().map(o => o.textContent)) != -1;
+    if ($("#manualInputGameType").valid()) {
+        if (duplicateGameType) {
+            $(".alert").show();
+            $("#gameTypeName").mousedown(function () {
+                $(".alert").hide();
+            });
+            return false;
+        } else if ($('#inputPoint').find(":checked").length > 0) {
+            selectedScoringPoints = [];
+            $('#inputPoint').find(":checked").each(function (index, e) {
+                var input = $(e).parent("div").parent("div").find("input")[1];
+                if ($.isNumeric(input.value) && input.value >= 0 && input.value <= 10) {
+                    selectedScoringPoints.push({ id: input.id, value: input.value });
+                }
+                else {
+                    $(input).css("border-color", "red");
+                    $(e).parent("div").parent("div").next("span").show();
+                    $('#inputPoint').click(function () {
+                        $(e).parent("div").parent("div").next("span").hide();
+                        $(input).css("border-color", "#ced4da");
+                    });
+                }
+            });
+            if ($('#inputPoint').find(":checked").length != selectedScoringPoints.length) {
+                return false;
+            }
+                } else {
+            $("#points_select").show();
+            $('#inputPoint').click(function () {
+                $("#points_select").hide();
+            });
+            return false;
+        }
+    } else {
+        return false;
+    }
+});
 
-//$("#buttonAddGameType").click(function () {
-//    var gameTypeName = $('#gameTypeName').val();
-//    var duplicateGameType = jQuery.inArray(gameTypeName, $("#inputGameType option").toArray().map(o => o.textContent)) != -1;
-//    if ($("#manualInputGameType").valid()) {
-//        if (duplicateGameType) {
-//            $(".alert").show();
-//            $("#gameTypeName").mousedown(function () {
-//                $(".alert").hide();
-//            });
-//            return false;
-//        };
-//    } else {
-//        return false;
-//    }
-//});
-
-@*$("#manualInputGameType").on("submit", function (event) {
+    $("#manualInputGameType").on("submit", function (event) {
     event.preventDefault();
     var gameTypeName = $('#gameTypeName').val();
     var gameTypeDescription = $("#gameTypeDescription").val();
@@ -194,10 +220,7 @@ $("#inputGameType").change(showHideAddNewGameType);
             data: JSON.stringify({
                 Name: gameTypeName,
                 Description: gameTypeDescription,
-                ExactScorelinePoints: $('#exactScorelinePoints').val(),
-                GoalDifferencePoints: $('#goalDifferencePoints').val(),
-                OneTeamGoalsPoints: $('#oneTeamGoalsPoints').val(),
-                OutcomePoints: $('#outcomePoints').val()
+                SelectedScoringPoints: selectedScoringPoints,
             }),
             success: function(data) {
                 $("#gameTypeName").val('');
@@ -208,7 +231,7 @@ $("#inputGameType").change(showHideAddNewGameType);
                 alert("Error adding game type!");
             }
         });
-});*@
+});
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.1/jquery.validate.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.11/jquery.validate.unobtrusive.min.js"></script>
