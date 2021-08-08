@@ -21,32 +21,44 @@
                     Description = "Predict the scoreline of each match and you’ll accumulate points depending on how close you are to the correct one.",
                 };
 
-            gameType.GamePoints.Add(new GamePoint
+            gameType.GamePoints.Add(new GamePointGameType
             {
-                Name = "Exact scoreline",
+                GamePoint = new GamePoint
+                {
+                    Name = "Exact scoreline",
+                    Description = "Predicting the final result of the regular game time perfectly",
+                },
                 Value = 5,
-                Description = "Predicting the final result of the regular game time perfectly",
             });
 
-            gameType.GamePoints.Add(new GamePoint
+            gameType.GamePoints.Add(new GamePointGameType
             {
-                Name = "Goal difference",
+                GamePoint = new GamePoint
+                {
+                    Name = "Goal difference",
+                    Description = "Correctly predicting the difference of the goals scored by the teams (when also predicting the outcome correctly)",
+                },
                 Value = 3,
-                Description = "Correctly predicting the difference of the goals scored by the teams (when also predicting the outcome correctly)",
             });
 
-            gameType.GamePoints.Add(new GamePoint
+            gameType.GamePoints.Add(new GamePointGameType
             {
-                Name = "Goals scored by one of the teams",
+                GamePoint = new GamePoint
+                {
+                    Name = "Goals scored by one of the teams",
+                    Description = "Correctly predicting the number of goals scored by one of the teams",
+                },
                 Value = 2,
-                Description = "Correctly predicting the number of goals scored by one of the teams",
             });
 
-            gameType.GamePoints.Add(new GamePoint
+            gameType.GamePoints.Add(new GamePointGameType
             {
-                Name = "Outcome",
+                GamePoint = new GamePoint
+                {
+                    Name = "Outcome",
+                    Description = "Predicting the winning team or draw correctly",
+                },
                 Value = 1,
-                Description = "Predicting the winning team or draw correctly",
             });
 
             await dbContext.GameTypes.AddAsync(gameType);

@@ -12,7 +12,8 @@
     {
         public GameType()
         {
-            this.GamePoints = new HashSet<GamePoint>();
+            this.Games = new HashSet<Game>();
+            this.GamePoints = new HashSet<GamePointGameType>();
         }
 
         [Required]
@@ -22,14 +23,8 @@
         [Required]
         public string Description { get; set; }
 
-        public virtual ICollection<GamePoint> GamePoints { get; set; }
+        public virtual ICollection<Game> Games { get; set; }
 
-        ////public byte ExactScorelinePoints { get; set; }
-
-        ////public byte GoalDifferencePoints { get; set; }
-
-        ////public byte OneTeamGoalsPoints { get; set; }
-
-        ////public byte OutcomePoints { get; set; }
+        public virtual ICollection<GamePointGameType> GamePoints { get; set; }
     }
 }

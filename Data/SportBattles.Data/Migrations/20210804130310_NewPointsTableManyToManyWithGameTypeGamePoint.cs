@@ -1,8 +1,9 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
-
-namespace SportBattles.Data.Migrations
+﻿namespace SportBattles.Data.Migrations
 {
+    using System;
+
+    using Microsoft.EntityFrameworkCore.Migrations;
+
     public partial class NewPointsTableManyToManyWithGameTypeGamePoint : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -35,7 +36,7 @@ namespace SportBattles.Data.Migrations
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    DeletedOn = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    DeletedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
                 },
                 constraints: table =>
                 {
@@ -47,7 +48,7 @@ namespace SportBattles.Data.Migrations
                 columns: table => new
                 {
                     GamePointsId = table.Column<int>(type: "int", nullable: false),
-                    GameTypesId = table.Column<int>(type: "int", nullable: false)
+                    GameTypesId = table.Column<int>(type: "int", nullable: false),
                 },
                 constraints: table =>
                 {

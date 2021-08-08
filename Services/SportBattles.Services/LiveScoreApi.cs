@@ -179,7 +179,6 @@
                         AwaySets = string.IsNullOrEmpty(match.AwaySets) ? null : byte.Parse(match.AwaySets),
                         Games = this.GetGames(match),
                     });
-
                 }
             }
 

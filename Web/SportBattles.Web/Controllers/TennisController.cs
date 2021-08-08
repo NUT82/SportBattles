@@ -6,18 +6,22 @@
 
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
+
     using SportBattles.Services.Data;
+    using SportBattles.Web.ViewModels.Game;
     using SportBattles.Web.ViewModels.Tennis;
 
     public class TennisController : BaseController
     {
         private readonly ITennisMatchesService tennisMatchesService;
         private readonly ITennisPredictionsService tennisPredictionsService;
+        private readonly IGamePointsService gamePointsService;
 
-        public TennisController(ITennisMatchesService tennisMatchesService, ITennisPredictionsService tennisPredictionsService)
+        public TennisController(ITennisMatchesService tennisMatchesService, ITennisPredictionsService tennisPredictionsService, IGamePointsService gamePointsService)
         {
             this.tennisMatchesService = tennisMatchesService;
             this.tennisPredictionsService = tennisPredictionsService;
+            this.gamePointsService = gamePointsService;
         }
 
         [Authorize]
@@ -27,6 +31,7 @@
             {
                 Matches = this.tennisMatchesService.GetAllByGameId<MatchInPredictionsViewModel>(gameId),
                 GameId = gameId,
+                GamePoints = this.gamePointsService.GetAll<GamePointViewModel>(gameId),
                 MatchesDoublePoints = this.tennisMatchesService.GetMatchesDoublePointsByGameId(gameId),
                 MatchesPredictions = this.tennisPredictionsService.GetMatchesPredictions(gameId, this.User.FindFirstValue(ClaimTypes.NameIdentifier)),
             };

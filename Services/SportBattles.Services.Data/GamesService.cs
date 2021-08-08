@@ -107,8 +107,7 @@
                     throw new ArgumentNullException("No GamePoint with this Id");
                 }
 
-                gamePoint.Value = scoringPoint.Value;
-                gameType.GamePoints.Add(gamePoint);
+                gameType.GamePoints.Add(new GamePointGameType { GamePoint = gamePoint, Value = scoringPoint.Value });
             }
 
             await this.gameTypeRepository.AddAsync(gameType);

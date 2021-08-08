@@ -12,7 +12,7 @@
     {
         public GamePoint()
         {
-            this.GameTypes = new HashSet<GameType>();
+            this.GameTypes = new HashSet<GamePointGameType>();
         }
 
         [Required]
@@ -22,8 +22,6 @@
         [Required]
         public string Description { get; set; }
 
-        public byte Value { get; set; }
-
-        public virtual ICollection<GameType> GameTypes { get; set; }
+        public virtual ICollection<GamePointGameType> GameTypes { get; set; }
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace SportBattles.Web.ViewModels.Administration.Game
+﻿namespace SportBattles.Web.ViewModels.Game
 {
     using SportBattles.Data.Models;
     using SportBattles.Services.Mapping;

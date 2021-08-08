@@ -53,6 +53,8 @@
 
         public DbSet<GameMatch> GameMatch { get; set; }
 
+        public DbSet<GamePointGameType> GamePointGameType { get; set; }
+
         public DbSet<GameTennisMatch> GameTennisMatch { get; set; }
 
         public override int SaveChanges() => this.SaveChanges(true);

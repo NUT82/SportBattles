@@ -1,5 +1,4 @@
 ﻿namespace SportBattles.Web.ViewModels.Administration.Game
-
 {
     using System.ComponentModel.DataAnnotations;
 

@@ -4,45 +4,54 @@
 }
 @model IEnumerable<SportBattles.Web.ViewModels.Home.IndexGameViewModel>
 
-<table id="table_id" class="responsive display" style="width: 100%">
-    <thead>
-        <tr>
-            <th data-priority="1" style="width: 35%">Name</th>
-            <th style="width: 15%">Game type</th>
-            <th style="width: 10%">Matches</th>
-            <th style="width: 10%">Users</th>
-            <th data-priority="2" style="width: 30%">Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var game in Model)
-        {
-        <tr>
-            <td>@game.Name</td>
-            <td>@game.GameTypeName</td>
-            @if (game.GameTypeSport == "Football")
+<div class="mt-1">
+    <table id="table_id" class="responsive display" style="width: 100%">
+        <thead>
+            <tr>
+                <th data-priority="1" style="width: 35%">Name</th>
+                <th style="width: 15%">Game type</th>
+                <th style="width: 10%">Matches</th>
+                <th style="width: 10%">Users</th>
+                <th data-priority="2" style="width: 30%">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var game in Model)
             {
-                <td>@game.MatchesCount</td>
+                <tr>
+                    <td>@game.Name</td>
+                    <td>
+                        @game.GameTypeName
+                        <i class="fa fa-info-circle" data-toggle="tooltip" title="@game.GameTypeDescription"></i>
+                    </td>
+                    @if (game.GameTypeSport == "Football")
+                    {
+                        <td>@game.MatchesCount</td>
+                    }
+                    @if (game.GameTypeSport == "Tennis")
+                    {
+                        <td>@game.TennisMatchesCount</td>
+                    }
+                    <td>@game.UsersCount</td>
+                    <td>
+                        <a asp-controller="@game.GameTypeSport" asp-action="Predictions" asp-route-gameId="@game.Id" data-toggle="tooltip" title="Predict matches" class="btn btn-success">
+                            <i class="fa fa-question"></i>:<i class="fa fa-question"></i>
+                        </a>
+                    </td>
+                </tr>
             }
-            @if (game.GameTypeSport == "Tennis")
-            {
-                <td>@game.TennisMatchesCount</td>
-            }
-            <td>@game.UsersCount</td>
-            <td>
-                <a asp-controller="@game.GameTypeSport" asp-action="Predictions" asp-route-gameId="@game.Id" title="Predict matches" class="btn btn-success">
-                    <i class="fa fa-question"></i>:<i class="fa fa-question"></i>
-                </a>
-            </td>
-        </tr>
-        }
-    </tbody>
-</table>
+        </tbody>
+    </table>
+</div>
 
 @section Scripts {
     <script type="text/javascript" charset="utf8" src="~/lib/datatables/js/jquery.dataTables.min.js"></script>
     <script type="text/javascript" charset="utf8" src="~/lib/datatables/js/dataTables.responsive.min.js"></script>
     <script>
         $('#table_id').DataTable();
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+            
+        });
     </script>
 }

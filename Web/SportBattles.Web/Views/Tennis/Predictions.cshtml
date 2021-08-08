@@ -21,14 +21,16 @@
                 <div class="double_points" data-toggle="tooltip" title="Double point match">x2</div>
             }
             @match.TournamentCountryName - @match.TournamentName
-            @if (Model.MatchesPredictions.ContainsKey(match.Id) && Model.MatchesPredictions[match.Id].Points != null)
-            {
-                <div class="points" data-toggle="tooltip" title="Points">@Model.MatchesPredictions[match.Id].Points</div>
-            }
-            else
-            {
-                <div class="points" data-toggle="tooltip" title="Points">?</div>
-            }
+            <div class="points" data-toggle="tooltip" data-html="true" title="@("Scoring system<br />" + @String.Join("<br />", Model.GamePoints.Select(gp => gp.NameValue)))">
+                @if (Model.MatchesPredictions.ContainsKey(match.Id) && Model.MatchesPredictions[match.Id].Points != null)
+                {
+                    <span>@Model.MatchesPredictions[match.Id].Points</span>
+                }
+                else
+                {
+                    <span>?</span>
+                }
+            </div>
         </div>
         <div class="startDate">@match.StartTimeLocalTime</div>
         <div class="teams_result">
@@ -83,6 +85,9 @@
                 if (this.value.length == 1) {
                     $(this).css("color", "green");
                 }
+            });
+            $(function () {
+                $('[data-toggle="tooltip"]').tooltip();
             });
         });
 

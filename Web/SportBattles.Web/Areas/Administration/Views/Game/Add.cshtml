@@ -12,7 +12,7 @@
     <div class="d-flex">
         <select asp-for="Game.TypeID" id="inputGameType" class="form-control user-select-none"></select>
         <a title="Scoring points" class="btn btn-success rounded-circle form-control w-auto" id="scoringPoints">
-            <i class="fa fa-question-circle"></i>
+            <i class="fa fa-info-circle"></i>
         </a>
     </div>
     <div class="input-game-name">
@@ -166,7 +166,7 @@ var showHideAddNewGameType = function() {
         $('#scoringPoints').popover({ html: true, placement: "left", trigger: "hover" });
         var popoverData = new String();
         $(scoringPoints[selectGameTypeId]).each(function (index, score) {
-            popoverData += '<div class"row">' + score.name + ': ' + score.value + '</div>';
+            popoverData += '<div class"row">' + score.gamePointName + ': ' + score.value + '</div>';
         });
         $('#scoringPoints').data("bs.popover").element.dataset.content = popoverData;
         $('#scoringPoints').data("bs.popover").setContent();

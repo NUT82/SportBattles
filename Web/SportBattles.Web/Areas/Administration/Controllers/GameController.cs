@@ -127,7 +127,7 @@
 
         public JsonResult GetAllGamePoints()
         {
-            var gamePoints = this.gamePointsService.GetAll<GamePointViewModel>();
+            var gamePoints = this.gamePointsService.GetAll<GameAllPointViewModel>();
             return this.Json(gamePoints);
         }
     }

@@ -1,8 +1,9 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
-
-namespace SportBattles.Data.Migrations
+﻿namespace SportBattles.Data.Migrations
 {
+    using System;
+
+    using Microsoft.EntityFrameworkCore.Migrations;
+
     public partial class AddTennisMatchesToGames : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -18,7 +19,7 @@ namespace SportBattles.Data.Migrations
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    DeletedOn = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    DeletedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
                 },
                 constraints: table =>
                 {
@@ -37,7 +38,7 @@ namespace SportBattles.Data.Migrations
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    DeletedOn = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    DeletedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
                 },
                 constraints: table =>
                 {
@@ -66,7 +67,7 @@ namespace SportBattles.Data.Migrations
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    DeletedOn = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    DeletedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
                 },
                 constraints: table =>
                 {
@@ -97,7 +98,7 @@ namespace SportBattles.Data.Migrations
                 {
                     GameId = table.Column<int>(type: "int", nullable: false),
                     TennisMatchId = table.Column<int>(type: "int", nullable: false),
-                    DoublePoints = table.Column<bool>(type: "bit", nullable: false)
+                    DoublePoints = table.Column<bool>(type: "bit", nullable: false),
                 },
                 constraints: table =>
                 {
@@ -121,7 +122,7 @@ namespace SportBattles.Data.Migrations
                 columns: table => new
                 {
                     SetGamesId = table.Column<int>(type: "int", nullable: false),
-                    TennisMatchesId = table.Column<int>(type: "int", nullable: false)
+                    TennisMatchesId = table.Column<int>(type: "int", nullable: false),
                 },
                 constraints: table =>
                 {

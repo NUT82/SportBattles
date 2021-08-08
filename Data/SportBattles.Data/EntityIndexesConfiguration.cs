@@ -27,6 +27,10 @@
             modelBuilder.Entity<GameTennisMatch>().HasOne(gtm => gtm.TennisMatch).WithMany(g => g.Games).HasForeignKey(gtm => gtm.TennisMatchId);
             modelBuilder.Entity<GameTennisMatch>().HasOne(gtm => gtm.Game).WithMany(tm => tm.TennisMatches).HasForeignKey(gtm => gtm.GameId);
 
+            modelBuilder.Entity<GamePointGameType>().HasKey(k => new { k.GamePointId, k.GameTypeId });
+            modelBuilder.Entity<GamePointGameType>().HasOne(gpgt => gpgt.GamePoint).WithMany(gt => gt.GameTypes).HasForeignKey(gpgt => gpgt.GamePointId);
+            modelBuilder.Entity<GamePointGameType>().HasOne(gpgt => gpgt.GameType).WithMany(gp => gp.GamePoints).HasForeignKey(gpgt => gpgt.GameTypeId);
+
             modelBuilder.Entity<Team>(t => t.HasIndex(cn => new { cn.CountryId, cn.Name }).IsUnique());
             modelBuilder.Entity<TennisPlayer>(t => t.HasIndex(cn => new { cn.CountryId, cn.Name }).IsUnique());
         }

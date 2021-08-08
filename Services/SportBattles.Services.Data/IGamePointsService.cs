@@ -7,6 +7,8 @@
     {
         public IEnumerable<T> GetAll<T>();
 
+        public IEnumerable<T> GetAll<T>(int gameId);
+
         public bool IsDuplicateName(string name);
 
         public Task Add(string name, string description);

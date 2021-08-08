@@ -70,9 +70,9 @@
             var maxResult = 0;
             foreach (var gamePoint in prediction.Game.GameType.GamePoints)
             {
-                var result = gamePoint.Name switch
+                var result = gamePoint.GameType.Name switch
                 {
-                    "Exact sets" => this.GetPoints(prediction, gamePoint, multiplier, this.ExactScorelinePoints()),
+                    "Exact sets" => this.GetPoints(prediction, gamePoint.Value, multiplier, this.ExactScorelinePoints()),
                     _ => throw new ArgumentException("Add method to calculate points for this GamePointType first!"),
                 };
 
@@ -85,13 +85,11 @@
             return maxResult;
         }
 
-
-
-        private int GetPoints(TennisPrediction prediction, GamePoint gamePoint, int multiplier, Func<TennisPrediction, bool> condition)
+        private int GetPoints(TennisPrediction prediction, byte value, int multiplier, Func<TennisPrediction, bool> condition)
         {
             if (condition(prediction))
             {
-                return gamePoint.Value * multiplier;
+                return value * multiplier;
             }
 
             return 0;
