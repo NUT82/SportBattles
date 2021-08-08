@@ -4,14 +4,17 @@
     using System.Threading.Tasks;
 
     using SportBattles.Web.ViewModels.Administration.Game;
+    using SportBattles.Web.ViewModels.Game;
 
     public interface IGamesService
     {
+        public IEnumerable<RankingViewModel> GetRanking(int gameId);
+
         public IEnumerable<T> GetAll<T>();
 
         public IEnumerable<T> GetUserGames<T>(string userId);
 
-        public IEnumerable<T> GetAllStarted<T>();
+        public IEnumerable<T> GetAllStarted<T>(string userId);
 
         public IEnumerable<T> GetAllTypes<T>();
 

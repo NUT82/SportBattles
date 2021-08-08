@@ -70,7 +70,7 @@
             var maxResult = 0;
             foreach (var gamePoint in prediction.Game.GameType.GamePoints)
             {
-                var result = gamePoint.GameType.Name switch
+                var result = gamePoint.GamePoint.Name switch
                 {
                     "Exact scoreline" => this.GetPoints(prediction, gamePoint.Value, multiplier, this.ExactScorelinePoints()),
                     "Goal difference" => this.GetPoints(prediction, gamePoint.Value, multiplier, this.GoalDifferencePoints()),

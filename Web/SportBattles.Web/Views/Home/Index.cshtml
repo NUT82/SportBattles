@@ -18,24 +18,27 @@
     <tbody>
         @foreach (var game in Model)
         {
-        <tr>
-            <td>@game.Name</td>
-            <td>@game.GameTypeName</td>
-            @if (game.GameTypeSport == "Football")
-            {
-                <td>@game.MatchesCount</td>
-            }
-            @if (game.GameTypeSport == "Tennis")
-            {
-                <td>@game.TennisMatchesCount</td>
-            }
-            <td>@game.UsersCount</td>
-            <td>
-                <a asp-controller="Game" asp-action="Join" asp-route-gameId="@game.Id" title="Join game" class="btn btn-success">
-                    <i class="fa fa-sign-in"></i>
-                </a>
-            </td>
-        </tr>
+            <tr>
+                <td>@game.Name</td>
+                <td>
+                    @game.GameTypeName
+                    <i class="fa fa-info-circle" data-toggle="tooltip" title="@game.GameTypeDescription"></i>
+                </td>
+                @if (game.GameTypeSport == "Football")
+                {
+                    <td>@game.MatchesCount</td>
+                }
+                @if (game.GameTypeSport == "Tennis")
+                {
+                    <td>@game.TennisMatchesCount</td>
+                }
+                <td>@game.UsersCount</td>
+                <td>
+                    <a asp-controller="Game" asp-action="Join" asp-route-gameId="@game.Id" data-toggle="tooltip" title="Join game" class="btn btn-success">
+                        <i class="fa fa-sign-in"></i>
+                    </a>
+                </td>
+            </tr>
         }
     </tbody>
 </table>
@@ -45,5 +48,8 @@
     <script type="text/javascript" charset="utf8" src="~/lib/datatables/js/dataTables.responsive.min.js"></script>
     <script>
         $('#table_id').DataTable();
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
     </script>
 }

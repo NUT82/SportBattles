@@ -10,6 +10,7 @@
     using SportBattles.Services;
     using SportBattles.Services.Mapping;
     using SportBattles.Web.ViewModels.Administration.Game;
+    using SportBattles.Web.ViewModels.Game;
 
     public class GamesService : IGamesService
     {
@@ -20,6 +21,8 @@
         private readonly IDeletableEntityRepository<TennisMatch> tennisMatchRepository;
         private readonly IDeletableEntityRepository<ApplicationUser> userRepository;
         private readonly IDeletableEntityRepository<Tournament> tournamentRepository;
+        private readonly IDeletableEntityRepository<Prediction> predictionRepository;
+        private readonly IDeletableEntityRepository<TennisPrediction> tennisPredictionRepository;
         private readonly ITeamsService teamService;
         private readonly ITennisPlayersService tennisPlayersService;
 
@@ -31,6 +34,8 @@
             IDeletableEntityRepository<TennisMatch> tennisMatchRepository,
             IDeletableEntityRepository<ApplicationUser> userRepository,
             IDeletableEntityRepository<Tournament> tournamentRepository,
+            IDeletableEntityRepository<Prediction> predictionRepository,
+            IDeletableEntityRepository<TennisPrediction> tennisPredictionRepository,
             ITeamsService teamService,
             ITennisPlayersService tennisPlayersService)
         {
@@ -41,8 +46,38 @@
             this.tennisMatchRepository = tennisMatchRepository;
             this.userRepository = userRepository;
             this.tournamentRepository = tournamentRepository;
+            this.predictionRepository = predictionRepository;
+            this.tennisPredictionRepository = tennisPredictionRepository;
             this.teamService = teamService;
             this.tennisPlayersService = tennisPlayersService;
+        }
+
+        public IEnumerable<RankingViewModel> GetRanking(int gameId)
+        {
+            var result = new List<RankingViewModel>();
+            var users = this.userRepository.AllAsNoTracking().Where(u => u.Games.Any(g => g.Id == gameId)).ToList();
+            foreach (var user in users)
+            {
+                var gameType = this.gameRepository.AllAsNoTracking().Where(g => g.Id == gameId).Select(g => g.GameType.Name).FirstOrDefault();
+                var points = 0;
+                if (gameType.Contains("Football"))
+                {
+                    points = this.predictionRepository.AllAsNoTracking().Where(p => p.UserId == user.Id && p.GameId == gameId && p.Points.HasValue).Select(p => (int)p.Points.Value).Sum();
+                }
+                else if (gameType.Contains("Tennis"))
+                {
+                    points = this.tennisPredictionRepository.AllAsNoTracking().Where(p => p.UserId == user.Id && p.GameId == gameId && p.Points.HasValue).Select(p => (int)p.Points.Value).Sum();
+                }
+
+                result.Add(new RankingViewModel
+                {
+                    UserName = user.UserName,
+                    ProfilePictureId = user.ProfilePictureId,
+                    Points = points,
+                });
+            }
+
+            return result;
         }
 
         public async Task Join(int gameId, string userId)
@@ -134,9 +169,15 @@
             return this.gameRepository.AllAsNoTracking().Where(g => g.Started && g.Users.Any(u => u.Id == userId)).OrderBy(g => g.Name).To<T>().ToList();
         }
 
-        public IEnumerable<T> GetAllStarted<T>()
+        public IEnumerable<T> GetAllStarted<T>(string userId)
         {
-            return this.gameRepository.AllAsNoTracking().Where(g => g.Started).OrderBy(g => g.Name).To<T>().ToList();
+            if (userId is null)
+            {
+                return this.gameRepository.AllAsNoTracking().Where(g => g.Started).OrderBy(g => g.Name).To<T>().ToList();
+
+            }
+
+            return this.gameRepository.AllAsNoTracking().Where(g => g.Started && !g.Users.Any(u => u.Id == userId)).OrderBy(g => g.Name).To<T>().ToList();
         }
 
         public IEnumerable<T> GetAllTypes<T>()

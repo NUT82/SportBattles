@@ -7,6 +7,7 @@
     using Microsoft.AspNetCore.Mvc;
 
     using SportBattles.Services.Data;
+    using SportBattles.Web.ViewModels.Game;
     using SportBattles.Web.ViewModels.Home;
 
     public class GameController : BaseController
@@ -23,6 +24,13 @@
         {
             var games = this.gamesService.GetUserGames<IndexGameViewModel>(this.User.FindFirstValue(ClaimTypes.NameIdentifier));
             return this.View(games);
+        }
+
+        [Authorize]
+        public IActionResult Ranking(int gameId)
+        {
+            var ranking = this.gamesService.GetRanking(gameId);
+            return this.View(ranking);
         }
 
         [Authorize]

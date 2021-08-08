@@ -1,7 +1,7 @@
 ﻿namespace SportBattles.Web.Controllers
 {
     using System.Diagnostics;
-
+    using System.Security.Claims;
     using Microsoft.AspNetCore.Mvc;
 
     using SportBattles.Services.Data;
@@ -19,7 +19,8 @@
 
         public IActionResult Index()
         {
-            var games = this.gamesService.GetAllStarted<IndexGameViewModel>();
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var games = this.gamesService.GetAllStarted<IndexGameViewModel>(userId);
             return this.View(games);
         }
 

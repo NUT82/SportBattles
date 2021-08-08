@@ -37,6 +37,9 @@
                         <a asp-controller="@game.GameTypeSport" asp-action="Predictions" asp-route-gameId="@game.Id" data-toggle="tooltip" title="Predict matches" class="btn btn-success">
                             <i class="fa fa-question"></i>:<i class="fa fa-question"></i>
                         </a>
+                        <a asp-controller="Game" asp-action="Ranking" asp-route-gameId="@game.Id" data-toggle="tooltip" title="Ranking" class="btn btn-success">
+                            <i class="fa fa-trophy"></i>
+                        </a>
                     </td>
                 </tr>
             }

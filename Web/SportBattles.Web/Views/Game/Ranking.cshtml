@@ -1,0 +1,43 @@
+﻿@using SportBattles.Common
+@{
+    this.ViewData["Title"] = "Home Page";
+    var count = 0;
+}
+@model IEnumerable<SportBattles.Web.ViewModels.Game.RankingViewModel>
+
+<div class="mt-1">
+    <table id="table_id" class="responsive display" style="width: 100%">
+        <thead>
+            <tr>
+                <th style="width: 10%">#</th>
+                <th data-priority="1" style="width: 35%">Player</th>
+                <th style="width: 15%">Score</th>
+                <th style="width: 10%">Info</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var player in Model)
+            {
+                count++;
+                <tr>
+                    <td>@count</td>
+                    <td>@player.UserName</td>
+                    <td>@player.Points</td>
+                    <td></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@section Scripts {
+    <script type="text/javascript" charset="utf8" src="~/lib/datatables/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="~/lib/datatables/js/dataTables.responsive.min.js"></script>
+    <script>
+        $('#table_id').DataTable();
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+            
+        });
+    </script>
+}
