@@ -1,5 +1,6 @@
 ﻿namespace SportBattles.Web.Areas.Administration.Controllers
 {
+    using System;
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Mvc;
@@ -11,10 +12,12 @@
     public class GameController : AdministrationController
     {
         private readonly IGamesService gamesService;
+        private readonly IGamePointsService gamePointsService;
 
-        public GameController(IGamesService gamesService)
+        public GameController(IGamesService gamesService, IGamePointsService gamePointsService)
         {
             this.gamesService = gamesService;
+            this.gamePointsService = gamePointsService;
         }
 
         public IActionResult Index()
@@ -51,7 +54,16 @@
         [HttpPost]
         public async Task<JsonResult> AddSelectedMatches([FromBody] AddSelectedMatchesInputModel inputModel)
         {
-            await this.gamesService.AddMatches(inputModel.GameId, inputModel.Matches);
+            switch (inputModel.Sport)
+            {
+                case "Football": await this.gamesService.AddMatches(inputModel.GameId, inputModel.Matches);
+                    break;
+                case "Tennis": await this.gamesService.AddTennisMatches(inputModel.GameId, inputModel.TennisMatches);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException("This sport is not supported");
+            }
+
             return this.Json(new { redirectToUrl = this.Url.Action("Index", "Game") });
         }
 
@@ -93,9 +105,29 @@
             return this.Json(gameTypes);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> AddGamePoint([FromBody] GamePointNewInputModel inputModel)
+        {
+            if (this.ModelState.IsValid)
+            {
+                if (this.gamePointsService.IsDuplicateName(inputModel.Name))
+                {
+                    this.ModelState.AddModelError(string.Empty, "Duplicate name of scoring points");
+                    return this.View(nameof(this.Add), inputModel);
+                }
+                else
+                {
+                    await this.gamePointsService.Add(inputModel.Name, inputModel.Description);
+                    return this.Json(inputModel);
+                }
+            }
+
+            return this.View(nameof(this.Add), inputModel);
+        }
+
         public JsonResult GetAllGamePoints()
         {
-            var gamePoints = this.gamesService.GetAllGamePoints<GamePointViewModel>();
+            var gamePoints = this.gamePointsService.GetAll<GamePointViewModel>();
             return this.Json(gamePoints);
         }
     }

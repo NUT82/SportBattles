@@ -199,13 +199,15 @@
     $("#buttonShowMatches").click(function () {
         $("#tableMatches #body").find('tr').remove();
         $("#tableMatches").show();
+        var sport = $("#inputSport").find(":selected").text();
         var tournament = $("#inputTournament").find(":selected").text();
         var country = $("#inputCountry").find(":selected").text();
         $.ajax({
             url: '@Url.Action("Show", "Match", new { Area = "Administration" })',
             type: 'GET',
-            data: { country: country, tournament: tournament },
+            data: { sport: sport, country: country, tournament: tournament },
             success: function (data) {
+                console.log(data);
                 if (data.length == 0) {
                     $("<tr><td colspan=5>No matches for selected category</td></tr>").appendTo($("#tableMatches #body"));
                 }
@@ -240,10 +242,26 @@
                         }
                     });
                     $("#buttonAddMatchesToGame").click(function () {
+                        var sport = $("#inputSport").find(":selected").text();
                         var checkedIds = $('#tableMatches :checked').toArray().map(i => i.id);
                         var checkedMatches = data.filter(function (item) {
                                             return (jQuery.inArray(item.id, checkedIds) !== -1)
                         });
+                        var sendData;
+                        if (sport == "Football") {
+                            sendData = {
+                            Matches: checkedMatches,
+                            GameId: @Model,
+                            Sport: sport
+                            };
+                        } else if (sport == "Tennis") {
+                            sendData = {
+                            TennisMatches: checkedMatches,
+                            GameId: @Model,
+                            Sport: sport
+                            };
+                        }
+
                         $.ajax({
                             type: 'POST',
                             url: '@Url.Action("AddSelectedMatches", "Game", new { Area = "Administration" })',
@@ -252,10 +270,7 @@
                             headers: {
                                 '@tokenSet.HeaderName': '@tokenSet.RequestToken'
                             },
-                            data: JSON.stringify({
-                                Matches: checkedMatches,
-                                GameId: @Model,
-                            }),
+                            data: JSON.stringify(sendData),
                             success: function (response) {
                                 window.location.href = response.redirectToUrl;
                             }

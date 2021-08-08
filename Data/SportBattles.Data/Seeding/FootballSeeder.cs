@@ -329,8 +329,8 @@
                 "zw", "Zimbabwe",
             };
 
-            var jsonFilePath = @"wwwroot/json/FootballLeagues.json";
-            var footballCountries = serviceProvider.GetService<ILiveScoreApi>().GetFootballCountriesAndTournaments(jsonFilePath);
+            var jsonFilePath = @"wwwroot/json/SoccerLeagues.json";
+            var footballCountries = serviceProvider.GetService<ILiveScoreApi>().GetCountriesAndTournaments(jsonFilePath);
 
             var footballSport = dbContext.Sports.Where(s => s.Name == "Football").FirstOrDefault();
             if (footballSport == null)

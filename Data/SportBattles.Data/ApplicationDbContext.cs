@@ -31,11 +31,19 @@
 
         public DbSet<Prediction> Predictions { get; set; }
 
+        public DbSet<TennisPrediction> TennisPredictions { get; set; }
+
         public DbSet<Match> Matches { get; set; }
+
+        public DbSet<TennisMatch> TennisMatches { get; set; }
+
+        public DbSet<SetGame> SetGames { get; set; }
 
         public DbSet<Sport> Sports { get; set; }
 
         public DbSet<Team> Teams { get; set; }
+
+        public DbSet<TennisPlayer> TennisPlayers { get; set; }
 
         public DbSet<Tournament> Tournaments { get; set; }
 
@@ -44,6 +52,8 @@
         public DbSet<UserTeam> UserTeams { get; set; }
 
         public DbSet<GameMatch> GameMatch { get; set; }
+
+        public DbSet<GameTennisMatch> GameTennisMatch { get; set; }
 
         public override int SaveChanges() => this.SaveChanges(true);
 

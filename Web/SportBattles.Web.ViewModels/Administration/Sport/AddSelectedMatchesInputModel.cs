@@ -6,8 +6,12 @@
 
     public class AddSelectedMatchesInputModel
     {
-        public IEnumerable<FootballMatch> Matches { get; set; }
+        public IEnumerable<FootballMatchServiceModel> Matches { get; set; }
+
+        public IEnumerable<TennisMatchServiceModel> TennisMatches { get; set; }
 
         public int GameId { get; set; }
+
+        public string Sport { get; set; }
     }
 }

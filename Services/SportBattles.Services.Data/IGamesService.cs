@@ -15,13 +15,13 @@
 
         public IEnumerable<T> GetAllTypes<T>();
 
-        public IEnumerable<T> GetAllGamePoints<T>();
-
         public Task Join(int gameId, string userId);
 
         public Task Add(string name, int typeId);
 
-        public Task AddMatches(int gameId, IEnumerable<FootballMatch> footballMatches);
+        public Task AddMatches(int gameId, IEnumerable<FootballMatchServiceModel> footballMatches);
+
+        public Task AddTennisMatches(int gameId, IEnumerable<TennisMatchServiceModel> footballMatches);
 
         public Task Delete(int gameId);
 

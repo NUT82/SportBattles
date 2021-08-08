@@ -17,26 +17,32 @@
         private readonly IDeletableEntityRepository<GamePoint> gamePointRepository;
         private readonly IDeletableEntityRepository<Game> gameRepository;
         private readonly IDeletableEntityRepository<Match> matchRepository;
+        private readonly IDeletableEntityRepository<TennisMatch> tennisMatchRepository;
         private readonly IDeletableEntityRepository<ApplicationUser> userRepository;
         private readonly IDeletableEntityRepository<Tournament> tournamentRepository;
         private readonly ITeamsService teamService;
+        private readonly ITennisPlayersService tennisPlayersService;
 
         public GamesService(
             IDeletableEntityRepository<GameType> gameTypeRepository,
             IDeletableEntityRepository<GamePoint> gamePointRepository,
             IDeletableEntityRepository<Game> gameRepository,
             IDeletableEntityRepository<Match> matchRepository,
+            IDeletableEntityRepository<TennisMatch> tennisMatchRepository,
             IDeletableEntityRepository<ApplicationUser> userRepository,
             IDeletableEntityRepository<Tournament> tournamentRepository,
-            ITeamsService teamService)
+            ITeamsService teamService,
+            ITennisPlayersService tennisPlayersService)
         {
             this.gameTypeRepository = gameTypeRepository;
             this.gamePointRepository = gamePointRepository;
             this.gameRepository = gameRepository;
             this.matchRepository = matchRepository;
+            this.tennisMatchRepository = tennisMatchRepository;
             this.userRepository = userRepository;
             this.tournamentRepository = tournamentRepository;
             this.teamService = teamService;
+            this.tennisPlayersService = tennisPlayersService;
         }
 
         public async Task Join(int gameId, string userId)
@@ -139,12 +145,7 @@
             return this.gameTypeRepository.AllAsNoTracking().OrderBy(g => g.Name).To<T>().ToList();
         }
 
-        public IEnumerable<T> GetAllGamePoints<T>()
-        {
-            return this.gamePointRepository.AllAsNoTracking().OrderBy(gp => gp.Name).To<T>().ToList();
-        }
-
-        public async Task AddMatches(int gameId, IEnumerable<FootballMatch> footballMatches)
+        public async Task AddMatches(int gameId, IEnumerable<FootballMatchServiceModel> footballMatches)
         {
             var game = this.gameRepository.All().FirstOrDefault(g => g.Id == gameId);
 
@@ -176,6 +177,42 @@
                 }
 
                 game.Matches.Add(new GameMatch { Match = currMatch });
+                await this.gameRepository.SaveChangesAsync();
+            }
+        }
+
+        public async Task AddTennisMatches(int gameId, IEnumerable<TennisMatchServiceModel> tennisMatches)
+        {
+            var game = this.gameRepository.All().FirstOrDefault(g => g.Id == gameId);
+
+            foreach (var match in tennisMatches)
+            {
+                var tournamentId = this.tournamentRepository.AllAsNoTracking().Where(t => t.Name == match.Tournament && t.Country.Name == match.Country).Select(t => t.Id).FirstOrDefault();
+
+                var homePlayerId = await this.tennisPlayersService.Add(match.HomeTeam, match.HomeTeamCountry);
+                var awayPlayerId = await this.tennisPlayersService.Add(match.AwayTeam, match.AwayTeamCountry);
+
+                var currMatch = this.tennisMatchRepository.AllAsNoTracking().FirstOrDefault(m => m.HomePlayerId == homePlayerId && m.AwayPlayerId == awayPlayerId && m.StartTime == match.StartTimeUTC);
+                if (currMatch == null)
+                {
+                    currMatch = new TennisMatch
+                    {
+                        StartTime = match.StartTimeUTC,
+                        Status = match.Status,
+                        TournamentId = tournamentId,
+                        HomePlayerId = homePlayerId,
+                        AwayPlayerId = awayPlayerId,
+                    };
+                    await this.tennisMatchRepository.AddAsync(currMatch);
+                    await this.tennisMatchRepository.SaveChangesAsync();
+                }
+
+                if (game.TennisMatches.Any(m => m.TennisMatchId == currMatch.Id))
+                {
+                    continue;
+                }
+
+                game.TennisMatches.Add(new GameTennisMatch { TennisMatch = currMatch });
                 await this.gameRepository.SaveChangesAsync();
             }
         }

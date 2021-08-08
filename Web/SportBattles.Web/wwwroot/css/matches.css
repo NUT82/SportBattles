@@ -1,10 +1,10 @@
 div.match {
-  margin-top: 1%;
-  padding-top: 1%;
-  padding-bottom: 1%;
-  width: 100%;
-  border-radius: 26px;
-  background-color: aqua;
+    margin-top: 1%;
+    padding-top: 1%;
+    padding-bottom: 1%;
+    width: 100%;
+    border-radius: 26px;
+    background-color: aqua;
 }
 
 .points{
@@ -53,7 +53,7 @@ div.teams_result {
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
-    font-size: 22px;
+    font-size: 20px;
 }
 
 div.home_team {
@@ -69,32 +69,40 @@ div.away_team {
 }
 
 div.emblem {
-    margin: auto;
-    min-width: 60px;
+    margin: .5%;
+    min-width: 55px;
 }
 
 .emblem img {
-  width: 60px;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+    width: 55px;
 }
 
 div.separator {
     padding: 3px;
     margin: auto;
-  font-size: 30px;
+    font-size: 30px;
 }
 
 div.result {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  text-align: center;
-  margin: auto;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    text-align: center;
+    margin-left: 0px;
+    margin-right: 0px;
+    margin-block: auto;
+    height: 55px;
+    min-width: 60px;
 }
 
 div.finished_result {
     position: relative;
-    width: 70px;
+    min-width: 72px;
     height: 40px;
+    text-align: center;
     background-color: darkblue;
     border-radius: 10px;
     margin-top: auto;
@@ -114,7 +122,7 @@ div.prediction {
     color: white;
     position: absolute;
     top: -55%;
-    left: 15px;
+    left: 16px;
     font-size: 18px;
 }
 

@@ -21,6 +21,7 @@
     using SportBattles.Services.Data;
     using SportBattles.Services.Mapping;
     using SportBattles.Services.Messaging;
+    using SportBattles.Services.TennisPlayerPictureScraper;
     using SportBattles.Web.ViewModels;
 
     public class Startup
@@ -67,12 +68,17 @@
             services.AddTransient<IEmailSender, NullMessageSender>();
             services.AddTransient<ISportsService, SportsService>();
             services.AddTransient<IMatchesService, MatchesService>();
+            services.AddTransient<ITennisMatchesService, TennisMatchesService>();
             services.AddTransient<IGamesService, GamesService>();
+            services.AddTransient<IGamePointsService, GamePointsService>();
             services.AddTransient<IPredictionsService, PredictionsService>();
+            services.AddTransient<ITennisPredictionsService, TennisPredictionsService>();
             services.AddTransient<ITeamsService, TeamsService>();
+            services.AddTransient<ITennisPlayersService, TennisPlayersService>();
             services.AddTransient<ICountriesService, CountriesService>();
             services.AddTransient<ITournamentsService, TournamentsService>();
             services.AddTransient<ILiveScoreApi, LiveScoreApi>();
+            services.AddTransient<ITennisExplorerScraperService, TennisExplorerScraperService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

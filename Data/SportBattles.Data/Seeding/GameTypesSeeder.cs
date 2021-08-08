@@ -4,9 +4,6 @@
     using System.Linq;
     using System.Threading.Tasks;
 
-    using Microsoft.AspNetCore.Identity;
-    using Microsoft.Extensions.DependencyInjection;
-    using SportBattles.Common;
     using SportBattles.Data.Models;
 
     internal class GameTypesSeeder : ISeeder
@@ -20,7 +17,7 @@
 
             var gameType = new GameType
                 {
-                    Name = "Correct score",
+                    Name = "Football correct score",
                     Description = "Predict the scoreline of each match and you’ll accumulate points depending on how close you are to the correct one.",
                 };
 

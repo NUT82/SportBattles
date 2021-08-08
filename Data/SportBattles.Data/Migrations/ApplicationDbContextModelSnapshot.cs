@@ -183,6 +183,21 @@ namespace SportBattles.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("SetGameTennisMatch", b =>
+                {
+                    b.Property<int>("SetGamesId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TennisMatchesId")
+                        .HasColumnType("int");
+
+                    b.HasKey("SetGamesId", "TennisMatchesId");
+
+                    b.HasIndex("TennisMatchesId");
+
+                    b.ToTable("SetGameTennisMatch");
+                });
+
             modelBuilder.Entity("SportBattles.Data.Models.ApplicationRole", b =>
                 {
                     b.Property<string>("Id")
@@ -444,6 +459,24 @@ namespace SportBattles.Data.Migrations
                     b.ToTable("GamePoint");
                 });
 
+            modelBuilder.Entity("SportBattles.Data.Models.GameTennisMatch", b =>
+                {
+                    b.Property<int>("GameId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TennisMatchId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("DoublePoints")
+                        .HasColumnType("bit");
+
+                    b.HasKey("GameId", "TennisMatchId");
+
+                    b.HasIndex("TennisMatchId");
+
+                    b.ToTable("GameTennisMatch");
+                });
+
             modelBuilder.Entity("SportBattles.Data.Models.GameType", b =>
                 {
                     b.Property<int>("Id")
@@ -625,6 +658,38 @@ namespace SportBattles.Data.Migrations
                     b.ToTable("Predictions");
                 });
 
+            modelBuilder.Entity("SportBattles.Data.Models.SetGame", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<byte?>("AwayGames")
+                        .HasColumnType("tinyint");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<byte?>("HomeGames")
+                        .HasColumnType("tinyint");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IsDeleted");
+
+                    b.ToTable("SetGames");
+                });
+
             modelBuilder.Entity("SportBattles.Data.Models.Sport", b =>
                 {
                     b.Property<int>("Id")
@@ -694,6 +759,154 @@ namespace SportBattles.Data.Migrations
                         .IsUnique();
 
                     b.ToTable("Teams");
+                });
+
+            modelBuilder.Entity("SportBattles.Data.Models.TennisMatch", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("AwayPlayerId")
+                        .HasColumnType("int");
+
+                    b.Property<byte?>("AwaySets")
+                        .HasColumnType("tinyint");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("HomePlayerId")
+                        .HasColumnType("int");
+
+                    b.Property<byte?>("HomeSets")
+                        .HasColumnType("tinyint");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("StartTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Status")
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
+
+                    b.Property<int>("TournamentId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AwayPlayerId");
+
+                    b.HasIndex("HomePlayerId");
+
+                    b.HasIndex("IsDeleted");
+
+                    b.HasIndex("TournamentId");
+
+                    b.ToTable("TennisMatches");
+                });
+
+            modelBuilder.Entity("SportBattles.Data.Models.TennisPlayer", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("CountryId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("PictureUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IsDeleted");
+
+                    b.HasIndex("CountryId", "Name")
+                        .IsUnique();
+
+                    b.ToTable("TennisPlayers");
+                });
+
+            modelBuilder.Entity("SportBattles.Data.Models.TennisPrediction", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<byte?>("AwaySets")
+                        .HasColumnType("tinyint");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("GameId")
+                        .HasColumnType("int");
+
+                    b.Property<byte?>("HomeSets")
+                        .HasColumnType("tinyint");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<byte?>("Points")
+                        .HasColumnType("tinyint");
+
+                    b.Property<int>("TennisMatchId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("TwoWayWinner")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GameId");
+
+                    b.HasIndex("IsDeleted");
+
+                    b.HasIndex("TennisMatchId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("TennisPredictions");
                 });
 
             modelBuilder.Entity("SportBattles.Data.Models.Tournament", b =>
@@ -877,6 +1090,21 @@ namespace SportBattles.Data.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("SetGameTennisMatch", b =>
+                {
+                    b.HasOne("SportBattles.Data.Models.SetGame", null)
+                        .WithMany()
+                        .HasForeignKey("SetGamesId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("SportBattles.Data.Models.TennisMatch", null)
+                        .WithMany()
+                        .HasForeignKey("TennisMatchesId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("SportBattles.Data.Models.ApplicationUser", b =>
                 {
                     b.HasOne("SportBattles.Data.Models.Image", "ProfilePicture")
@@ -914,6 +1142,25 @@ namespace SportBattles.Data.Migrations
                     b.Navigation("Game");
 
                     b.Navigation("Match");
+                });
+
+            modelBuilder.Entity("SportBattles.Data.Models.GameTennisMatch", b =>
+                {
+                    b.HasOne("SportBattles.Data.Models.Game", "Game")
+                        .WithMany("TennisMatches")
+                        .HasForeignKey("GameId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("SportBattles.Data.Models.TennisMatch", "TennisMatch")
+                        .WithMany("Games")
+                        .HasForeignKey("TennisMatchId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Game");
+
+                    b.Navigation("TennisMatch");
                 });
 
             modelBuilder.Entity("SportBattles.Data.Models.Match", b =>
@@ -981,6 +1228,71 @@ namespace SportBattles.Data.Migrations
                     b.Navigation("Country");
                 });
 
+            modelBuilder.Entity("SportBattles.Data.Models.TennisMatch", b =>
+                {
+                    b.HasOne("SportBattles.Data.Models.TennisPlayer", "AwayPlayer")
+                        .WithMany()
+                        .HasForeignKey("AwayPlayerId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("SportBattles.Data.Models.TennisPlayer", "HomePlayer")
+                        .WithMany()
+                        .HasForeignKey("HomePlayerId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("SportBattles.Data.Models.Tournament", "Tournament")
+                        .WithMany()
+                        .HasForeignKey("TournamentId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("AwayPlayer");
+
+                    b.Navigation("HomePlayer");
+
+                    b.Navigation("Tournament");
+                });
+
+            modelBuilder.Entity("SportBattles.Data.Models.TennisPlayer", b =>
+                {
+                    b.HasOne("SportBattles.Data.Models.Country", "Country")
+                        .WithMany()
+                        .HasForeignKey("CountryId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Country");
+                });
+
+            modelBuilder.Entity("SportBattles.Data.Models.TennisPrediction", b =>
+                {
+                    b.HasOne("SportBattles.Data.Models.Game", "Game")
+                        .WithMany()
+                        .HasForeignKey("GameId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("SportBattles.Data.Models.TennisMatch", "TennisMatch")
+                        .WithMany()
+                        .HasForeignKey("TennisMatchId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("SportBattles.Data.Models.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Game");
+
+                    b.Navigation("TennisMatch");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("SportBattles.Data.Models.Tournament", b =>
                 {
                     b.HasOne("SportBattles.Data.Models.Country", "Country")
@@ -1017,9 +1329,16 @@ namespace SportBattles.Data.Migrations
             modelBuilder.Entity("SportBattles.Data.Models.Game", b =>
                 {
                     b.Navigation("Matches");
+
+                    b.Navigation("TennisMatches");
                 });
 
             modelBuilder.Entity("SportBattles.Data.Models.Match", b =>
+                {
+                    b.Navigation("Games");
+                });
+
+            modelBuilder.Entity("SportBattles.Data.Models.TennisMatch", b =>
                 {
                     b.Navigation("Games");
                 });

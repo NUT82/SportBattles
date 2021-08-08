@@ -18,6 +18,6 @@
 
         public Task ChangeDoublePoints(int matchId, int gameId);
 
-        public Task PopulateResults(IEnumerable<FootballMatch> matches, DateTime startDate, DateTime endDate);
+        public Task PopulateResults(IEnumerable<FootballMatchServiceModel> matches, DateTime startDate, DateTime endDate);
     }
 }

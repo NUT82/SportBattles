@@ -3,7 +3,7 @@
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
-    using SportBattles.Web.ViewModels.Game;
+    using SportBattles.Web.ViewModels.Football;
 
     public interface IPredictionsService
     {

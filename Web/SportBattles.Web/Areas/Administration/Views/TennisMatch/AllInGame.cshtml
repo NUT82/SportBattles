@@ -1,0 +1,69 @@
+﻿@{
+    this.ViewData["Title"] = "All matches in game";
+}
+@model SportBattles.Web.ViewModels.Administration.TennisMatch.AllInGameViewModel
+<div class="container mt-2">
+    <table id="table_id" class="display" style="width: 100%">
+        <thead>
+            <tr>
+                <th>Start time</th>
+                <th>Tournament</th>
+                <th>Player 1</th>
+                <th>Player 2</th>
+                <th>Result</th>
+                <th>Double points</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var @match in Model.Matches)
+            {
+            <tr>
+                <td>@match.StartTimeLocalTime</td>
+                <td>@match.TournamentCountryName - @match.TournamentName</td>
+                <td>@match.HomePlayerName</td>
+                <td>@match.AwayPlayerName</td>
+                @if (match.HomeSets == null)
+                {
+                    if (match.Status == "Canc." || match.Status == "Postp.")
+                    {
+                        <td>@match.Status</td>
+                    }
+                    else
+                    {
+                        <td>? - ?</td>
+                    }
+                }
+                else
+                {
+                    <td>@match.HomeSets - @match.AwaySets</td>
+                }
+                <td>
+                    @if (match.StartTime > DateTime.UtcNow)
+                    {
+                        @if (Model.MatchesDoublePoints[match.Id])
+                        {
+                            <a asp-area="Administration" asp-controller="TennisMatch" asp-action="DoublePoints" asp-route-matchId="@match.Id" asp-route-gameId="@Model.GameId" title="Standart points" class="btn btn-danger">
+                                <i class="fa fa-arrow-circle-down"></i>
+                            </a>
+                        }
+                        else
+                        {
+                            <a asp-area="Administration" asp-controller="TennisMatch" asp-action="DoublePoints" asp-route-matchId="@match.Id" asp-route-gameId="@Model.GameId" title="Double points" class="btn btn-success">
+                                <i class="fa fa-arrow-circle-up"></i>
+                            </a>
+                        }
+                    }
+                    @(Model.MatchesDoublePoints[match.Id] ? "Yes" : "No")
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@section Scripts {
+    <script type="text/javascript" charset="utf8" src="~/lib/datatables/js/jquery.dataTables.min.js"></script>
+    <script>
+        $('#table_id').DataTable();
+    </script>
+}

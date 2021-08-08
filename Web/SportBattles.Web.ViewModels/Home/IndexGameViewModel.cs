@@ -11,7 +11,11 @@
 
         public string GameTypeName { get; set; }
 
+        public string GameTypeSport => this.GameTypeName?.Split()[0];
+
         public int MatchesCount { get; set; }
+
+        public int TennisMatchesCount { get; set; }
 
         public int UsersCount { get; set; }
     }

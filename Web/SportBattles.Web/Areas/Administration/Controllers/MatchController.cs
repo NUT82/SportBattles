@@ -52,11 +52,12 @@
 
         public async Task<IActionResult> GetAll()
         {
-            await this.liveScoreApi.CreateJsonFilesForAllFootballMatchesAsync(
+            await this.liveScoreApi.CreateJsonFilesForAllMatchesAsync(
                 this.yesterday,
                 this.yesterday.AddDays(GlobalConstants.LiveScoreAPIDaysAhead),
                 this.configuration.GetValue<string>("X-RapidAPI-Key"),
-                this.configuration.GetValue<string>("X-RapidAPI-Host"));
+                this.configuration.GetValue<string>("X-RapidAPI-Host"),
+                "Soccer");
 
             return this.RedirectToAction("Index", "Game");
         }
@@ -68,11 +69,12 @@
                 throw new NullReferenceException("You must specify the date");
             }
 
-            await this.liveScoreApi.CreateJsonFilesForAllFootballMatchesAsync(
+            await this.liveScoreApi.CreateJsonFilesForAllMatchesAsync(
                 date.Value,
                 date.Value,
                 this.configuration.GetValue<string>("X-RapidAPI-Key"),
-                this.configuration.GetValue<string>("X-RapidAPI-Host"));
+                this.configuration.GetValue<string>("X-RapidAPI-Host"),
+                "Soccer");
 
             return this.RedirectToAction("Index", "Game");
         }
@@ -86,15 +88,24 @@
             return this.RedirectToAction("Index", "Game");
         }
 
-        public JsonResult Show(string country, string tournament)
+        public JsonResult Show(string sport, string country, string tournament)
         {
-            var matches = this.liveScoreApi.GetFootballMatches(
-                this.yesterday.AddDays(1),
-                this.yesterday.AddDays(GlobalConstants.LiveScoreAPIDaysAhead),
-                country,
-                tournament);
-
-            return this.Json(matches);
+            return sport switch
+            {
+                "Football" => this.Json(
+                    this.liveScoreApi.GetFootballMatches(
+                       this.yesterday.AddDays(1),
+                       this.yesterday.AddDays(GlobalConstants.LiveScoreAPIDaysAhead),
+                       country,
+                       tournament)),
+                "Tennis" => this.Json(
+                    this.liveScoreApi.GetTennisMatches(
+                       this.yesterday.AddDays(1),
+                       this.yesterday.AddDays(GlobalConstants.LiveScoreAPIDaysAhead),
+                       country,
+                       tournament)),
+                _ => throw new ArgumentOutOfRangeException("This sport is not supported"),
+            };
         }
     }
 }

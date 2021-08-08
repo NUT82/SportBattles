@@ -59,7 +59,7 @@
             return gameMatch.DoublePoints;
         }
 
-        public async Task PopulateResults(IEnumerable<FootballMatch> matches, DateTime startDate, DateTime endDate)
+        public async Task PopulateResults(IEnumerable<FootballMatchServiceModel> matches, DateTime startDate, DateTime endDate)
         {
             startDate = startDate.Date.AddHours(-GlobalConstants.LiveScoreAPITimeZoneCorrection);
             endDate = endDate.Date.AddHours(-GlobalConstants.LiveScoreAPITimeZoneCorrection);

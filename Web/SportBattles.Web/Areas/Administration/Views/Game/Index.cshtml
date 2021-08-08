@@ -21,33 +21,40 @@
     <tbody>
         @foreach (var game in Model)
         {
-            <tr>
-                <td>@game.Name</td>
-                <td>@game.GameTypeName</td>
+        <tr>
+            <td>@game.Name</td>
+            <td>@game.GameTypeName</td>
+            @if (game.GameTypeName.Contains("Football"))
+            {
                 <td><a asp-area="Administration" asp-controller="Match" asp-action="AllInGame" asp-route-gameId="@game.Id" title="Show matches in game" class="btn-link">@game.MatchesCount</a></td>
-                <td><a asp-area="Administration" asp-controller="User" asp-action="AllInGame" asp-route-gameId="@game.Id" title="Show users in game" class="btn-link">@game.UsersCount</a></td>
-                <td>@(game.Started ? "Started" : "Not started")</td>
-                <td>
-                    @if (!game.Started)
-                    {
-                        <a asp-area="Administration" asp-controller="Match" asp-action="AddToGame" asp-route-gameId="@game.Id" title="Add matches to game" class="btn btn-primary">
-                            <i class="fa fa-plus-circle"></i>
-                        </a>
-                        <a asp-area="Administration" asp-controller="Game" asp-action="ChangeStatus" asp-route-gameId="@game.Id" title="Start game" class="btn btn-warning">
-                            <i class="fa fa-play-circle"></i>
-                        </a>
-                    }
-                    else
-                    {
-                        <a asp-area="Administration" asp-controller="Game" asp-action="ChangeStatus" asp-route-gameId="@game.Id" title="Stop game" class="btn btn-warning">
-                            <i class="fa fa-stop-circle"></i>
-                        </a>
-                    }
-                    <a asp-area="Administration" asp-controller="Game" asp-action="Delete" asp-route-gameId="@game.Id" title="Delete game" class="btn btn-danger">
-                        <i class="fa fa-minus-circle"></i>
+            }
+            @if (game.GameTypeName.Contains("Tennis"))
+            {
+                <td><a asp-area="Administration" asp-controller="TennisMatch" asp-action="AllInGame" asp-route-gameId="@game.Id" title="Show matches in game" class="btn-link">@game.TennisMatchesCount</a></td>
+            }
+            <td><a asp-area="Administration" asp-controller="User" asp-action="AllInGame" asp-route-gameId="@game.Id" title="Show users in game" class="btn-link">@game.UsersCount</a></td>
+            <td>@(game.Started ? "Started" : "Not started")</td>
+            <td>
+                @if (!game.Started)
+                {
+                    <a asp-area="Administration" asp-controller="Match" asp-action="AddToGame" asp-route-gameId="@game.Id" title="Add matches to game" class="btn btn-primary">
+                        <i class="fa fa-plus-circle"></i>
                     </a>
-                </td>
-            </tr>
+                    <a asp-area="Administration" asp-controller="Game" asp-action="ChangeStatus" asp-route-gameId="@game.Id" title="Start game" class="btn btn-warning">
+                        <i class="fa fa-play-circle"></i>
+                    </a>
+                }
+                else
+                {
+                    <a asp-area="Administration" asp-controller="Game" asp-action="ChangeStatus" asp-route-gameId="@game.Id" title="Stop game" class="btn btn-warning">
+                        <i class="fa fa-stop-circle"></i>
+                    </a>
+                }
+                <a asp-area="Administration" asp-controller="Game" asp-action="Delete" asp-route-gameId="@game.Id" title="Delete game" class="btn btn-danger">
+                    <i class="fa fa-minus-circle"></i>
+                </a>
+            </td>
+        </tr>
         }
     </tbody>
 </table>

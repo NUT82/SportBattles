@@ -13,6 +13,8 @@
 
         public int MatchesCount { get; set; }
 
+        public int TennisMatchesCount { get; set; }
+
         public int UsersCount { get; set; }
 
         public bool Started { get; set; }

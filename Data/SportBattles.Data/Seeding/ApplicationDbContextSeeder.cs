@@ -27,6 +27,7 @@
                           {
                               new RolesSeeder(),
                               new FootballSeeder(),
+                              new TennisSeeder(),
                               new GameTypesSeeder(),
                           };
 

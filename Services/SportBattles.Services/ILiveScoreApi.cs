@@ -8,10 +8,12 @@
 
     public interface ILiveScoreApi
     {
-        public IEnumerable<FootballMatch> GetFootballMatches(DateTime startDate, DateTime endDate, string country = null, string tournament = null);
+        public IEnumerable<FootballMatchServiceModel> GetFootballMatches(DateTime startDate, DateTime endDate, string country = null, string tournament = null);
 
-        public IEnumerable<FootballLeagueJson> GetFootballCountriesAndTournaments(string jsonFileName);
+        public IEnumerable<TennisMatchServiceModel> GetTennisMatches(DateTime startDate, DateTime endDate, string country = null, string tournament = null);
 
-        public Task CreateJsonFilesForAllFootballMatchesAsync(DateTime startDate, DateTime endDate, string apiKey, string apiHost);
+        public IEnumerable<LeagueJson> GetCountriesAndTournaments(string jsonFileName);
+
+        public Task CreateJsonFilesForAllMatchesAsync(DateTime startDate, DateTime endDate, string apiKey, string apiHost, string category);
     }
 }

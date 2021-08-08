@@ -11,6 +11,7 @@
         {
             this.Users = new HashSet<ApplicationUser>();
             this.Matches = new HashSet<GameMatch>();
+            this.TennisMatches = new HashSet<GameTennisMatch>();
         }
 
         [Required]
@@ -26,5 +27,7 @@
         public virtual ICollection<ApplicationUser> Users { get; set; }
 
         public virtual ICollection<GameMatch> Matches { get; set; }
+
+        public virtual ICollection<GameTennisMatch> TennisMatches { get; set; }
     }
 }

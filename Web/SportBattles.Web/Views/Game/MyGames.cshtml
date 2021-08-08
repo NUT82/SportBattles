@@ -17,17 +17,24 @@
     <tbody>
         @foreach (var game in Model)
         {
-            <tr>
-                <td>@game.Name</td>
-                <td>@game.GameTypeName</td>
+        <tr>
+            <td>@game.Name</td>
+            <td>@game.GameTypeName</td>
+            @if (game.GameTypeSport == "Football")
+            {
                 <td>@game.MatchesCount</td>
-                <td>@game.UsersCount</td>
-                <td>
-                    <a asp-controller="Game" asp-action="Predictions" asp-route-gameId="@game.Id" title="Predict matches" class="btn btn-success">
-                        <i class="fa fa-question"></i>:<i class="fa fa-question"></i>
-                    </a>
-                </td>
-            </tr>
+            }
+            @if (game.GameTypeSport == "Tennis")
+            {
+                <td>@game.TennisMatchesCount</td>
+            }
+            <td>@game.UsersCount</td>
+            <td>
+                <a asp-controller="@game.GameTypeSport" asp-action="Predictions" asp-route-gameId="@game.Id" title="Predict matches" class="btn btn-success">
+                    <i class="fa fa-question"></i>:<i class="fa fa-question"></i>
+                </a>
+            </td>
+        </tr>
         }
     </tbody>
 </table>

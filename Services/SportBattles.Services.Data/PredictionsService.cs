@@ -7,7 +7,7 @@
 
     using SportBattles.Data.Common.Repositories;
     using SportBattles.Data.Models;
-    using SportBattles.Web.ViewModels.Game;
+    using SportBattles.Web.ViewModels.Football;
 
     public class PredictionsService : IPredictionsService
     {
