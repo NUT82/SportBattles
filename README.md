@@ -29,5 +29,5 @@ Administrator dashboard:
 - AJAX real-time Requests
 - jQuery and any kind of jQuery plugins ([DataTables](https://datatables.net/ "DataTables"))
 
-## :wrench: DB Diagram
-![](https://ibb.co/k4THn3G)
+## :floppy_disk: Database Diagram
+![](https://i.ibb.co/hBN75Xg/Sport-Battles-DB.png)
