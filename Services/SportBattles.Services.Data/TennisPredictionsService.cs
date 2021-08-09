@@ -51,7 +51,6 @@
             var predictions = this.tennisPredictionRepository.All().Where(p => p.Points == null && p.TennisMatch.StartTime < DateTime.UtcNow && p.HomeSets != null).ToList();
             foreach (var prediction in predictions)
             {
-                var doublePoints = this.tennisMatchesService.IsDoublePoint(prediction.GameId, prediction.TennisMatchId);
                 var points = this.CalculatePoints(prediction);
                 prediction.Points = (byte?)points;
             }
@@ -61,7 +60,7 @@
 
         private int? CalculatePoints(TennisPrediction prediction)
         {
-            if (prediction.HomeSets is null || prediction is null)
+            if (prediction.HomeSets is null || prediction.AwaySets is null || prediction.TennisMatch.HomeSets is null || prediction.TennisMatch.AwaySets is null)
             {
                 return null;
             }
@@ -70,9 +69,10 @@
             var maxResult = 0;
             foreach (var gamePoint in prediction.Game.GameType.GamePoints)
             {
-                var result = gamePoint.GameType.Name switch
+                var result = gamePoint.GamePoint.Name switch
                 {
                     "Exact sets" => this.GetPoints(prediction, gamePoint.Value, multiplier, this.ExactScorelinePoints()),
+                    "Tennis player winner" => this.GetPoints(prediction, gamePoint.Value, multiplier, this.OutcomePoints()),
                     _ => throw new ArgumentException("Add method to calculate points for this GamePointType first!"),
                 };
 
@@ -99,22 +99,15 @@
             prediction.HomeSets == prediction.TennisMatch.HomeSets &&
             prediction.AwaySets == prediction.TennisMatch.AwaySets;
 
-        // private Func<Prediction, bool> GoalDifferencePoints() => (prediction) =>
-        //    prediction.HomeGoals - prediction.AwayGoals == prediction.Match.HomeGoals - prediction.Match.AwayGoals;
+        private Func<TennisPrediction, bool> OutcomePoints() => (prediction) =>
+           this.IsCorrectWinner(prediction);
 
-        // private Func<Prediction, bool> OneTeamGoalsPoints() => (prediction) =>
-        //    (this.IsCorrectWinner(prediction) &&
-        //    (prediction.HomeGoals == prediction.Match.HomeGoals || prediction.AwayGoals == prediction.Match.AwayGoals));
-
-        // private Func<Prediction, bool> OutcomePoints() => (prediction) =>
-        //    this.IsCorrectWinner(prediction);
-
-        // private bool IsCorrectWinner(Prediction prediction)
-        // {
-        //    var predictionOutcome = prediction.HomeGoals - prediction.AwayGoals;
-        //    var resultOutcome = prediction.Match.HomeGoals - prediction.Match.AwayGoals;
-        //    var outcome = (predictionOutcome == 0 && resultOutcome == 0) || (predictionOutcome * resultOutcome > 0);
-        //    return outcome;
-        // }
+        private bool IsCorrectWinner(TennisPrediction prediction)
+        {
+            var predictionOutcome = prediction.HomeSets - prediction.AwaySets;
+            var resultOutcome = prediction.TennisMatch.HomeSets - prediction.TennisMatch.AwaySets;
+            var outcome = (predictionOutcome == 0 && resultOutcome == 0) || (predictionOutcome * resultOutcome > 0);
+            return outcome;
+        }
     }
 }

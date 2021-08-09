@@ -9,15 +9,18 @@
     public class PredictionController : AdministrationController
     {
         private readonly IPredictionsService predictionsService;
+        private readonly ITennisPredictionsService tennisPredictionsService;
 
-        public PredictionController(IPredictionsService predictionsService)
+        public PredictionController(IPredictionsService predictionsService, ITennisPredictionsService tennisPredictionsService)
         {
             this.predictionsService = predictionsService;
+            this.tennisPredictionsService = tennisPredictionsService;
         }
 
         public async Task<IActionResult> GetPoints()
         {
             await this.predictionsService.PopulatePoints();
+            await this.tennisPredictionsService.PopulatePoints();
 
             return this.RedirectToAction("Index", "Game");
         }

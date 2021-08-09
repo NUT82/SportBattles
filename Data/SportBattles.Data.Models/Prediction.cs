@@ -26,6 +26,10 @@
 
         public ThreeWayResult? ThreeWayWinner { get; set; }
 
+        public HalfTimeFullTime? HalfTimeFullTime { get; set; }
+
+        public string OverUnderGoals { get; set; }
+
         public byte? Points { get; set; }
     }
 }

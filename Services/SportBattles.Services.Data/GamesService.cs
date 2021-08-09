@@ -23,6 +23,8 @@
         private readonly IDeletableEntityRepository<Tournament> tournamentRepository;
         private readonly IDeletableEntityRepository<Prediction> predictionRepository;
         private readonly IDeletableEntityRepository<TennisPrediction> tennisPredictionRepository;
+        private readonly IDeletableEntityRepository<Country> countryRepository;
+        private readonly IDeletableEntityRepository<Sport> sportRepository;
         private readonly ITeamsService teamService;
         private readonly ITennisPlayersService tennisPlayersService;
 
@@ -36,6 +38,8 @@
             IDeletableEntityRepository<Tournament> tournamentRepository,
             IDeletableEntityRepository<Prediction> predictionRepository,
             IDeletableEntityRepository<TennisPrediction> tennisPredictionRepository,
+            IDeletableEntityRepository<Country> countryRepository,
+            IDeletableEntityRepository<Sport> sportRepository,
             ITeamsService teamService,
             ITennisPlayersService tennisPlayersService)
         {
@@ -48,6 +52,8 @@
             this.tournamentRepository = tournamentRepository;
             this.predictionRepository = predictionRepository;
             this.tennisPredictionRepository = tennisPredictionRepository;
+            this.countryRepository = countryRepository;
+            this.sportRepository = sportRepository;
             this.teamService = teamService;
             this.tennisPlayersService = tennisPlayersService;
         }
@@ -227,19 +233,32 @@
 
             foreach (var match in tennisMatches)
             {
-                var tournamentId = this.tournamentRepository.AllAsNoTracking().Where(t => t.Name == match.Tournament && t.Country.Name == match.Country).Select(t => t.Id).FirstOrDefault();
+                var tournament = this.tournamentRepository.AllAsNoTracking().Where(t => t.Name == match.Tournament && t.Country.Name == match.Country).FirstOrDefault();
+
+                if (tournament == null)
+                {
+                    tournament = new Tournament
+                    {
+                        Name = match.Tournament,
+                        CountryId = this.countryRepository.AllAsNoTracking().FirstOrDefault(c => c.Name == match.Country).Id,
+                        SportId = this.sportRepository.AllAsNoTracking().FirstOrDefault(s => s.Name == "Tennis").Id,
+                    };
+
+                    await this.tournamentRepository.AddAsync(tournament);
+                    await this.tournamentRepository.SaveChangesAsync();
+                }
 
                 var homePlayerId = await this.tennisPlayersService.Add(match.HomeTeam, match.HomeTeamCountry);
                 var awayPlayerId = await this.tennisPlayersService.Add(match.AwayTeam, match.AwayTeamCountry);
 
-                var currMatch = this.tennisMatchRepository.AllAsNoTracking().FirstOrDefault(m => m.HomePlayerId == homePlayerId && m.AwayPlayerId == awayPlayerId && m.StartTime == match.StartTimeUTC);
+                var currMatch = this.tennisMatchRepository.All().FirstOrDefault(m => m.HomePlayerId == homePlayerId && m.AwayPlayerId == awayPlayerId && m.Status != "FT");
                 if (currMatch == null)
                 {
                     currMatch = new TennisMatch
                     {
                         StartTime = match.StartTimeUTC,
                         Status = match.Status,
-                        TournamentId = tournamentId,
+                        TournamentId = tournament.Id,
                         HomePlayerId = homePlayerId,
                         AwayPlayerId = awayPlayerId,
                     };
@@ -249,6 +268,12 @@
 
                 if (game.TennisMatches.Any(m => m.TennisMatchId == currMatch.Id))
                 {
+                    if (match.StartTimeUTC != currMatch.StartTime)
+                    {
+                        currMatch.StartTime = match.StartTimeUTC;
+                        await this.tennisMatchRepository.SaveChangesAsync();
+                    }
+
                     continue;
                 }
 
