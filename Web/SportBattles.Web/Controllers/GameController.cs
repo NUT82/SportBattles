@@ -1,5 +1,6 @@
 ﻿namespace SportBattles.Web.Controllers
 {
+    using System.Collections.Generic;
     using System.Security.Claims;
     using System.Threading.Tasks;
 
@@ -7,7 +8,6 @@
     using Microsoft.AspNetCore.Mvc;
 
     using SportBattles.Services.Data;
-    using SportBattles.Web.ViewModels.Game;
     using SportBattles.Web.ViewModels.Home;
 
     public class GameController : BaseController
@@ -19,11 +19,23 @@
             this.gamesService = gamesService;
         }
 
+        public IActionResult Index()
+        {
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var games = this.gamesService.GetAllStarted<GameViewModel>(userId);
+            return this.View(games);
+        }
+
         [Authorize]
         public IActionResult MyGames()
         {
-            var games = this.gamesService.GetUserGames<IndexGameViewModel>(this.User.FindFirstValue(ClaimTypes.NameIdentifier));
-            return this.View(games);
+            var model = new IndexGameViewModel
+            {
+                GameViewModel = this.gamesService.GetUserGames<GameViewModel>(this.User.FindFirstValue(ClaimTypes.NameIdentifier)),
+                UnpredictedMatches = this.gamesService.UnpredictedMatchesInGameByUserCount(this.User.FindFirstValue(ClaimTypes.NameIdentifier)),
+            };
+
+            return this.View(model);
         }
 
         [Authorize]

@@ -17,6 +17,8 @@ namespace SportBattles.Data.Models
             this.Logins = new HashSet<IdentityUserLogin<string>>();
             this.Games = new HashSet<Game>();
             this.UserTeams = new HashSet<UserTeam>();
+            this.Predictions = new HashSet<Prediction>();
+            this.TennisPredictions = new HashSet<TennisPrediction>();
         }
 
         public string ProfilePictureId { get; set; }
@@ -34,6 +36,10 @@ namespace SportBattles.Data.Models
         public DateTime? DeletedOn { get; set; }
 
         public virtual ICollection<Game> Games { get; set; }
+
+        public virtual ICollection<Prediction> Predictions { get; set; }
+
+        public virtual ICollection<TennisPrediction> TennisPredictions { get; set; }
 
         public virtual ICollection<UserTeam> UserTeams { get; set; }
 

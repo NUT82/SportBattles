@@ -29,5 +29,9 @@
         public virtual ICollection<GameMatch> Matches { get; set; }
 
         public virtual ICollection<GameTennisMatch> TennisMatches { get; set; }
+
+        public virtual ICollection<Prediction> Predictions { get; set; }
+
+        public virtual ICollection<TennisPrediction> TennisPredictions { get; set; }
     }
 }

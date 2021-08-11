@@ -1,8 +1,9 @@
 ﻿@using SportBattles.Common
 @{
-    this.ViewData["Title"] = "Home Page";
+    this.ViewData["Title"] = "My games";
+    this.ViewData["MyGames"] = "active";
 }
-@model IEnumerable<SportBattles.Web.ViewModels.Home.IndexGameViewModel>
+@model SportBattles.Web.ViewModels.Home.IndexGameViewModel
 
 <div class="mt-1">
     <table id="table_id" class="responsive display" style="width: 100%">
@@ -11,12 +12,13 @@
                 <th data-priority="1" style="width: 35%">Name</th>
                 <th style="width: 15%">Game type</th>
                 <th style="width: 10%">Matches</th>
+                <th style="width: 10%">Unpredicted matches</th>
                 <th style="width: 10%">Users</th>
                 <th data-priority="2" style="width: 30%">Actions</th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var game in Model)
+            @foreach (var game in Model.GameViewModel)
             {
                 <tr>
                     <td>@game.Name</td>
@@ -32,6 +34,7 @@
                     {
                         <td>@game.TennisMatchesCount</td>
                     }
+                    <td class="text-danger font-weight-bold">@Model.UnpredictedMatches[game.Id]</td>
                     <td>@game.UsersCount</td>
                     <td>
                         <a asp-controller="@game.GameTypeSport" asp-action="Predictions" asp-route-gameId="@game.Id" data-toggle="tooltip" title="Predict matches" class="btn btn-success">
@@ -51,10 +54,11 @@
     <script type="text/javascript" charset="utf8" src="~/lib/datatables/js/jquery.dataTables.min.js"></script>
     <script type="text/javascript" charset="utf8" src="~/lib/datatables/js/dataTables.responsive.min.js"></script>
     <script>
-        $('#table_id').DataTable();
+        $('#table_id').DataTable(
+            { "order": [[3, "desc"]] }
+        );
         $(function () {
             $('[data-toggle="tooltip"]').tooltip();
-            
         });
     </script>
 }

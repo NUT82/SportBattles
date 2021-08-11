@@ -24,6 +24,16 @@
             this.gamePointsService = gamePointsService;
         }
 
+        public IActionResult Schedule()
+        {
+            return this.View();
+        }
+
+        public IActionResult Results()
+        {
+            return this.View();
+        }
+
         [Authorize]
         public IActionResult Predictions(int gameId)
         {

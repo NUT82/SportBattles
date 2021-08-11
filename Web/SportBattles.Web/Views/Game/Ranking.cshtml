@@ -1,6 +1,7 @@
 ﻿@using SportBattles.Common
 @{
-    this.ViewData["Title"] = "Home Page";
+    this.ViewData["Title"] = "Ranking";
+    this.ViewData["MyGames"] = "active";
     var count = 0;
 }
 @model IEnumerable<SportBattles.Web.ViewModels.Game.RankingViewModel>
@@ -9,10 +10,9 @@
     <table id="table_id" class="responsive display" style="width: 100%">
         <thead>
             <tr>
-                <th style="width: 10%">#</th>
-                <th data-priority="1" style="width: 35%">Player</th>
-                <th style="width: 15%">Score</th>
-                <th style="width: 10%">Info</th>
+                <th>#</th>
+                <th>Player</th>
+                <th>Score</th>
             </tr>
         </thead>
         <tbody>
@@ -23,7 +23,6 @@
                     <td>@count</td>
                     <td>@player.UserName</td>
                     <td>@player.Points</td>
-                    <td></td>
                 </tr>
             }
         </tbody>

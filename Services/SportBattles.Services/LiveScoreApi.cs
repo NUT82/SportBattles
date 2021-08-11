@@ -162,7 +162,7 @@
             var matches = new List<TennisMatchServiceModel>();
             foreach (var league in tennisMatchesJson)
             {
-                foreach (var match in league.Events)
+                foreach (var match in league.Events.Where(m => m.Home.Count == 1))
                 {
                     matches.Add(new TennisMatchServiceModel
                     {

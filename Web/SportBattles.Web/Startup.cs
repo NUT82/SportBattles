@@ -5,6 +5,7 @@
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
@@ -22,6 +23,7 @@
     using SportBattles.Services.Mapping;
     using SportBattles.Services.Messaging;
     using SportBattles.Services.TennisPlayerPictureScraper;
+    using SportBattles.Web.Areas.Identity;
     using SportBattles.Web.ViewModels;
 
     public class Startup
@@ -40,7 +42,9 @@
                 options => options.UseSqlServer(this.configuration.GetConnectionString("DefaultConnection")).UseLazyLoadingProxies());
 
             services.AddDefaultIdentity<ApplicationUser>(IdentityOptionsProvider.GetIdentityOptions)
-                .AddRoles<ApplicationRole>().AddEntityFrameworkStores<ApplicationDbContext>();
+                .AddRoles<ApplicationRole>()
+                .AddSignInManager<MySignInManager<ApplicationUser>>()
+                .AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.Configure<CookiePolicyOptions>(
                 options =>
@@ -66,6 +70,7 @@
 
             // Application services
             services.AddTransient<IEmailSender, NullMessageSender>();
+            services.AddTransient<IUsersService, UsersService>();
             services.AddTransient<ISportsService, SportsService>();
             services.AddTransient<IMatchesService, MatchesService>();
             services.AddTransient<ITennisMatchesService, TennisMatchesService>();

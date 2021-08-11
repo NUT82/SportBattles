@@ -2,6 +2,7 @@
 @inject IAntiforgery antiforgery
 @{
     this.ViewData["Title"] = "Add new game";
+    this.ViewData["Admin"] = "active";
     var tokenSet = antiforgery.GetAndStoreTokens(Context);
 }
 

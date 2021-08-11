@@ -1,0 +1,13 @@
+﻿@model ICollection<SportBattles.Web.ViewModels.User.TopPlayersComponentViewModel>
+
+<div class="col-lg-4 col-md-6 offset-lg-1">
+    <div class="fs-widget" >
+        <h4>Top Players</h4>
+        <ul class="fw-links" style="width:100%">
+            @foreach (var player in Model)
+            {
+                <li><a asp-area="" asp-controller="Player" asp-action="Info" asp-route-name="@player.UserName">@player.UserName - @player.Points points</a></li>
+            }
+        </ul>
+    </div>
+</div>

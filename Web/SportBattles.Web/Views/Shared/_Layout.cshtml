@@ -31,43 +31,15 @@
         <div class="canvas-close">
             <i class="fa fa-close"></i>
         </div>
-        <div class="search-btn search-switch">
-            <i class="fa fa-search"></i>
-        </div>
         <div class="header__top--canvas">
             <div class="ht-info">
                 <ul>
-                    <li>@DateTime.Now.ToString("f")</li>
                     <partial name="_LoginPartial" />
                 </ul>
             </div>
-            <div class="ht-links">
-                <a href="#"><i class="fa fa-facebook"></i></a>
-                <a href="#"><i class="fa fa-vimeo"></i></a>
-                <a href="#"><i class="fa fa-twitter"></i></a>
-                <a href="#"><i class="fa fa-google-plus"></i></a>
-                <a href="#"><i class="fa fa-instagram"></i></a>
-            </div>
         </div>
         <ul class="main-menu mobile-menu">
-            <li class="active"><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-            @if (this.User.Identity.IsAuthenticated)
-            {
-                <li><a asp-area="" asp-controller="Game" asp-action="MyGames">My Games</a></li>
-            }
-            <li><a asp-area="" asp-controller="Home" asp-action="Index">Schedule</a></li>
-            <li><a asp-area="" asp-controller="Home" asp-action="Index">Results</a></li>
-            <li><a asp-area="" asp-controller="Home" asp-action="Index">Sport</a></li>
-            <li>
-                <a href="#">Pages</a>
-                <ul class="dropdown">
-                    <li><a asp-area="" asp-controller="Home" asp-action="Index">Blog</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="Index">Blog Details</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="Index">Schedule</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="Index">Results</a></li>
-                </ul>
-            </li>
-            <li><a asp-area="" asp-controller="Home" asp-action="Index">Contact Us</a></li>
+            <partial name="_MenuPartial">
         </ul>
         <div id="mobile-menu-wrap"></div>
     </div>
@@ -80,18 +52,8 @@
                     <div class="col-lg-8">
                         <div class="ht-info">
                             <ul>
-                                <li>@DateTime.Now.ToString("f")</li>
                                 <partial name="_LoginPartial" />
                             </ul>
-                        </div>
-                    </div>
-                    <div class="col-lg-4">
-                        <div class="ht-links">
-                            <a href="#"><i class="fa fa-facebook"></i></a>
-                            <a href="#"><i class="fa fa-vimeo"></i></a>
-                            <a href="#"><i class="fa fa-twitter"></i></a>
-                            <a href="#"><i class="fa fa-google-plus"></i></a>
-                            <a href="#"><i class="fa fa-instagram"></i></a>
                         </div>
                     </div>
                 </div>
@@ -108,28 +70,8 @@
                     <div class="col-lg-10">
                         <div class="nav-menu">
                             <ul class="main-menu">
-                                <li class="active"><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-                                @if (this.User.Identity.IsAuthenticated)
-                                {
-                                    <li><a asp-area="" asp-controller="Game" asp-action="MyGames">My Games</a></li>
-                                }
-                                <li><a asp-area="" asp-controller="Home" asp-action="Index">Schedule</a></li>
-                                <li><a asp-area="" asp-controller="Home" asp-action="Index">Results</a></li>
-                                <li><a asp-area="" asp-controller="Home" asp-action="Index">Sport</a></li>
-                                <li>
-                                    <a href="#">Pages</a>
-                                    <ul class="dropdown">
-                                        <li><a asp-area="" asp-controller="Home" asp-action="Index">Blog</a></li>
-                                        <li><a asp-area="" asp-controller="Home" asp-action="Index">Blog Details</a></li>
-                                        <li><a asp-area="" asp-controller="Home" asp-action="Index">Schedule</a></li>
-                                        <li><a asp-area="" asp-controller="Home" asp-action="Index">Results</a></li>
-                                    </ul>
-                                </li>
-                                <li><a asp-area="" asp-controller="Home" asp-action="Index">Contact Us</a></li>
+                                <partial name="_MenuPartial">
                             </ul>
-                            <div class="nm-right search-switch">
-                                <i class="fa fa-search"></i>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -158,58 +100,14 @@
                             <a asp-area="" asp-controller="Home" asp-action="Index"><img src="~/img/logo.png" alt=""></a>
                         </div>
                         <ul>
-                            <li><i class="fa fa-envelope"></i> Info.colorlib@gmail.com</li>
-                            <li><i class="fa fa-copy"></i> +(12) 345 6789 10</li>
-                            <li><i class="fa fa-thumb-tack"></i> 40 Baria Sreet 133/2 New York City, United State</li>
-                        </ul>
-                        <div class="fs-social">
-                            <a href="#"><i class="fa fa-facebook"></i></a>
-                            <a href="#"><i class="fa fa-twitter"></i></a>
-                            <a href="#"><i class="fa fa-tumblr"></i></a>
-                            <a href="#"><i class="fa fa-linkedin"></i></a>
-                            <a href="#"><i class="fa fa-instagram"></i></a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6 offset-lg-1">
-                    <div class="fs-widget">
-                        <h4>Top Club</h4>
-                        <ul class="fw-links">
-                            <li><a href="#">Brazil</a></li>
-                            <li><a href="#">Germany</a></li>
-                            <li><a href="#">Italy</a></li>
-                            <li><a href="#">Argentina</a></li>
-                            <li><a href="#">France</a></li>
-                        </ul>
-                        <ul class="fw-links">
-                            <li><a href="#">England</a></li>
-                            <li><a href="#">Netherlands</a></li>
-                            <li><a href="#">Hungary</a></li>
-                            <li><a href="#">Croatia</a></li>
-                            <li><a href="#">Poland</a></li>
+                            <li><i class="fa fa-envelope"></i>Send us your</li>
+                            <li>recommendations and ideas at:</li>
+                            <li>info.sportbattles@gmail.com</li>
                         </ul>
                     </div>
                 </div>
-                <div class="col-lg-4">
-                    <div class="fs-widget">
-                        <h4>Recent News</h4>
-
-                        <div class="fw-item">
-                            <h5><a href="#">England win shows they have the spark to go far at World Cup</a></h5>
-                            <ul>
-                                <li><i class="fa fa-calendar"></i> May 19, 2019</li>
-                                <li><i class="fa fa-edit"></i> 3 Comment</li>
-                            </ul>
-                        </div>
-                        <div class="fw-item">
-                            <h5><a href="#">Sri Lanka v Australia: Cricket World Cup 2019 – live!</a></h5>
-                            <ul>
-                                <li><i class="fa fa-calendar"></i> May 19, 2019</li>
-                                <li><i class="fa fa-edit"></i> 3 Comment</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
+                <vc:top-players></vc:top-players>
+                <vc:top-games></vc:top-games>
             </div>
         </div>
         <div class="container">
@@ -226,9 +124,7 @@
                         </div>
                         <div class="co-widget">
                             <ul>
-                                <li><a href="#">Copyright notification</a></li>
-                                <li><a href="#">Terms of Use</a></li>
-                                <li><a href="#">Privacy Policy</a></li>
+                                <li><a asp-area="" asp-action="Privacy" asp-controller="Home">Privacy Policy</a></li>
                             </ul>
                         </div>
                     </div>

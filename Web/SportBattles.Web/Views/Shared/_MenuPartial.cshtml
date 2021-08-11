@@ -1,0 +1,37 @@
+﻿@using SportBattles.Common
+
+@if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+{
+    <li class="@ViewData["Admin"]">
+        <a href="#">Admin</a>
+        <ul class="dropdown">
+            <li><a asp-area="Administration" asp-controller="Game" asp-action="Index" title="Admin">Games</a></li>
+            <li><a asp-area="Administration" asp-controller="Match" asp-action="GetAll" title="Get matches for week">Get Football matches</a></li>
+            <li><a asp-area="Administration" asp-controller="Match" asp-action="GetResults" title="Get previous day results">Get Football results</a></li>
+            <li><a asp-area="Administration" asp-controller="TennisMatch" asp-action="GetAll" title="Get matches for week">Get Tennis matches</a></li>
+            <li><a asp-area="Administration" asp-controller="TennisMatch" asp-action="GetResults" title="Get previous day results">Get Tennis results</a></li>
+            <li><a asp-area="Administration" asp-controller="Prediction" asp-action="GetPoints" title="Get points for users">Get Points</a></li>
+        </ul>
+    </li>
+}
+<li class="@ViewData["Home"]"><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+<li class="@ViewData["Games"]"><a asp-area="" asp-controller="Game" asp-action="Index">Games</a></li>
+@if (this.User.Identity.IsAuthenticated)
+{
+    <li class="@ViewData["MyGames"]"><a asp-area="" asp-controller="Game" asp-action="MyGames">My Games</a></li>
+}
+<li class="@ViewData["Shedule"]">
+    <a href="#">Schedule</a>
+    <ul class="dropdown">
+        <li><a asp-area="" asp-controller="Football" asp-action="Schedule">Football</a></li>
+        <li><a asp-area="" asp-controller="Tennis" asp-action="Schedule">Tennis</a></li>
+    </ul>
+</li>
+<li class="@ViewData["Results"]">
+    <a href="#">Results</a>
+    <ul class="dropdown">
+        <li><a asp-area="" asp-controller="Football" asp-action="Results">Football</a></li>
+        <li><a asp-area="" asp-controller="Tennis" asp-action="Results">Tennis</a></li>
+    </ul>
+</li>
+<li class="@ViewData["ContactUs"]"><a asp-area="" asp-controller="Contact" asp-action="Index">Contact Us</a></li>

@@ -3,7 +3,6 @@
     using System.ComponentModel.DataAnnotations;
 
     using SportBattles.Data.Common.Models;
-    using SportBattles.Data.Models.Enums;
 
     public class TennisPrediction : BaseDeletableModel<int>
     {
@@ -23,8 +22,6 @@
         public byte? HomeSets { get; set; }
 
         public byte? AwaySets { get; set; }
-
-        public TwoWayResult? TwoWayWinner { get; set; }
 
         public byte? Points { get; set; }
     }

@@ -623,9 +623,6 @@ namespace SportBattles.Data.Migrations
                     b.Property<int>("GameId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("HalfTimeFullTime")
-                        .HasColumnType("int");
-
                     b.Property<byte?>("HomeGoals")
                         .HasColumnType("tinyint");
 
@@ -638,14 +635,8 @@ namespace SportBattles.Data.Migrations
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("OverUnderGoals")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<byte?>("Points")
                         .HasColumnType("tinyint");
-
-                    b.Property<int?>("ThreeWayWinner")
-                        .HasColumnType("int");
 
                     b.Property<string>("UserId")
                         .IsRequired()
@@ -893,9 +884,6 @@ namespace SportBattles.Data.Migrations
                         .HasColumnType("tinyint");
 
                     b.Property<int>("TennisMatchId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("TwoWayWinner")
                         .HasColumnType("int");
 
                     b.Property<string>("UserId")
@@ -1203,7 +1191,7 @@ namespace SportBattles.Data.Migrations
             modelBuilder.Entity("SportBattles.Data.Models.Prediction", b =>
                 {
                     b.HasOne("SportBattles.Data.Models.Game", "Game")
-                        .WithMany()
+                        .WithMany("Predictions")
                         .HasForeignKey("GameId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -1279,7 +1267,7 @@ namespace SportBattles.Data.Migrations
             modelBuilder.Entity("SportBattles.Data.Models.TennisPrediction", b =>
                 {
                     b.HasOne("SportBattles.Data.Models.Game", "Game")
-                        .WithMany()
+                        .WithMany("TennisPredictions")
                         .HasForeignKey("GameId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -1340,7 +1328,11 @@ namespace SportBattles.Data.Migrations
                 {
                     b.Navigation("Matches");
 
+                    b.Navigation("Predictions");
+
                     b.Navigation("TennisMatches");
+
+                    b.Navigation("TennisPredictions");
                 });
 
             modelBuilder.Entity("SportBattles.Data.Models.GamePoint", b =>

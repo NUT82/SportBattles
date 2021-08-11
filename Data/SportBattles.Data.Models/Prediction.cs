@@ -3,7 +3,6 @@
     using System.ComponentModel.DataAnnotations;
 
     using SportBattles.Data.Common.Models;
-    using SportBattles.Data.Models.Enums;
 
     public class Prediction : BaseDeletableModel<int>
     {
@@ -23,12 +22,6 @@
         public byte? HomeGoals { get; set; }
 
         public byte? AwayGoals { get; set; }
-
-        public ThreeWayResult? ThreeWayWinner { get; set; }
-
-        public HalfTimeFullTime? HalfTimeFullTime { get; set; }
-
-        public string OverUnderGoals { get; set; }
 
         public byte? Points { get; set; }
     }

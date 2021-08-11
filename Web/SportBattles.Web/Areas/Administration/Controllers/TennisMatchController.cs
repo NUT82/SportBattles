@@ -48,7 +48,7 @@
         {
             await this.liveScoreApi.CreateJsonFilesForAllMatchesAsync(
                 this.yesterday,
-                this.yesterday.AddDays(GlobalConstants.LiveScoreAPIDaysAhead),
+                this.yesterday.AddDays(GlobalConstants.LiveScoreAPIDaysAheadForTennis),
                 this.configuration.GetValue<string>("X-RapidAPI-Key-Tennis"),
                 this.configuration.GetValue<string>("X-RapidAPI-Host"),
                 "Tennis");

@@ -14,7 +14,11 @@
 
         public IEnumerable<T> GetUserGames<T>(string userId);
 
+        public IDictionary<int, int> UnpredictedMatchesInGameByUserCount(string userId);
+
         public IEnumerable<T> GetAllStarted<T>(string userId);
+
+        public IEnumerable<T> GetTopGames<T>(int count);
 
         public IEnumerable<T> GetAllTypes<T>();
 

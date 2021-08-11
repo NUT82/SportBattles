@@ -54,7 +54,7 @@
         {
             await this.liveScoreApi.CreateJsonFilesForAllMatchesAsync(
                 this.yesterday,
-                this.yesterday.AddDays(GlobalConstants.LiveScoreAPIDaysAhead),
+                this.yesterday.AddDays(GlobalConstants.LiveScoreAPIDaysAheadForFootball),
                 this.configuration.GetValue<string>("X-RapidAPI-Key"),
                 this.configuration.GetValue<string>("X-RapidAPI-Host"),
                 "Soccer");
@@ -95,13 +95,13 @@
                 "Football" => this.Json(
                     this.liveScoreApi.GetFootballMatches(
                        this.yesterday.AddDays(1),
-                       this.yesterday.AddDays(GlobalConstants.LiveScoreAPIDaysAhead),
+                       this.yesterday.AddDays(GlobalConstants.LiveScoreAPIDaysAheadForFootball),
                        country,
                        tournament)),
                 "Tennis" => this.Json(
                     this.liveScoreApi.GetTennisMatches(
                        this.yesterday.AddDays(1),
-                       this.yesterday.AddDays(GlobalConstants.LiveScoreAPIDaysAhead),
+                       this.yesterday.AddDays(GlobalConstants.LiveScoreAPIDaysAheadForFootball),
                        country,
                        tournament)),
                 _ => throw new ArgumentOutOfRangeException("This sport is not supported"),

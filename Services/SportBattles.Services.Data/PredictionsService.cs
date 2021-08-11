@@ -76,7 +76,6 @@
                     "Goals scored by one of the teams" => this.GetPoints(prediction, gamePoint.Value, multiplier, this.OneTeamGoalsPoints()),
                     "Outcome" => this.GetPoints(prediction, gamePoint.Value, multiplier, this.OutcomePoints()),
                     "Over/Under 2.5 goals" => this.GetPoints(prediction, gamePoint.Value, multiplier, this.OverUnder(2.5)),
-                    "First half - Full time" => this.GetPoints(prediction, gamePoint.Value, multiplier, this.FirstHalfFullTime()),
                     _ => throw new ArgumentException("Add method to calculate points for this GamePointType first!"),
                 };
 
@@ -116,40 +115,13 @@
         private Func<Prediction, bool> OverUnder(double goals) => (prediction) =>
             {
                 var over = prediction.Match.HomeGoals + prediction.Match.AwayGoals > goals; ////true - match is over goals, false - under goals
-                if (prediction.OverUnderGoals.Contains("Over"))
+                if (prediction.HomeGoals + prediction.AwayGoals > goals)
                 {
                     return over;
                 }
 
                 return !over;
             };
-
-        private Func<Prediction, bool> FirstHalfFullTime() => (prediction) =>
-            {
-                var half = this.HomeDrawAway(prediction.Match.HomeGoalsFirstHalf.Value, prediction.Match.AwayGoalsFirstHalf.Value);
-                var full = this.HomeDrawAway(prediction.Match.HomeGoals.Value, prediction.Match.AwayGoals.Value);
-                if (prediction.HalfTimeFullTime.ToString() == half + full)
-                {
-                    return true;
-                }
-
-                return false;
-            };
-
-        private string HomeDrawAway(byte homeGoals, byte awayGoals)
-        {
-            var result = "Home";
-            if (homeGoals == awayGoals)
-            {
-                result = "Draw";
-            }
-            else if (homeGoals < awayGoals)
-            {
-                result = "Away";
-            }
-
-            return result;
-        }
 
         private bool IsCorrectWinner(Prediction prediction)
         {

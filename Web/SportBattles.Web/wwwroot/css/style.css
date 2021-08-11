@@ -439,7 +439,8 @@ ol {
 }
 
 .header__nav .nav-menu .main-menu li .dropdown li a:hover {
-	color: #dd1515;
+	color: white;
+	background-color: #dd1515;
 }
 
 .header__nav .nav-menu .main-menu li .dropdown li a:after {

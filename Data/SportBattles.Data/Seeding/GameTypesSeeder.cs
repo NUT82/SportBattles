@@ -61,6 +61,48 @@
                 Value = 1,
             });
 
+            var gameTypeOverUnder = new GameType
+            {
+                Name = "Football over/under 2.5 goals",
+                Description = "You have to guess more or less than 2.5 goals will be scored in the match - no matter who the winner is",
+            };
+
+            gameTypeOverUnder.GamePoints.Add(new GamePointGameType
+            {
+                GamePoint = new GamePoint
+                {
+                    Name = "Over/Under 2.5 goals",
+                    Description = "Points are awarded if you have correctly predicted more / less than 2.5 goals in the match (no matter who is the winner)",
+                },
+                Value = 1,
+            });
+
+            var gameTypeTennis = new GameType
+            {
+                Name = "Tennis exact sets",
+                Description = "Predicting the exact sets result of tennis matches",
+            };
+
+            gameTypeTennis.GamePoints.Add(new GamePointGameType
+            {
+                GamePoint = new GamePoint
+                {
+                    Name = "Exact sets",
+                    Description = "Predicting the final result in of tennis match perfectly",
+                },
+                Value = 3,
+            });
+
+            gameTypeTennis.GamePoints.Add(new GamePointGameType
+            {
+                GamePoint = new GamePoint
+                {
+                    Name = "Tennis player winner",
+                    Description = "Predicting the winning tennis player correctly",
+                },
+                Value = 1,
+            });
+
             await dbContext.GameTypes.AddAsync(gameType);
             await dbContext.SaveChangesAsync();
         }

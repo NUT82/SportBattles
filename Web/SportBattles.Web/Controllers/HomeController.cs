@@ -2,6 +2,7 @@
 {
     using System.Diagnostics;
     using System.Security.Claims;
+
     using Microsoft.AspNetCore.Mvc;
 
     using SportBattles.Services.Data;
@@ -20,7 +21,7 @@
         public IActionResult Index()
         {
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var games = this.gamesService.GetAllStarted<IndexGameViewModel>(userId);
+            var games = this.gamesService.GetAllStarted<GameViewModel>(userId);
             return this.View(games);
         }
 
