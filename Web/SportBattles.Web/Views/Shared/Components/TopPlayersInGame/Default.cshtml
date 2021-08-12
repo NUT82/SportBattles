@@ -1,0 +1,6 @@
+﻿@model IEnumerable<SportBattles.Web.ViewModels.Game.RankingViewModel>
+
+@foreach (var player in Model)
+{
+    <li>@player.UserName - @player.Points points</li>
+}

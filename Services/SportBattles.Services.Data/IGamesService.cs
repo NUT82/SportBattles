@@ -18,6 +18,8 @@
 
         public IEnumerable<T> GetAllStarted<T>(string userId);
 
+        public IEnumerable<T> GetLatest<T>();
+
         public IEnumerable<T> GetTopGames<T>(int count);
 
         public IEnumerable<T> GetAllTypes<T>();
@@ -27,6 +29,8 @@
         public Task Add(string name, int typeId);
 
         public Task AddMatches(int gameId, IEnumerable<FootballMatchServiceModel> footballMatches);
+
+        public T GetGame<T>(int id);
 
         public Task AddTennisMatches(int gameId, IEnumerable<TennisMatchServiceModel> footballMatches);
 
@@ -39,5 +43,7 @@
         public bool IsDuplicate(string name, int typeId);
 
         public bool IsDuplicateTypeName(string name);
+
+        public bool IsUserInGame(string userId, int gameId);
     }
 }

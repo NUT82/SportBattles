@@ -20,8 +20,7 @@
 
         public IActionResult Index()
         {
-            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var games = this.gamesService.GetAllStarted<GameViewModel>(userId);
+            var games = this.gamesService.GetLatest<LatestGamesViewModel>();
             return this.View(games);
         }
 
@@ -34,7 +33,7 @@
         public IActionResult Error()
         {
             return this.View(
-                new ErrorViewModel { RequestId = Activity.Current?.Id ?? this.HttpContext.TraceIdentifier });
+                new ErrorViewModel { ErrorMsg = Activity.Current?.Id ?? this.HttpContext.TraceIdentifier });
         }
     }
 }

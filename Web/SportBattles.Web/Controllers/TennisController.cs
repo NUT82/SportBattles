@@ -8,6 +8,7 @@
     using Microsoft.AspNetCore.Mvc;
 
     using SportBattles.Services.Data;
+    using SportBattles.Web.ViewModels;
     using SportBattles.Web.ViewModels.Game;
     using SportBattles.Web.ViewModels.Tennis;
 
@@ -16,12 +17,14 @@
         private readonly ITennisMatchesService tennisMatchesService;
         private readonly ITennisPredictionsService tennisPredictionsService;
         private readonly IGamePointsService gamePointsService;
+        private readonly IGamesService gamesService;
 
-        public TennisController(ITennisMatchesService tennisMatchesService, ITennisPredictionsService tennisPredictionsService, IGamePointsService gamePointsService)
+        public TennisController(ITennisMatchesService tennisMatchesService, ITennisPredictionsService tennisPredictionsService, IGamePointsService gamePointsService, IGamesService gamesService)
         {
             this.tennisMatchesService = tennisMatchesService;
             this.tennisPredictionsService = tennisPredictionsService;
             this.gamePointsService = gamePointsService;
+            this.gamesService = gamesService;
         }
 
         public IActionResult Schedule()
@@ -37,6 +40,11 @@
         [Authorize]
         public IActionResult Predictions(int gameId)
         {
+            if (!this.gamesService.IsUserInGame(this.User.FindFirstValue(ClaimTypes.NameIdentifier), gameId))
+            {
+                return this.View("Error", new ErrorViewModel { ErrorMsg = "You are not in this game!" });
+            }
+
             var viewModel = new PredictionsViewModel
             {
                 Matches = this.tennisMatchesService.GetAllByGameId<MatchInPredictionsViewModel>(gameId),
@@ -53,6 +61,11 @@
         [HttpPost]
         public async Task<IActionResult> SavePredictions([FromBody] PredictionInputModel inputModel)
         {
+            if (!this.gamesService.IsUserInGame(this.User.FindFirstValue(ClaimTypes.NameIdentifier), inputModel.GameId))
+            {
+                return this.View("Error", new ErrorViewModel { ErrorMsg = "You are not in this game!" });
+            }
+
             if (!this.ModelState.IsValid)
             {
                 return this.Json(new { isValid = false, error = "Error saving match result!" });

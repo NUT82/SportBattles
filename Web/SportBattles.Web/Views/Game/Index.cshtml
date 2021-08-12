@@ -3,7 +3,7 @@
     this.ViewData["Title"] = "All games";
     this.ViewData["Games"] = "active";
 }
-@model IEnumerable<SportBattles.Web.ViewModels.Home.GameViewModel>
+@model IEnumerable<SportBattles.Web.ViewModels.Game.GameViewModel>
 
 <h2>Choose a game you want to participate in</h2>
 <table id="table_id" class="responsive display" style="width: 100%">
@@ -20,7 +20,7 @@
         @foreach (var game in Model)
         {
             <tr>
-                <td>@game.Name</td>
+                <td><a class="text-dark" asp-area="" asp-controller="Game" asp-action="Info" asp-route-id="@game.Id">@game.Name</a></td>
                 <td>
                     @game.GameTypeName
                     <i class="fa fa-info-circle" data-toggle="tooltip" title="@game.GameTypeDescription"></i>
@@ -35,7 +35,7 @@
                 }
                 <td>@game.UsersCount</td>
                 <td>
-                    <a asp-controller="Game" asp-action="Join" asp-route-gameId="@game.Id" data-toggle="tooltip" title="Join game" class="btn btn-success">
+                    <a asp-controller="Game" asp-action="Join" asp-route-gameId="@game.Id" asp-route-sport="@game.GameTypeSport" data-toggle="tooltip" title="Join game" class="btn btn-success">
                         <i class="fa fa-sign-in"></i>
                     </a>
                 </td>

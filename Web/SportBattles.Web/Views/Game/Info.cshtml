@@ -1,0 +1,115 @@
+@{
+    this.ViewData["Title"] = "Game info";
+    this.ViewData["Games"] = "active";
+}
+@model SportBattles.Web.ViewModels.Game.GameInfoViewModel
+<!-- Schedule Section Begin -->
+<section class="schedule-section spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 left-blog-pad">
+                <div class="schedule-text">
+                    <h4 class="st-title">@Model.Name</h4>
+                    <div class="st-table">
+                        <table>
+                            <tbody>
+                                @if (Model.NotStartedMatches.Count == 0 && Model.NotStartedTennisMatches.Count == 0)
+                                {
+                                    <tr>
+                                        <td class="text-center text-danger font-weight-bolder">There are currently no new matches added to this game, please check back later.</td>
+                                    </tr>
+                                }
+                                else
+                                {
+                                    if (Model.GameTypeSport == "Football")
+                                    {
+                                        foreach (var match in Model.NotStartedMatches)
+                                        {
+                                            <tr>
+                                                <td class="left-team">
+                                                    <img src="@match.MatchHomeTeamEmblemUrl" style="width: 50px; height: 50px" alt="">
+                                                    <h4>@match.MatchHomeTeamName</h4>
+                                                </td>
+                                                <td class="st-option">
+                                                    <div class="so-text">@match.MatchTournamentCountryName - @match.MatchTournamentName</div>
+                                                    <h4>VS</h4>
+                                                    <div class="so-text">@match.MatchStartTimeLocalTime</div>
+                                                </td>
+                                                <td class="right-team">
+                                                    <img src="@match.MatchAwayTeamEmblemUrl" style="width: 50px; height: 50px" alt="">
+                                                    <h4>@match.MatchAwayTeamName</h4>
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                    else if (Model.GameTypeSport == "Tennis")
+                                    {
+                                        foreach (var tennisMatch in Model.NotStartedTennisMatches)
+                                        {
+                                            <tr>
+                                                <td class="left-team">
+                                                    <img src="@tennisMatch.TennisMatchHomePlayerPictureUrl" style="width: 50px; height: 50px" alt="">
+                                                    <h4>@tennisMatch.TennisMatchHomePlayerName</h4>
+                                                </td>
+                                                <td class="st-option">
+                                                    <div class="so-text">@tennisMatch.TennisMatchTournamentCountryName - @tennisMatch.TennisMatchTournamentName</div>
+                                                    <h4>VS</h4>
+                                                    <div class="so-text">@tennisMatch.TennisMatchStartTimeLocalTime</div>
+                                                </td>
+                                                <td class="right-team">
+                                                    <img src="@tennisMatch.TennisMatchAwayPlayerPictureUrl" style="width: 50px; height: 50px" alt="">
+                                                    <h4>@tennisMatch.TennisMatchAwayPlayerName</h4>
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                }
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <a asp-controller="Game" asp-action="Join" asp-route-gameId="@Model.Id" asp-route-sport="@Model.GameTypeSport" class="btn-lg btn-danger btn-block">Join this game</a>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="schedule-sidebar">
+                    <div class="ss-league">
+                        <div class="section-title sidebar-title">
+                            <h5><i class="fa fa-info-circle"></i> Description</h5>
+                        </div>
+                        <span>@Model.GameTypeDescription</span>
+                    </div>
+                    <div class="ss-widget other-sport" style="margin-bottom: 65px">
+                        <div class="section-title sidebar-title">
+                            <h5>Scoring system</h5>
+                        </div>
+                        <ul>
+                            @foreach (var point in Model.GameTypeGamePoints)
+                            {
+                                <li>@point.NameValue point <i data-toggle="tooltip" title="@point.GamePointDescription" class="fa fa-info-circle"></i></li>
+                            }
+                        </ul>
+                    </div>
+                    <div class="ss-league">
+                        <div class="section-title sidebar-title">
+                            <h5>Top Players</h5>
+                        </div>
+                        <vc:top-players-in-game game-id="@Model.Id"></vc:top-players-in-game>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Schedule Section End -->
+
+@section Scripts
+{
+    <script>
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+    </script>
+}

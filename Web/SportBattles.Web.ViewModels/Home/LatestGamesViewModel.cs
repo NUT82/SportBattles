@@ -3,7 +3,7 @@
     using SportBattles.Data.Models;
     using SportBattles.Services.Mapping;
 
-    public class GameViewModel : IMapFrom<Game>
+    public class LatestGamesViewModel : IMapFrom<Game>
     {
         public int Id { get; set; }
 
@@ -11,14 +11,14 @@
 
         public string GameTypeName { get; set; }
 
-        public string GameTypeSport => this.GameTypeName?.Split()[0];
+        public string DisplayName => this.GameTypeName + " - " + this.Name;
 
-        public string GameTypeDescription { get; set; }
+        public string SportName => this.GameTypeName?.Split()[0];
+
+        public int UsersCount { get; set; }
 
         public int MatchesCount { get; set; }
 
         public int TennisMatchesCount { get; set; }
-
-        public int UsersCount { get; set; }
     }
 }

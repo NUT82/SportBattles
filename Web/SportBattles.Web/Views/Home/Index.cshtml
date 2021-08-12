@@ -3,5 +3,44 @@
     this.ViewData["Title"] = "Home Page";
     this.ViewData["Home"] = "active";
 }
+@model ICollection<SportBattles.Web.ViewModels.Home.LatestGamesViewModel>
 
-<h2>Welcome to SportBattles!</h2>
+<div class="container-fluid d-flex h-100" style="padding-top: 40px">
+    <div class="justify-content-center align-self-center w-100">
+        <div class="flex-row text-center w-100">
+            <h3 class="flex-row text-black-50">Welcome to <span class="font-weight-bold" style="font-family: 'Comic Sans MS'; font-size: larger">Sport Battles</span>!</h3>
+        </div>
+        <div class="flex-row text-center w-100">
+            <h5 class="flex-row text-black-50">Тhe place where you can compete with other fans of sports and sports predictions!</h5>
+        </div>
+    </div>
+</div>
+
+<section class="soccer-section" style="padding-top: 40px">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 p-0">
+                <div class="section-title">
+                    <h3>Latest <span>Battle Games</span></h3>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            @foreach (var game in Model)
+            {
+                <div class="col-sm-6 p-0">
+                    <div class="soccer-item set-bg" data-setbg="img/@game.SportName-terrain.jpg">
+                        <div class="si-tag">@game.SportName</div>
+                        <div class="si-text">
+                            <h5><a asp-area="" asp-controller="Game" asp-action="Info" asp-route-id="@game.Id">@game.DisplayName</a></h5>
+                            <ul>
+                                <li><i class="fa fa-futbol-o"></i>@(game.MatchesCount == 0 ? game.TennisMatchesCount : game.MatchesCount) Matches</li>
+                                <li><i class="fa fa-user-o"></i>@game.UsersCount Players</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>

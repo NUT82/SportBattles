@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <Content Remove="Views\Contact\Index.cshtml" />
+    <Content Remove="Views\Football\Info.cshtml" />
     <Content Remove="Views\Football\Results.cshtml" />
     <Content Remove="Views\Football\Schedule.cshtml" />
     <Content Remove="Views\Tennis\Results.cshtml" />
@@ -58,6 +59,7 @@
   <ItemGroup>
     <None Include="Views\Contact\Index.cshtml" />
     <None Include="Views\Football\Results.cshtml" />
+    <None Include="Views\Game\Info.cshtml" />
     <None Include="Views\Football\Schedule.cshtml" />
     <None Include="Views\Tennis\Results.cshtml" />
     <None Include="Views\Tennis\Schedule.cshtml" />

@@ -294,5 +294,27 @@
         {
             return this.gameRepository.AllAsNoTracking().Where(g => g.Started).OrderByDescending(g => g.Users.Count).ThenByDescending(g => g.Matches.Count + g.TennisMatches.Count).Take(count).To<T>().ToList();
         }
+
+        public IEnumerable<T> GetLatest<T>()
+        {
+            var result = new List<T>();
+            var latestFootballGame = this.gameRepository.AllAsNoTracking().Where(g => g.Started && g.GameType.Name.Contains("Football")).OrderByDescending(g => g.CreatedOn).To<T>().FirstOrDefault();
+            result.Add(latestFootballGame);
+
+            var latestTennisGame = this.gameRepository.AllAsNoTracking().Where(g => g.Started && g.GameType.Name.Contains("Tennis")).OrderByDescending(g => g.CreatedOn).To<T>().FirstOrDefault();
+            result.Add(latestTennisGame);
+
+            return result;
+        }
+
+        public T GetGame<T>(int id)
+        {
+            return this.gameRepository.AllAsNoTracking().Where(g => g.Started && g.Id == id).To<T>().FirstOrDefault();
+        }
+
+        public bool IsUserInGame(string userId, int gameId)
+        {
+            return this.gameRepository.AllAsNoTracking().Any(g => g.Id == gameId && g.Users.Any(u => u.Id == userId));
+        }
     }
 }

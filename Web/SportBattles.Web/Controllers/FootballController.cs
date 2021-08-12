@@ -8,6 +8,7 @@
     using Microsoft.AspNetCore.Mvc;
 
     using SportBattles.Services.Data;
+    using SportBattles.Web.ViewModels;
     using SportBattles.Web.ViewModels.Football;
     using SportBattles.Web.ViewModels.Game;
 
@@ -16,12 +17,14 @@
         private readonly IMatchesService matchesService;
         private readonly IPredictionsService predictionsService;
         private readonly IGamePointsService gamePointsService;
+        private readonly IGamesService gamesService;
 
-        public FootballController(IMatchesService matchesService, IPredictionsService predictionsService, IGamePointsService gamePointsService)
+        public FootballController(IMatchesService matchesService, IPredictionsService predictionsService, IGamePointsService gamePointsService, IGamesService gamesService)
         {
             this.matchesService = matchesService;
             this.predictionsService = predictionsService;
             this.gamePointsService = gamePointsService;
+            this.gamesService = gamesService;
         }
 
         public IActionResult Schedule()
@@ -37,6 +40,11 @@
         [Authorize]
         public IActionResult Predictions(int gameId)
         {
+            if (!this.gamesService.IsUserInGame(this.User.FindFirstValue(ClaimTypes.NameIdentifier), gameId))
+            {
+                return this.View("Error", new ErrorViewModel { ErrorMsg = "You are not in this game!" });
+            }
+
             var viewModel = new PredictionsViewModel
             {
                 Matches = this.matchesService.GetAllByGameId<MatchInPredictionsViewModel>(gameId),
@@ -53,6 +61,11 @@
         [HttpPost]
         public async Task<IActionResult> SavePredictions([FromBody] PredictionInputModel inputModel)
         {
+            if (!this.gamesService.IsUserInGame(this.User.FindFirstValue(ClaimTypes.NameIdentifier), inputModel.GameId))
+            {
+                return this.View("Error", new ErrorViewModel { ErrorMsg = "You are not in this game!" });
+            }
+
             if (!this.ModelState.IsValid)
             {
                 return this.Json(new { isValid = false, error = "Error saving match result!" });

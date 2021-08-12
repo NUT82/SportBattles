@@ -1,4 +1,4 @@
-﻿namespace SportBattles.Web.ViewModels.Home
+﻿namespace SportBattles.Web.ViewModels.Game
 {
     using System.Collections.Generic;
 

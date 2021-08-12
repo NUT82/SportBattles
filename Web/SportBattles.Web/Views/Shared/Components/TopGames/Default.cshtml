@@ -6,7 +6,7 @@
         @foreach (var game in Model)
         {
             <div class="fw-item">
-                <h5><a href="#">@game.DisplayName</a></h5>
+                <h5><a asp-area="" asp-controller="Game" asp-action="Info" asp-route-id="@game.Id">@game.DisplayName</a></h5>
                 <ul>
                     <li><i class="fa fa-futbol-o"></i> @game.AllCount</li>
                     <li><i class="fa fa-user-circle-o"></i> @game.UsersCount</li>

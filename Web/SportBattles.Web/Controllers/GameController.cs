@@ -8,7 +8,8 @@
     using Microsoft.AspNetCore.Mvc;
 
     using SportBattles.Services.Data;
-    using SportBattles.Web.ViewModels.Home;
+    using SportBattles.Web.ViewModels;
+    using SportBattles.Web.ViewModels.Game;
 
     public class GameController : BaseController
     {
@@ -24,6 +25,17 @@
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             var games = this.gamesService.GetAllStarted<GameViewModel>(userId);
             return this.View(games);
+        }
+
+        public IActionResult Info(int id)
+        {
+            var game = this.gamesService.GetGame<GameInfoViewModel>(id);
+            if (game == null)
+            {
+                return this.View("Error", new ErrorViewModel { ErrorMsg = "This game doesn't exists!" });
+            }
+
+            return this.View(game);
         }
 
         [Authorize]
@@ -46,10 +58,10 @@
         }
 
         [Authorize]
-        public async Task<IActionResult> Join(int gameId)
+        public async Task<IActionResult> Join(int gameId, string sport)
         {
             await this.gamesService.Join(gameId, this.User.FindFirstValue(ClaimTypes.NameIdentifier));
-            return this.RedirectToAction(nameof(this.MyGames));
+            return this.RedirectToAction("Predictions", sport, new { gameId });
         }
     }
 }
