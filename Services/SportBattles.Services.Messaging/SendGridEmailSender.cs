@@ -7,6 +7,7 @@
 
     using SendGrid;
     using SendGrid.Helpers.Mail;
+    using SportBattles.Common;
 
     public class SendGridEmailSender : IEmailSender
     {
@@ -24,9 +25,9 @@
                 throw new ArgumentException("Subject and message should be provided.");
             }
 
-            var fromAddress = new EmailAddress(from, fromName);
+            var fromAddress = new EmailAddress(GlobalConstants.SystemEmail);
             var toAddress = new EmailAddress(to);
-            var message = MailHelper.CreateSingleEmail(fromAddress, toAddress, subject, null, htmlContent);
+            var message = MailHelper.CreateSingleEmail(fromAddress, toAddress, subject, null, htmlContent + $"<br>Sender userName: {from}");
             if (attachments?.Any() == true)
             {
                 foreach (var attachment in attachments)

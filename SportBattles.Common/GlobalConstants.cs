@@ -6,6 +6,8 @@
 
         public const string AdministratorRoleName = "Administrator";
 
+        public const string SystemEmail = "info.sportbattles@gmail.com";
+
         public const byte LiveScoreAPITimeZoneCorrection = 7;
         public const byte LiveScoreAPIDaysAheadForFootball = 7;
         public const byte LiveScoreAPIDaysAheadForTennis = 2;

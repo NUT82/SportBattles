@@ -11,72 +11,75 @@
     <link rel="stylesheet" href="~/css/matches.css" type="text/css" asp-append-version="true" />
 }
 @model SportBattles.Web.ViewModels.Tennis.PredictionsViewModel
-@foreach (var match in Model.Matches)
-{
-    <div class="match">
+<div id="all-matches">
+    @foreach (var match in Model.Matches)
+    {
+        <div class="match">
 
-        <input type="hidden" class="matchId" value="@match.Id" />
-        <div class="league">
-            @if (Model.MatchesDoublePoints[match.Id])
-            {
-                <div class="double_points" data-toggle="tooltip" title="Double point match">x2</div>
-            }
-            @match.TournamentCountryName - @match.TournamentName
-            <div class="points" data-toggle="tooltip" data-html="true" title="@("Scoring system<br />" + @String.Join("<br />", Model.GamePoints.Select(gp => gp.NameValue)))">
-                @if (Model.MatchesPredictions.ContainsKey(match.Id) && Model.MatchesPredictions[match.Id].Points != null)
+            <input type="hidden" class="matchId" value="@match.Id" />
+            <div class="league">
+                @if (Model.MatchesDoublePoints[match.Id])
                 {
-                    <span>@Model.MatchesPredictions[match.Id].Points</span>
+                    <div class="double_points" data-toggle="tooltip" title="Double point match">x2</div>
+                }
+                @match.TournamentCountryName - @match.TournamentName
+                <div class="points" data-toggle="tooltip" data-html="true" title="@("Scoring system<br />" + @String.Join("<br />", Model.GamePoints.Select(gp => gp.NameValue)))">
+                    @if (Model.MatchesPredictions.ContainsKey(match.Id) && Model.MatchesPredictions[match.Id].Points != null)
+                    {
+                        <span>@Model.MatchesPredictions[match.Id].Points</span>
+                    }
+                    else
+                    {
+                        <span>?</span>
+                    }
+                </div>
+            </div>
+            <div class="startDate">@match.StartTimeLocalTime</div>
+            <div class="teams_result">
+                <div class="home_team">@match.HomePlayerName</div>
+                <div class="emblem"><img src="@(match.HomePlayerPictureUrl?? "/img/tennisNoImg.png")" alt=""></div>
+                @if (match.StartTime > DateTime.UtcNow)
+                {
+                    <div class="result">
+                        <input type="number" class="home_team_goals" maxlength='1' value='@(Model.MatchesPredictions.ContainsKey(match.Id) ? Model.MatchesPredictions[match.Id].HomeSets : "")' />
+                        <div class="separator">-</div>
+                        <input type="number" class="away_team_goals" maxlength='1' value='@(Model.MatchesPredictions.ContainsKey(match.Id) ? Model.MatchesPredictions[match.Id].AwaySets : "")' />
+                    </div>
                 }
                 else
                 {
-                    <span>?</span>
+                    <div class="finished_result">
+                        <div class="prediction" data-toggle="tooltip" title="Your prediction">
+                            @(Model.MatchesPredictions.ContainsKey(match.Id) ? Model.MatchesPredictions[match.Id].HomeSets : "?")
+                            -
+                            @(Model.MatchesPredictions.ContainsKey(match.Id) ? Model.MatchesPredictions[match.Id].AwaySets : "?")
+                        </div>
+                        <div class="real_result" data-toggle="tooltip" title="Result">
+                            @if (match.Status == "Canc." || match.Status == "Postp.")
+                            {
+                                @match.Status
+                            }
+                            else
+                            {
+                                @(match.HomeSets?.ToString() ?? "?")
+                                <span>-</span>
+                                @(match.AwaySets?.ToString() ?? "?")
+                            }
+                        </div>
+                    </div>
                 }
+
+                <div class="emblem"><img src="@(match.AwayPlayerPictureUrl?? "/img/tennisNoImg.png")" alt=""></div>
+                <div class="away_team">@match.AwayPlayerName</div>
             </div>
+            <div class="error"></div>
         </div>
-        <div class="startDate">@match.StartTimeLocalTime</div>
-        <div class="teams_result">
-            <div class="home_team">@match.HomePlayerName</div>
-            <div class="emblem"><img src="@(match.HomePlayerPictureUrl?? "/img/tennisNoImg.png")" alt=""></div>
-            @if (match.StartTime > DateTime.UtcNow)
-            {
-                <div class="result">
-                    <input type="number" class="home_team_goals" maxlength='1' value='@(Model.MatchesPredictions.ContainsKey(match.Id) ? Model.MatchesPredictions[match.Id].HomeSets : "")' />
-                    <div class="separator">-</div>
-                    <input type="number" class="away_team_goals" maxlength='1' value='@(Model.MatchesPredictions.ContainsKey(match.Id) ? Model.MatchesPredictions[match.Id].AwaySets : "")' />
-                </div>
-            }
-            else
-            {
-                <div class="finished_result">
-                    <div class="prediction" data-toggle="tooltip" title="Your prediction">
-                        @(Model.MatchesPredictions.ContainsKey(match.Id) ? Model.MatchesPredictions[match.Id].HomeSets : "?")
-                        -
-                        @(Model.MatchesPredictions.ContainsKey(match.Id) ? Model.MatchesPredictions[match.Id].AwaySets : "?")
-                    </div>
-                    <div class="real_result" data-toggle="tooltip" title="Result">
-                        @if (match.Status == "Canc." || match.Status == "Postp.")
-                        {
-                            @match.Status
-                        }
-                        else
-                        {
-                            @(match.HomeSets?.ToString() ?? "?")
-                            <span>-</span>
-                            @(match.AwaySets?.ToString() ?? "?")
-                        }
-                    </div>
-                </div>
-            }
+    }
+    <div id="loadMore" class="btn-lg btn-danger btn-block">Load more</div>
+</div>
 
-            <div class="emblem"><img src="@(match.AwayPlayerPictureUrl?? "/img/tennisNoImg.png")" alt=""></div>
-            <div class="away_team">@match.AwayPlayerName</div>
-        </div>
-        <div class="error"></div>
-    </div>
-}
-
-@section Scripts{
-    <script>
+        @section Scripts{
+            <script>
         $(document).ready(function () {
             //Disable whole page
             $(this).bind('cut copy paste', function (e) {
@@ -89,6 +92,19 @@
             });
             $(function () {
                 $('[data-toggle="tooltip"]').tooltip();
+            });
+            $(function () {
+                var items = $('#all-matches div.match').length;
+                var shown = 6;
+                $('#all-matches div.match:lt(6)').show();
+                $('#loadMore').click(function () {
+                    shown = $('#all-matches div.match:visible').length + 6;
+                    if (shown < items) { $('#all-matches div.match:lt(' + shown + ')').show(); }
+                    else {
+                        $('#all-matches div.match:lt(' + items + ')').show();
+                        $('#loadMore').hide();
+                    }
+                });
             });
         });
 
@@ -180,5 +196,5 @@
         });
 
 
-    </script>
-}
+            </script>
+        }

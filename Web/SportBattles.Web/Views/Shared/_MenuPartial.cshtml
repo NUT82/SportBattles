@@ -34,4 +34,7 @@
         <li><a asp-area="" asp-controller="Tennis" asp-action="Results">Tennis</a></li>
     </ul>
 </li>
-<li class="@ViewData["ContactUs"]"><a asp-area="" asp-controller="Contact" asp-action="Index">Contact Us</a></li>
+@if (this.User.Identity.IsAuthenticated)
+{
+    <li class="@ViewData["ContactUs"]"><a asp-area="" asp-controller="Contact" asp-action="Index">Contact Us</a></li>
+}

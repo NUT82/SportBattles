@@ -1,4 +1,5 @@
 div.match {
+    display: none;
     margin-top: 1%;
     padding-top: 1%;
     padding-bottom: 1%;
@@ -149,5 +150,14 @@ input[type=number]::-webkit-outer-spin-button {
 
 input[type=number] {
   -moz-appearance: textfield;
+}
+
+#loadMore {
+    margin-top: 1%;
+    padding-top: 1%;
+    padding-bottom: 1%;
+    width: 100%;
+    border-radius: 26px;
+    text-align: center;
 }
 /*# sourceMappingURL=style.css.map */

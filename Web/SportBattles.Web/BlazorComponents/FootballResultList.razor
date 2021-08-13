@@ -71,7 +71,7 @@
 
     DateTime Date = DateTime.Today;
     int dateIndex = 0;
-    int tournamentIndex = 0;
+    int tournamentIndex = -1;
     bool isNextTournament = true;
     bool isPreviousTournament = false;
 
@@ -183,7 +183,6 @@
 
     protected override async Task OnInitializedAsync()
     {
-        await Task.Delay(1);
-        UpdateTournamentsButtonsAvailability();
+        NextTournament();
     }
 }
