@@ -18,9 +18,11 @@ Administrator dashboard:
 - ASP.NET [CORE 5.0]
 - ASP.NET CORE view components
 - ASP.NET Core areas
+- Blazor Components
 - MSSQL Server
 - Entity Framework 5.0
 - SendGrid
+- GoogleRecaptcha
 - LiveScore API - for getting matches results and fixtures
 - AngleSharp - for scraping tennis player info
 - Font awesome
