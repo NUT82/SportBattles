@@ -38,6 +38,16 @@
             return notStarted.Concat(startedOrFinished);
         }
 
+        public IEnumerable<T> GetAllWithoutResult<T>()
+        {
+            return this.tennisMatchesRepository.AllAsNoTracking().Where(m => m.HomeSets == null && m.StartTime.Date >= DateTime.UtcNow.Date && m.StartTime.Date < DateTime.UtcNow.Date.AddDays(GlobalConstants.LiveScoreAPIDaysAheadForTennis)).OrderBy(m => m.Tournament.Country.Name).ThenBy(m => m.Tournament.Name).ThenBy(m => m.StartTime).To<T>().ToList();
+        }
+
+        public IEnumerable<T> GetAllWithResult<T>()
+        {
+            return this.tennisMatchesRepository.AllAsNoTracking().Where(m => m.HomeSets != null && m.StartTime.Date > DateTime.UtcNow.Date.AddDays(-GlobalConstants.LiveScoreAPIDaysAheadForFootball) && m.StartTime.Date <= DateTime.UtcNow.Date).OrderBy(m => m.Tournament.Country.Name).ThenBy(m => m.Tournament.Name).ThenBy(m => m.StartTime).To<T>().ToList();
+        }
+
         public IDictionary<int, bool> GetMatchesDoublePointsByGameId(int gameId)
         {
             return this.gameTennisMatchRepository.AllAsNoTracking().Where(g => g.GameId == gameId).Select(m => new KeyValuePair<int, bool>(m.TennisMatchId, m.DoublePoints)).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);

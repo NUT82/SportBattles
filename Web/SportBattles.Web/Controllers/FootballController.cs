@@ -9,6 +9,7 @@
 
     using SportBattles.Services.Data;
     using SportBattles.Web.ViewModels;
+    using SportBattles.Web.ViewModels.Administration.Match;
     using SportBattles.Web.ViewModels.Football;
     using SportBattles.Web.ViewModels.Game;
 
@@ -29,12 +30,22 @@
 
         public IActionResult Schedule()
         {
-            return this.View();
+            var model = new MatchSheduleViewModel
+            {
+                Matches = this.matchesService.GetAllWithoutResult<MatchViewModel>(),
+            };
+
+            return this.View(model);
         }
 
         public IActionResult Results()
         {
-            return this.View();
+            var model = new MatchSheduleViewModel
+            {
+                Matches = this.matchesService.GetAllWithResult<MatchViewModel>(),
+            };
+
+            return this.View(model);
         }
 
         [Authorize]

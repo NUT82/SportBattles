@@ -29,12 +29,22 @@
 
         public IActionResult Schedule()
         {
-            return this.View();
+            var model = new MatchSheduleViewModel
+            {
+                Matches = this.tennisMatchesService.GetAllWithoutResult<MatchViewModel>(),
+            };
+
+            return this.View(model);
         }
 
         public IActionResult Results()
         {
-            return this.View();
+            var model = new MatchSheduleViewModel
+            {
+                Matches = this.tennisMatchesService.GetAllWithResult<MatchViewModel>(),
+            };
+
+            return this.View(model);
         }
 
         [Authorize]

@@ -35,7 +35,17 @@
             var notStarted = this.matchesRepository.AllAsNoTracking().Where(m => m.Games.Any(g => g.GameId == gameId) && m.StartTime > DateTime.UtcNow).OrderBy(m => m.StartTime).To<T>().ToList();
             var startedOrFinished = this.matchesRepository.AllAsNoTracking().Where(m => m.Games.Any(g => g.GameId == gameId) && m.StartTime <= DateTime.UtcNow).OrderByDescending(m => m.StartTime).To<T>().ToList();
 
-            return notStarted.Concat(startedOrFinished);
+            return notStarted.Concat(startedOrFinished).ToList();
+        }
+
+        public IEnumerable<T> GetAllWithoutResult<T>()
+        {
+            return this.matchesRepository.AllAsNoTracking().Where(m => m.HomeGoals == null && m.StartTime.Date >= DateTime.UtcNow.Date && m.StartTime.Date < DateTime.UtcNow.Date.AddDays(GlobalConstants.LiveScoreAPIDaysAheadForFootball)).OrderBy(m => m.Tournament.Country.Name).ThenBy(m => m.Tournament.Name).ThenBy(m => m.StartTime).To<T>().ToList();
+        }
+
+        public IEnumerable<T> GetAllWithResult<T>()
+        {
+            return this.matchesRepository.AllAsNoTracking().Where(m => m.HomeGoals != null && m.StartTime.Date > DateTime.UtcNow.Date.AddDays(-GlobalConstants.LiveScoreAPIDaysAheadForFootball) && m.StartTime.Date <= DateTime.UtcNow.Date).OrderBy(m => m.Tournament.Country.Name).ThenBy(m => m.Tournament.Name).ThenBy(m => m.StartTime).To<T>().ToList();
         }
 
         public IDictionary<int, bool> GetMatchesDoublePointsByGameId(int gameId)

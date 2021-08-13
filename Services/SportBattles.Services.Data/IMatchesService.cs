@@ -10,6 +10,10 @@
     {
         public IEnumerable<T> GetAllByGameId<T>(int gameId);
 
+        public IEnumerable<T> GetAllWithResult<T>();
+
+        public IEnumerable<T> GetAllWithoutResult<T>();
+
         public DateTime GetStartTimeUTC(int matchId);
 
         public bool IsDoublePoint(int gameId, int matchId);

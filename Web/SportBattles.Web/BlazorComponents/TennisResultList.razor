@@ -1,0 +1,189 @@
+﻿@using SportBattles.Web.ViewModels.Tennis
+@using SportBattles.Web.BlazorComponents
+@using SportBattles
+@using System.Net.Http
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components
+@using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Components.Routing
+@using Microsoft.AspNetCore.Components.Web
+@using Microsoft.JSInterop
+<div class="st-table">
+    <div class="row">
+        @if (dateIndex > -6)
+        {
+            <button class="btn-left col-5" @onclick="PreviousDay"><a style="color: white">@DateTime.Today.AddDays(dateIndex - 1).ToString("D")</a></button>
+        }
+
+        @if (dateIndex < 0)
+        {
+            <button class="btn-right col-5 ml-auto" @onclick="NextDay"><a style="color: white">@DateTime.Today.AddDays(dateIndex + 1).ToString("D")</a></button>
+        }
+    </div>
+    <table>
+        <tbody>
+            @if (Matches.Where(m => m.StartTime.ToLocalTime().Date == Date).Count() == 0)
+            {
+                <tr>
+                    <td class="text-danger font-weight-bold">There is no tennis matches with final result for @DateTime.Today.AddDays(dateIndex).ToString("D") yet. Check back later.</td>
+                </tr>
+            }
+            else
+            {
+                foreach (var match in Matches.Where(m => m.StartTime.ToLocalTime().Date == Date && (m.TournamentCountryName + " - " + m.TournamentName) == Tournaments[tournamentIndex]))
+                {
+                    <tr>
+                        <td class="left-team">
+                            <img src="@match.HomePlayerPictureUrl" alt="" style="width:55px; height:66px">
+                            <h4>@match.HomePlayerName</h4>
+                        </td>
+                        <td class="st-option">
+                            <div class="so-text">@match.TournamentCountryName - @match.TournamentName</div>
+                            <h4>@match.HomeSets : @match.AwaySets</h4>
+                            <div class="so-text">@match.StartTimeLocalTime</div>
+                        </td>
+                        <td class="right-team">
+                            <img src="@match.AwayPlayerPictureUrl" alt="" style="width:55px; height:66px">
+                            <h4>@match.AwayPlayerName</h4>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+    <div class="row">
+        @if (isPreviousTournament)
+        {
+            <button class="btn-left col-5" @onclick="PreviousTournament"><a style="color: white">Previous Tournament</a></button>
+        }
+
+        @if (isNextTournament)
+        {
+            <button class="btn-right col-5 ml-auto" @onclick="NextTournament"><a style="color: white">Next Tournament</a></button>
+        }
+    </div>
+</div>
+
+@code {
+    [Parameter] public IEnumerable<MatchViewModel> Matches { get; set; }
+    [Parameter] public List<string> Tournaments { get; set; }
+
+    DateTime Date = DateTime.Today;
+    int dateIndex = 0;
+    int tournamentIndex = 0;
+    bool isNextTournament = true;
+    bool isPreviousTournament = false;
+
+    private void NextDay()
+    {
+        if (dateIndex < 0)
+        {
+            dateIndex++;
+            Date = DateTime.Today.AddDays(dateIndex);
+        }
+        tournamentIndex = -1;
+        NextTournament();
+    }
+
+    private void PreviousDay()
+    {
+        if (dateIndex > -6)
+        {
+            dateIndex--;
+            Date = DateTime.Today.AddDays(dateIndex);
+        }
+        tournamentIndex = -1;
+        NextTournament();
+    }
+
+    private void NextTournament()
+    {
+        while (tournamentIndex < Tournaments.Count() - 1)
+        {
+            tournamentIndex++;
+            if (IsMatchesInTournament())
+            {
+                break;
+            }
+        }
+
+        UpdateTournamentsButtonsAvailability();
+    }
+
+    private void PreviousTournament()
+    {
+        while (tournamentIndex > 0)
+        {
+            tournamentIndex--;
+            if (IsMatchesInTournament())
+            {
+                break;
+            }
+        }
+
+        UpdateTournamentsButtonsAvailability();
+    }
+
+    private bool IsMatchesInTournament()
+    {
+        return Matches.Where(m => m.StartTime.ToLocalTime().Date == Date && (m.TournamentCountryName + " - " + m.TournamentName) == Tournaments[tournamentIndex]).Count() != 0;
+    }
+
+    private void UpdateTournamentsButtonsAvailability()
+    {
+        if (IsNextTournamentHasMatches())
+        {
+            isNextTournament = true;
+        }
+        else
+        {
+            isNextTournament = false;
+        }
+
+        if (IsPreviousTournamentHasMatches())
+        {
+            isPreviousTournament = true;
+        }
+        else
+        {
+            isPreviousTournament = false;
+        }
+    }
+
+    private bool IsNextTournamentHasMatches()
+    {
+        var currenttournamentIndex = tournamentIndex;
+        while (currenttournamentIndex < Tournaments.Count() - 1)
+        {
+            currenttournamentIndex++;
+            if (Matches.Where(m => m.StartTime.ToLocalTime().Date == Date && (m.TournamentCountryName + " - " + m.TournamentName) == Tournaments[currenttournamentIndex]).Count() > 0)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private bool IsPreviousTournamentHasMatches()
+    {
+        var currenttournamentIndex = tournamentIndex;
+        while (currenttournamentIndex > 0)
+        {
+            currenttournamentIndex--;
+            if (Matches.Where(m => m.StartTime.ToLocalTime().Date == Date && (m.TournamentCountryName + " - " + m.TournamentName) == Tournaments[currenttournamentIndex]).Count() > 0)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Task.Delay(1);
+        UpdateTournamentsButtonsAvailability();
+    }
+}
