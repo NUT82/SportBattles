@@ -35,7 +35,6 @@
             modelBuilder.Entity<Match>(t => t.HasIndex(m => new { m.HomeTeamId, m.AwayTeamId, m.StartTime }).IsUnique());
             modelBuilder.Entity<TennisPlayer>(t => t.HasIndex(cn => new { cn.CountryId, cn.Name }).IsUnique());
             modelBuilder.Entity<TennisMatch>(t => t.HasIndex(tm => new { tm.HomePlayerId, tm.AwayPlayerId, tm.StartTime }).IsUnique());
-
         }
     }
 }
