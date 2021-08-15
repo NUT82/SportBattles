@@ -36,7 +36,7 @@
     },
     {
       "type": "Microsoft.Resources/deployments",
-      "name": "[concat(parameters('resourceGroupName'), 'Deployment', uniqueString(concat('sportbattlesconfig', subscription().subscriptionId)))]",
+      "name": "[concat(parameters('resourceGroupName'), 'Deployment', uniqueString(concat('sportbattles', subscription().subscriptionId)))]",
       "resourceGroup": "[parameters('resourceGroupName')]",
       "apiVersion": "2019-10-01",
       "dependsOn": [
@@ -55,7 +55,7 @@
               "sku": {
                 "name": "free"
               },
-              "name": "sportbattlesConfig",
+              "name": "sportbattles",
               "apiVersion": "2020-06-01"
             }
           ]

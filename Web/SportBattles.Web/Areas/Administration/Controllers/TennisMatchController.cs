@@ -49,8 +49,8 @@
             await this.liveScoreApi.CreateJsonFilesForAllMatchesAsync(
                 this.yesterday,
                 this.yesterday.AddDays(GlobalConstants.LiveScoreAPIDaysAheadForTennis),
-                this.configuration.GetValue<string>("X-RapidAPI-Key-Tennis"),
-                this.configuration.GetValue<string>("X-RapidAPI-Host"),
+                this.configuration["X-RapidAPI-Key-Tennis"],
+                this.configuration["X-RapidAPI-Host"],
                 "Tennis");
 
             return this.RedirectToAction("Index", "Game");
@@ -66,8 +66,8 @@
             await this.liveScoreApi.CreateJsonFilesForAllMatchesAsync(
                 date.Value,
                 date.Value,
-                this.configuration.GetValue<string>("X-RapidAPI-Key-Tennis"),
-                this.configuration.GetValue<string>("X-RapidAPI-Host"),
+                this.configuration["X-RapidAPI-Key-Tennis"],
+                this.configuration["X-RapidAPI-Host"],
                 "Tennis");
 
             return this.RedirectToAction("Index", "Game");

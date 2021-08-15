@@ -55,8 +55,8 @@
             await this.liveScoreApi.CreateJsonFilesForAllMatchesAsync(
                 this.yesterday,
                 this.yesterday.AddDays(GlobalConstants.LiveScoreAPIDaysAheadForFootball),
-                this.configuration.GetValue<string>("X-RapidAPI-Key"),
-                this.configuration.GetValue<string>("X-RapidAPI-Host"),
+                this.configuration["X-RapidAPI-Key"],
+                this.configuration["X-RapidAPI-Host"],
                 "Soccer");
 
             return this.RedirectToAction("Index", "Game");
@@ -72,8 +72,8 @@
             await this.liveScoreApi.CreateJsonFilesForAllMatchesAsync(
                 date.Value,
                 date.Value,
-                this.configuration.GetValue<string>("X-RapidAPI-Key"),
-                this.configuration.GetValue<string>("X-RapidAPI-Host"),
+                this.configuration["X-RapidAPI-Key"],
+                this.configuration["X-RapidAPI-Host"],
                 "Soccer");
 
             return this.RedirectToAction("Index", "Game");
