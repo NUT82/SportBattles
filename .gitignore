@@ -65,6 +65,8 @@ artifacts/
 appsettings.json
 appsettings.Development.json
 appsettings.Production.json
+**/wwwroot/lib
+**/wwwroot/json
 
 # ASP.NET Scaffolding
 ScaffoldingReadMe.txt
