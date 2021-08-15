@@ -2,6 +2,7 @@
 ## Project Introduction
 
 **SportBattles Website** is my defense project for **ASP.NET Core MVC** course at [SoftUni](https://softuni.bg/ "SoftUni") (May-August 2021).
+Project is hosted to Azure at: https://sportbattles.azurewebsites.net/, you may register ang give your predictions ;)
 
 ## :pencil2: Overview
 
