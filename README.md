@@ -3,6 +3,8 @@
 
 **SportBattles Website** is my defense project for **ASP.NET Core MVC** course at [SoftUni](https://softuni.bg/ "SoftUni") (May-August 2021).
 
+Project is hosted to Azure at: https://sportbattles.azurewebsites.net/, you may register ang give your predictions :wink:
+
 ## :pencil2: Overview
 
 **SportBattles Website** is a website where you can compete with other fans of sports predictions. Currently supported sports are football and tennis, and there are different types of games to choose from (exact score, under / over 2.5 goals, winner only, etc.). You can choose to play alone against other players or make a team with a friend and compete together against other teams.
