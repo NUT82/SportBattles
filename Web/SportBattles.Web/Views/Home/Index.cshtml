@@ -33,16 +33,20 @@
                     continue;
                 }
                 <div class="col-sm-6 p-0">
-                    <div class="soccer-item set-bg" data-setbg="img/@game.SportName-terrain.jpg">
-                        <div class="si-tag">@game.SportName</div>
-                        <div class="si-text">
-                            <h5><a asp-area="" asp-controller="Game" asp-action="Info" asp-route-id="@game.Id">@game.DisplayName</a></h5>
-                            <ul>
-                                <li><i class="fa fa-futbol-o"></i>@(game.MatchesCount == 0 ? game.TennisMatchesCount : game.MatchesCount) Matches</li>
-                                <li><i class="fa fa-user-o"></i>@game.UsersCount Players</li>
-                            </ul>
+                    <a asp-area="" asp-controller="Game" asp-action="Info" asp-route-id="@game.Id">
+                        <div class="soccer-item set-bg" data-setbg="img/@game.SportName-terrain.jpg">
+                            <div class="si-tag">@game.SportName</div>
+                            <div class="si-text">
+                                <h5 style="color: white">
+                                    @game.DisplayName
+                                </h5>
+                                <ul>
+                                    <li><i class="fa fa-futbol-o"></i>@(game.MatchesCount == 0 ? game.TennisMatchesCount : game.MatchesCount) Matches</li>
+                                    <li><i class="fa fa-user-o"></i>@game.UsersCount Players</li>
+                                </ul>
+                            </div>
                         </div>
-                    </div>
+                    </a>
                 </div>
             }
         </div>

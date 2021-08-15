@@ -20,7 +20,7 @@
         [Display(Name = "Content of the message")]
         public string Content { get; set; }
 
-        ////[GoogleReCaptchaValidation]
-        ////public string RecaptchaValue { get; set; }
+        [GoogleReCaptchaValidation]
+        public string RecaptchaValue { get; set; }
     }
 }

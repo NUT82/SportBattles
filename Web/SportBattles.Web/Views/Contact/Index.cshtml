@@ -1,4 +1,4 @@
-@*@inject Microsoft.Extensions.Configuration.IConfiguration Configuration*@
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
 @{
     this.ViewData["Title"] = "Contact us";
     this.ViewData["Contact"] = "active";
@@ -31,7 +31,7 @@
                             By clicking the "Send us a message" button, you confirm that you are familiar with and agree with our
                             <a asp-area="" asp-controller="Home" asp-action="Privacy">privacy policy.</a>
                         </p>
-                        @*<input type="hidden" id="RecaptchaValue" name="RecaptchaValue" />*@
+                        <input type="hidden" id="RecaptchaValue" name="RecaptchaValue" />
                         <button type="submit">Send us a message</button>
                     </form>
                 </div>
@@ -42,12 +42,12 @@
 <!-- Contact Section End -->
 @section Scripts
 {
-    @*<script src="https://www.google.com/recaptcha/api.js?render=@this.Configuration["GoogleReCaptcha:Key"]"></script>
+    <script src="https://www.google.com/recaptcha/api.js?render=@this.Configuration["GoogleReCaptcha:Key"]"></script>
         <script>
             grecaptcha.ready(function () {
                 grecaptcha.execute('@this.Configuration["GoogleReCaptcha:Key"]', { action: 'contact_form' }).then(function (token) {
                     document.getElementById("RecaptchaValue").value = token;
                 });
             });
-        </script>*@
+        </script>
 }

@@ -11,6 +11,20 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="wwwroot\json\**" />
+	  <Content Remove="wwwroot\json\**" />
+	  <EmbeddedResource Remove="wwwroot\json\**" />
+	  <None Remove="wwwroot\json\**" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<MsDeploySkipRules Include="CustomSkipFolder">
+			<ObjectName>dirPath</ObjectName>
+			<AbsolutePath>wwwroot\json\</AbsolutePath>
+		</MsDeploySkipRules>
+	</ItemGroup>
+
+	<ItemGroup>
 		<AdditionalFiles Include="..\..\stylecop.json" />
 	</ItemGroup>
 
@@ -46,10 +60,6 @@
 		<ProjectReference Include="..\..\Services\SportBattles.Services\SportBattles.Services.csproj" />
 		<ProjectReference Include="..\SportBattles.Web.Infrastructure\SportBattles.Web.Infrastructure.csproj" />
 		<ProjectReference Include="..\SportBattles.Web.ViewModels\SportBattles.Web.ViewModels.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<Folder Include="wwwroot\json\" />
 	</ItemGroup>
 
 	<ProjectExtensions>
