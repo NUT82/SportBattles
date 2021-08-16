@@ -21,4 +21,15 @@
             }
         });
     </script>
+    <script>
+        function ConverDateTime() {
+            var offset = luxon.DateTime.now().offset;
+            $(".so-text.time").each(function (index, e) {
+                var currentDateTime = $(e).attr("value");
+                var dateTime = luxon.DateTime.fromISO(currentDateTime);
+                var dateToLocal = dateTime.plus({ minutes: offset }).toFormat("dd LLLL yyyy HH':'mm");
+                $(e).text(dateToLocal);
+            });
+        };
+    </script>
 }

@@ -19,7 +19,7 @@
 
         public DateTime StartTime { get; set; }
 
-        public string StartTimeLocalTime => this.StartTime.ToLocalTime().ToString("dd.MM.yyyy HH:mm");
+        public string StartTimeISO => this.StartTime.ToString("s");
 
         public string Status { get; set; }
 

@@ -59,6 +59,7 @@ div.teams_result {
     -webkit-align-items: center;
     align-items: center;
     font-size: 20px;
+    min-height: 58px;
 }
 
 div.home_team {

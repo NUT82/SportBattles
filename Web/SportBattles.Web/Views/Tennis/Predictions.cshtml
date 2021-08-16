@@ -34,7 +34,7 @@
                     }
                 </div>
             </div>
-            <div class="startDate">@match.StartTimeLocalTime</div>
+            <div class="startDate">@match.StartTimeISO</div>
             <div class="teams_result">
                 <div class="home_team">@match.HomePlayerName</div>
                 <div class="emblem"><img src="@(match.HomePlayerPictureUrl?? "/img/tennisNoImg.png")" alt=""></div>
@@ -75,12 +75,22 @@
             <div class="error"></div>
         </div>
     }
-    <div id="loadMore" class="btn-lg btn-danger btn-block">Load more</div>
+    <div id="loadMore" class="btn-lg btn-danger btn-block" style="display:none">Load more</div>
 </div>
 
         @section Scripts{
             <script>
         $(document).ready(function () {
+            //DateTime Convert
+            $(function () {
+                var offset = luxon.DateTime.now().offset;
+                $(".startDate").each(function (index, e) {
+                    var currentDateTime = e.innerText;
+                    var dateTime = luxon.DateTime.fromISO(currentDateTime);
+                    var dateToLocal = dateTime.plus({ minutes: offset }).toFormat("dd LLLL yyyy HH':'mm");
+                    $(e).text(dateToLocal);
+                });
+            });
             //Disable whole page
             $(this).bind('cut copy paste', function (e) {
                 e.preventDefault();
@@ -95,11 +105,17 @@
             });
             $(function () {
                 var items = $('#all-matches div.match').length;
-                var shown = 6;
-                $('#all-matches div.match:lt(6)').show();
+                var matchesToPredict = $(".home_team_goals").length;
+                if (matchesToPredict < 3) {
+                    matchesToPredict = 3;
+                }
+                $('#all-matches div.match:lt(' + matchesToPredict + ')').show();
+                if (items > $('#all-matches div.match:visible').length) {
+                    $('#loadMore').show();
+                }
                 $('#loadMore').click(function () {
-                    shown = $('#all-matches div.match:visible').length + 6;
-                    if (shown < items) { $('#all-matches div.match:lt(' + shown + ')').show(); }
+                    matchesToPredict = $('#all-matches div.match:visible').length + 6;
+                    if (matchesToPredict < items) { $('#all-matches div.match:lt(' + matchesToPredict + ')').show(); }
                     else {
                         $('#all-matches div.match:lt(' + items + ')').show();
                         $('#loadMore').hide();

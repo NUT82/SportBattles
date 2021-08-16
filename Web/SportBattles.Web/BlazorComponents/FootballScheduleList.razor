@@ -9,6 +9,7 @@
 @using Microsoft.AspNetCore.Components.Routing
 @using Microsoft.AspNetCore.Components.Web
 @using Microsoft.JSInterop
+@inject IJSRuntime JSRuntime;
 
 <div class="row mr-0 ml-0 mt-3">
     @if (dateIndex > 0)
@@ -47,7 +48,7 @@
                                             <td class="st-option">
                                                 <div class="so-text">@match.TournamentCountryName - @match.TournamentName</div>
                                                 <h4>VS</h4>
-                                                <div class="so-text">@match.StartTime</div>
+                                                <div class="so-text time" value="@match.StartTimeISO"></div>
                                             </td>
                                             <td class="right-team">
                                                 <img src="@match.AwayTeamEmblemUrl" alt="" style="width:60px; height:60px">
@@ -197,5 +198,11 @@
         await Task.Delay(1);
         tournamentIndex = -1;
         NextTournament();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await JSRuntime.InvokeVoidAsync("ConverDateTime");
+        await base.OnAfterRenderAsync(firstRender);
     }
 }

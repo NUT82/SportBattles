@@ -8,7 +8,7 @@
 @section Heads{
     <link rel="stylesheet" href="~/css/stylearrow.css" type="text/css" asp-append-version="true" />
 }
-<div class="time"></div>
+
 <component type="typeof(FootballResultList)" render-mode="ServerPrerendered" param-Matches="Model.Matches" param-Tournaments="Model.Tournaments" />
 
 @section Scripts
@@ -24,5 +24,16 @@
     <script>
         var offset = luxon.DateTime.now().offset;
         console.log(offset);
+    </script>
+    <script>
+        function ConverDateTime() {
+            var offset = luxon.DateTime.now().offset;
+            $(".so-text.time").each(function (index, e) {
+                var currentDateTime = $(e).attr("value");
+                var dateTime = luxon.DateTime.fromISO(currentDateTime);
+                var dateToLocal = dateTime.plus({ minutes: offset }).toFormat("dd LLLL yyyy HH':'mm");
+                $(e).text(dateToLocal);
+            });
+        };
     </script>
 }
