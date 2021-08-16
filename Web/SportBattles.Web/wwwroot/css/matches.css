@@ -45,58 +45,69 @@ div.error {
 }
 
 div.startDate, div.league {
-  position: relative;
-  text-align: center;
-  font-size: 14px;
+    position: relative;
+    text-align: center;
+    font-size: 14px;
 }
 
 div.teams_result {
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
+    -webkit-justify-content: center;
+    justify-content: center;
+    -webkit-align-items: center;
+    align-items: center;
     font-size: 20px;
 }
 
 div.home_team {
-  width: 30%;
-  margin: auto;
-  text-align: right;
+    -webkit-flex-grow: 2;
+    flex-grow: 2;
+    flex-basis: 35%;
+    text-align: right;
+    overflow: hidden;
+    -ms-text-overflow: clip;
+    -o-text-overflow: clip;
+    text-overflow: clip;
 }
 
 div.away_team {
-    width: 30%;
-    margin: auto;
+    -webkit-flex-grow: 2;
+    flex-grow: 2;
+    flex-basis: 35%;
     text-align: left;
+    overflow: hidden;
+    -ms-text-overflow: clip;
+    -o-text-overflow: clip;
+    text-overflow: clip;
 }
 
 div.emblem {
-    margin: .5%;
-    min-width: 55px;
+    margin: 0.5%;
+    flex-basis: 10%;
+    max-width: 60px;
+    text-align: center;
 }
 
 .emblem img {
     -moz-border-radius: 10px;
     -webkit-border-radius: 10px;
     border-radius: 10px;
-    width: 55px;
 }
 
 div.separator {
-    padding: 3px;
-    margin: auto;
     font-size: 30px;
 }
 
 div.result {
-    display: -webkit-box;
-    display: -ms-flexbox;
+    margin: 0.1%;
+    -webkit-flex-grow: 1;
+    flex-grow: 1;
+    flex-basis: 10%;
     display: flex;
-    text-align: center;
-    margin-left: 0px;
-    margin-right: 0px;
-    margin-block: auto;
-    height: 55px;
-    min-width: 60px;
+    -webkit-justify-content: center;
+    justify-content: center;
 }
 
 div.finished_result {
@@ -129,8 +140,9 @@ div.prediction {
 
 input {
   border: solid 4px;
-  text-align: center;
   padding: 0;
+  margin:auto;
+  text-align: center;
   font-size: 30px;
   width: 30px;
   letter-spacing: 0;

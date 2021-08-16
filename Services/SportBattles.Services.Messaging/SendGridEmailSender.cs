@@ -25,9 +25,9 @@
                 throw new ArgumentException("Subject and message should be provided.");
             }
 
-            var fromAddress = new EmailAddress(GlobalConstants.SystemEmail, "Svetoslav Petrov");
+            var fromAddress = new EmailAddress(GlobalConstants.SystemEmail, GlobalConstants.SystemName);
             var toAddress = new EmailAddress(to);
-            var message = MailHelper.CreateSingleEmail(fromAddress, toAddress, subject, null, htmlContent + $"Sender userName: {from}");
+            var message = MailHelper.CreateSingleEmail(fromAddress, toAddress, subject, null, htmlContent + $"<br>Sender userName: {from}");
             if (attachments?.Any() == true)
             {
                 foreach (var attachment in attachments)

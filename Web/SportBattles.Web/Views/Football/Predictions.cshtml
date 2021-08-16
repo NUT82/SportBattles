@@ -36,6 +36,7 @@
             <div class="startDate">@match.StartTimeLocalTime</div>
             <div class="teams_result">
                 <div class="home_team">@match.HomeTeamName</div>
+                @*<div class="home_team">@String.Join(" ", match.HomeTeamName.Split().Select(n => n.Length > 10 ? n.Remove(8) + "..." : n))</div>*@
                 <div class="emblem"><img src="@(match.HomeTeamEmblemUrl?? "/img/noTeamEmblem.png")" alt=""></div>
                 @if (match.StartTime > DateTime.UtcNow)
                 {
@@ -69,6 +70,7 @@
                 }
                 <div class="emblem"><img src="@(match.AwayTeamEmblemUrl?? "/img/noTeamEmblem.png")" alt=""></div>
                 <div class="away_team">@match.AwayTeamName</div>
+                @*<div class="away_team">@String.Join(" ", match.AwayTeamName.Split().Select(n => n.Length > 10 ? n.Remove(8) + "..." : n))</div>*@
             </div>
             <div class="error"></div>
         </div>
