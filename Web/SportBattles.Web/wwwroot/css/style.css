@@ -1424,8 +1424,18 @@ ol {
 -----------------------*/
 
 .schedule-section {
-	padding-top: 70px;
-	padding-bottom: 70px;
+	padding-top: 0;
+	padding-bottom: 0;
+}
+
+.schedule-section .container{
+	padding-left: 0;
+	padding-right: 0;
+}
+
+.schedule-section .container{
+	padding-left: -15px;
+	padding-right: -15px;
 }
 
 .schedule-text .st-title {
@@ -1475,7 +1485,7 @@ ol {
 }
 
 .schedule-text .st-table table tbody tr td.left-team {
-	padding-left: 20px;
+	padding-left: 0px;
 }
 
 .schedule-text .st-table table tbody tr td.left-team img {
@@ -1489,7 +1499,7 @@ ol {
 
 .schedule-text .st-table table tbody tr td.right-team {
 	text-align: right;
-	padding-right: 20px;
+	padding-right: 0px;
 }
 
 .schedule-text .st-table table tbody tr td.right-team img {
@@ -2566,16 +2576,17 @@ ol {
 		float: none;
 		margin-right: 0;
 	}
-	.schedule-text .st-table table tbody tr td.left-team h4 {
-		overflow: visible;
-		display: block;
-		margin-top: 10px;
-	}
+    .schedule-text .st-table table tbody tr td.left-team h4 {
+        font-size: large;
+        display: block;
+        margin-top: 10px;
+    }
 	.schedule-text .st-table table tbody tr td.right-team img {
 		float: none;
 		margin-left: 0;
 	}
 	.schedule-text .st-table table tbody tr td.right-team h4 {
+		font-size: large;
 		float: none;
 		margin-top: 10px;
 	}

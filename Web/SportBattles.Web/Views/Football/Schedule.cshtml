@@ -8,18 +8,8 @@
 @section Heads{
     <link rel="stylesheet" href="~/css/stylearrow.css" type="text/css" asp-append-version="true" />
 }
-<section class="schedule-section spad">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12 left-blog-pad">
-                <div class="schedule-text">
-                    <component type="typeof(FootballScheduleList)" render-mode="ServerPrerendered" param-Matches="Model.Matches" param-Tournaments="Model.Tournaments" />
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
 
+<component type="typeof(FootballScheduleList)" render-mode="ServerPrerendered" param-Matches="Model.Matches" param-Tournaments="Model.Tournaments" />
 
 @section Scripts
 {

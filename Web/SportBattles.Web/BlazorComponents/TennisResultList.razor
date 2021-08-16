@@ -9,60 +9,71 @@
 @using Microsoft.AspNetCore.Components.Routing
 @using Microsoft.AspNetCore.Components.Web
 @using Microsoft.JSInterop
-<div class="st-table">
-    <div class="row">
-        @if (dateIndex > -6)
-        {
-            <button class="btn-left col-5" @onclick="PreviousDay"><a style="color: white">@DateTime.Today.AddDays(dateIndex - 1).ToString("D")</a></button>
-        }
 
-        @if (dateIndex < 0)
-        {
-            <button class="btn-right col-5 ml-auto" @onclick="NextDay"><a style="color: white">@DateTime.Today.AddDays(dateIndex + 1).ToString("D")</a></button>
-        }
-    </div>
-    <table>
-        <tbody>
-            @if (Matches.Where(m => m.StartTime.ToLocalTime().Date == Date).Count() == 0)
-            {
-                <tr>
-                    <td class="text-danger font-weight-bold">There is no tennis matches with final result for @DateTime.Today.AddDays(dateIndex).ToString("D") yet. Check back later.</td>
-                </tr>
-            }
-            else
-            {
-                foreach (var match in Matches.Where(m => m.StartTime.ToLocalTime().Date == Date && (m.TournamentCountryName + " - " + m.TournamentName) == Tournaments[tournamentIndex]))
-                {
-                    <tr>
-                        <td class="left-team">
-                            <img src="@match.HomePlayerPictureUrl" alt="" style="width:55px; height:66px">
-                            <h4>@match.HomePlayerName</h4>
-                        </td>
-                        <td class="st-option">
-                            <div class="so-text">@match.TournamentCountryName - @match.TournamentName</div>
-                            <h4>@match.HomeSets : @match.AwaySets</h4>
-                            <div class="so-text">@match.StartTimeLocalTime</div>
-                        </td>
-                        <td class="right-team">
-                            <img src="@match.AwayPlayerPictureUrl" alt="" style="width:55px; height:66px">
-                            <h4>@match.AwayPlayerName</h4>
-                        </td>
-                    </tr>
-                }
-            }
-        </tbody>
-    </table>
-    <div class="row">
-        @if (isPreviousTournament)
-        {
-            <button class="btn-left col-5" @onclick="PreviousTournament"><a style="color: white">Previous Tournament</a></button>
-        }
+<div class="row mr-0 ml-0 mt-3">
+    @if (dateIndex > -6)
+    {
+        <button class="btn-left col-5" @onclick="PreviousDay"><a style="color: white">@DateTime.Today.AddDays(dateIndex - 1).ToString("D")</a></button>
+    }
 
-        @if (isNextTournament)
-        {
-            <button class="btn-right col-5 ml-auto" @onclick="NextTournament"><a style="color: white">Next Tournament</a></button>
-        }
+    @if (dateIndex < 0)
+    {
+        <button class="btn-right col-5 ml-auto" @onclick="NextDay"><a style="color: white">@DateTime.Today.AddDays(dateIndex + 1).ToString("D")</a></button>
+    }
+</div>
+<section class="schedule-section spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 left-blog-pad">
+                <div class="schedule-text">
+                    <div class="st-table">
+                        <table>
+                            <tbody>
+                                @if (Matches.Where(m => m.StartTime.ToLocalTime().Date == Date).Count() == 0)
+                                {
+                                    <tr>
+                                        <td class="text-danger text-center font-weight-bold pt-5">There is no tennis matches with final result for @DateTime.Today.AddDays(dateIndex).ToString("D") yet. Check back later.</td>
+                                    </tr>
+                                }
+                                else
+                                {
+                                    foreach (var match in Matches.Where(m => m.StartTime.ToLocalTime().Date == Date && (m.TournamentCountryName + " - " + m.TournamentName) == Tournaments[tournamentIndex]))
+                                    {
+                                        <tr>
+                                            <td class="left-team">
+                                                <img src="@match.HomePlayerPictureUrl" alt="" style="width:55px; height:66px">
+                                                <h4>@match.HomePlayerName</h4>
+                                            </td>
+                                            <td class="st-option">
+                                                <div class="so-text">@match.TournamentCountryName - @match.TournamentName</div>
+                                                <h4>@match.HomeSets : @match.AwaySets</h4>
+                                                <div class="so-text">@match.StartTimeLocalTime</div>
+                                            </td>
+                                            <td class="right-team">
+                                                <img src="@match.AwayPlayerPictureUrl" alt="" style="width:55px; height:66px">
+                                                <h4>@match.AwayPlayerName</h4>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+</section>
+<div class="row mr-0 ml-0 mb-3">
+    @if (isPreviousTournament)
+    {
+        <button class="btn-left col-5" @onclick="PreviousTournament"><a style="color: white">Previous Tournament</a></button>
+    }
+
+    @if (isNextTournament)
+    {
+        <button class="btn-right col-5 ml-auto" @onclick="NextTournament"><a style="color: white">Next Tournament</a></button>
+    }
 </div>
 
 @code {
