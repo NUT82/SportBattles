@@ -89,6 +89,15 @@
       "files": [
         "js/dataTables.responsive.min.js"
       ]
+    },
+    {
+      "library": "luxon@2.0.2",
+      "destination": "wwwroot/lib/luxon/",
+      "files": [
+        "README.md",
+        "build/global/luxon.js",
+        "build/global/luxon.js.map"
+      ]
     }
   ]
 }

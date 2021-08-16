@@ -13,12 +13,12 @@
 <div class="row mr-0 ml-0 mt-3">
     @if (dateIndex > 0)
     {
-        <button class="btn-left col-5" @onclick="PreviousDay"><a style="color: white">@DateTime.Today.AddDays(dateIndex - 1).ToString("D")</a></button>
+        <button class="btn-left col-5" @onclick="PreviousDay"><a style="color: white">@DateTime.Today.AddDays(dateIndex - 1).ToString("dd MMM")</a></button>
     }
 
     @if (dateIndex < 6)
     {
-        <button class="btn-right col-5 ml-auto" @onclick="NextDay"><a style="color: white">@DateTime.Today.AddDays(dateIndex + 1).ToString("D")</a></button>
+        <button class="btn-right col-5 ml-auto" @onclick="NextDay"><a style="color: white">@DateTime.Today.AddDays(dateIndex + 1).ToString("dd MMM")</a></button>
     }
 </div>
 <section class="schedule-section spad">
@@ -47,7 +47,7 @@
                                             <td class="st-option">
                                                 <div class="so-text">@match.TournamentCountryName - @match.TournamentName</div>
                                                 <h4>VS</h4>
-                                                <div class="so-text">@match.StartTimeLocalTime</div>
+                                                <div class="so-text">@match.StartTime</div>
                                             </td>
                                             <td class="right-team">
                                                 <img src="@match.AwayTeamEmblemUrl" alt="" style="width:60px; height:60px">

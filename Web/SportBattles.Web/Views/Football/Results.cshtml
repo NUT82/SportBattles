@@ -8,7 +8,7 @@
 @section Heads{
     <link rel="stylesheet" href="~/css/stylearrow.css" type="text/css" asp-append-version="true" />
 }
-
+<div class="time"></div>
 <component type="typeof(FootballResultList)" render-mode="ServerPrerendered" param-Matches="Model.Matches" param-Tournaments="Model.Tournaments" />
 
 @section Scripts
@@ -20,5 +20,9 @@
                 builder.withUrl("/_blazor");
             }
         });
+    </script>
+    <script>
+        var offset = luxon.DateTime.now().offset;
+        console.log(offset);
     </script>
 }
