@@ -6,7 +6,10 @@
     using System.Linq;
     using System.Net.Http;
     using System.Reflection;
+    using System.Text;
     using System.Threading.Tasks;
+
+    using Azure.Storage.Blobs;
 
     using Newtonsoft.Json.Linq;
 
@@ -15,6 +18,13 @@
 
     public class LiveScoreApi : ILiveScoreApi
     {
+        private readonly BlobServiceClient blobServiceClient;
+
+        public LiveScoreApi(BlobServiceClient blobServiceClient)
+        {
+            this.blobServiceClient = blobServiceClient;
+        }
+
         public async Task CreateJsonFilesForAllMatchesAsync(DateTime startDate, DateTime endDate, string apiKey, string apiHost, string category)
         {
             if (!GlobalConstants.LiveScoreApiCategories.Contains(category))
@@ -41,8 +51,10 @@
                 using (var response = await client.SendAsync(request))
                 {
                     response.EnsureSuccessStatusCode();
-                    using FileStream fileStream = File.Create(@"wwwroot/json/" + category + currDate + ".json");
-                    await response.Content.CopyToAsync(fileStream);
+                    var container = this.blobServiceClient.GetBlobContainerClient("api-json");
+                    var fileClient = container.GetBlobClient(category + currDate + ".json");
+
+                    await fileClient.UploadAsync(await response.Content.ReadAsStreamAsync(), true);
                 }
 
                 startDate = startDate.AddDays(1);
@@ -97,15 +109,22 @@
             while (startDate <= endDate)
             {
                 var currDate = startDate.ToString("yyyyMMdd");
-                if (!File.Exists(@"wwwroot/json/Soccer" + currDate + ".json"))
+
+                var container = this.blobServiceClient.GetBlobContainerClient("api-json");
+                var blobFile = container.GetBlobs().Where(f => f.Name == "Soccer" + currDate + ".json").FirstOrDefault();
+                if (blobFile is null)
                 {
                     startDate = startDate.AddDays(1);
                     continue;
                 }
 
-                var jsonObj = JObject.Parse(File.ReadAllText(@"wwwroot/json/Soccer" + currDate + ".json"));
-                matchesJson.AddRange(jsonObj["Stages"].ToObject<IEnumerable<FootballMatchJson>>().ToList());
-                startDate = startDate.AddDays(1);
+                var fileClient = container.GetBlobClient(blobFile.Name);
+                using (var sr = new StreamReader(fileClient.DownloadStreaming().Value.Content))
+                {
+                    var jsonObj = JObject.Parse(sr.ReadToEnd());
+                    matchesJson.AddRange(jsonObj["Stages"].ToObject<IEnumerable<FootballMatchJson>>().ToList());
+                    startDate = startDate.AddDays(1);
+                }
             }
 
             var matches = new List<FootballMatchServiceModel>();
@@ -148,15 +167,22 @@
             while (startDate <= endDate)
             {
                 var currDate = startDate.ToString("yyyyMMdd");
-                if (!File.Exists(@"wwwroot/json/Tennis" + currDate + ".json"))
+
+                var container = this.blobServiceClient.GetBlobContainerClient("api-json");
+                var blobFile = container.GetBlobs().Where(f => f.Name == "Tennis" + currDate + ".json").FirstOrDefault();
+                if (blobFile is null)
                 {
                     startDate = startDate.AddDays(1);
                     continue;
                 }
 
-                var jsonObj = JObject.Parse(File.ReadAllText(@"wwwroot/json/Tennis" + currDate + ".json"));
-                tennisMatchesJson.AddRange(jsonObj["Stages"].ToObject<IEnumerable<TennisMatchJson>>().ToList());
-                startDate = startDate.AddDays(1);
+                var fileClient = container.GetBlobClient(blobFile.Name);
+                using (var sr = new StreamReader(fileClient.DownloadStreaming().Value.Content))
+                {
+                    var jsonObj = JObject.Parse(sr.ReadToEnd());
+                    tennisMatchesJson.AddRange(jsonObj["Stages"].ToObject<IEnumerable<TennisMatchJson>>().ToList());
+                    startDate = startDate.AddDays(1);
+                }
             }
 
             var matches = new List<TennisMatchServiceModel>();

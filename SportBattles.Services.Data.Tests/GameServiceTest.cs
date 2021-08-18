@@ -524,7 +524,6 @@
                 },
             };
             await this.service.AddTennisMatches(1, tennisMatchesServiceModel);
-
         }
 
         private void InitializeMapper() => AutoMapperConfig.

@@ -2,6 +2,8 @@
 {
     using System.Reflection;
 
+    using Azure.Storage.Blobs;
+
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
@@ -63,6 +65,7 @@
             services.AddDatabaseDeveloperPageExceptionFilter();
 
             services.AddSingleton(this.configuration);
+            services.AddSingleton(x => new BlobServiceClient(this.configuration["ConnectionStrings:AzureBlob"]));
 
             // Data repositories
             services.AddScoped(typeof(IDeletableEntityRepository<>), typeof(EfDeletableEntityRepository<>));
