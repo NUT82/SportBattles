@@ -12,13 +12,11 @@
     {
         private readonly IDeletableEntityRepository<GamePoint> gamePointRepository;
         private readonly IRepository<GamePointGameType> gamePointGameTypeRepository;
-        private readonly IDeletableEntityRepository<GameType> gameTypeRepository;
 
-        public GamePointsService(IDeletableEntityRepository<GamePoint> gamePointRepository, IRepository<GamePointGameType> gamePointGameTypeRepository, IDeletableEntityRepository<GameType> gameTypeRepository)
+        public GamePointsService(IDeletableEntityRepository<GamePoint> gamePointRepository, IRepository<GamePointGameType> gamePointGameTypeRepository)
         {
             this.gamePointRepository = gamePointRepository;
             this.gamePointGameTypeRepository = gamePointGameTypeRepository;
-            this.gameTypeRepository = gameTypeRepository;
         }
 
         public async Task Add(string name, string description)

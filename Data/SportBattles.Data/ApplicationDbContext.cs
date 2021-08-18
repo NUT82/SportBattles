@@ -53,6 +53,8 @@
 
         public DbSet<GameMatch> GameMatch { get; set; }
 
+        public DbSet<GamePoint> GamePoint { get; set; }
+
         public DbSet<GamePointGameType> GamePointGameType { get; set; }
 
         public DbSet<GameTennisMatch> GameTennisMatch { get; set; }
