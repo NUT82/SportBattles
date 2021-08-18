@@ -21,13 +21,5 @@
             var tournaments = this.tournamentsService.GetAllForSportInCountry<TournamentsViewModel>(sportId, countryId);
             return this.Json(tournaments);
         }
-
-        [HttpPost]
-        public async Task<IActionResult> AddToSportInCountry([FromBody] TournamentsViewModel inputModel)
-        {
-            ////TODO
-            await this.tournamentsService.AddToSportInCountry(1, 2, "not implement");
-            return this.Json(inputModel);
-        }
     }
 }

@@ -17,11 +17,6 @@
             this.tournamentRepository = tournamentRepository;
         }
 
-        public Task<int> AddToSportInCountry(int sportId, int countryId, string name)
-        {
-            throw new System.NotImplementedException();
-        }
-
         public IEnumerable<T> GetAllForSportInCountry<T>(int sportId, int countryId)
         {
             return this.tournamentRepository.AllAsNoTracking().Where(t => t.SportId == sportId && t.CountryId == countryId).OrderBy(t => t.Name).To<T>().ToList();

@@ -8,7 +8,5 @@
     public interface ITournamentsService
     {
         IEnumerable<T> GetAllForSportInCountry<T>(int sportId, int countryId);
-
-        Task<int> AddToSportInCountry(int sportId, int countryId, string name);
     }
 }

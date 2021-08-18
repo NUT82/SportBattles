@@ -11,17 +11,20 @@
     using SportBattles.Data.Common.Repositories;
     using SportBattles.Data.Models;
     using SportBattles.Services.Mapping;
+    using SportBattles.Services.TennisPlayerPictureScraper;
     using SportBattles.Web.ViewModels.Administration.Game;
     using SportBattles.Web.ViewModels.Game;
     using SportBattles.Web.ViewModels.Home;
     using Xunit;
+
+    using Match = SportBattles.Data.Models.Match;
 
     public class GameServiceTest
     {
         private Mock<IDeletableEntityRepository<GameType>> mockGameTypeRepository;
         private Mock<IDeletableEntityRepository<GamePoint>> mockGamePointRepository;
         private Mock<IDeletableEntityRepository<Game>> mockGameRepository;
-        private Mock<IDeletableEntityRepository<SportBattles.Data.Models.Match>> mockMatchRepository;
+        private Mock<IDeletableEntityRepository<Match>> mockMatchRepository;
         private Mock<IDeletableEntityRepository<TennisMatch>> mockTennisMatchRepository;
         private Mock<IDeletableEntityRepository<ApplicationUser>> mockUserRepository;
         private Mock<IDeletableEntityRepository<Tournament>> mockTournamentRepository;
@@ -40,7 +43,7 @@
             this.mockGameTypeRepository = new Mock<IDeletableEntityRepository<GameType>>();
             this.mockGamePointRepository = new Mock<IDeletableEntityRepository<GamePoint>>();
             this.mockGameRepository = new Mock<IDeletableEntityRepository<Game>>();
-            this.mockMatchRepository = new Mock<IDeletableEntityRepository<SportBattles.Data.Models.Match>>();
+            this.mockMatchRepository = new Mock<IDeletableEntityRepository<Match>>();
             this.mockTennisMatchRepository = new Mock<IDeletableEntityRepository<TennisMatch>>();
             this.mockUserRepository = new Mock<IDeletableEntityRepository<ApplicationUser>>();
             this.mockTournamentRepository = new Mock<IDeletableEntityRepository<Tournament>>();
@@ -364,6 +367,163 @@
             result = this.service.GetRanking(3);
             Assert.True(result.Count() == 3);
             Assert.True(result.First().UserName == "Test User2");
+        }
+
+        [Fact]
+        public async Task AddMatchesToGameAddedMatchSuccesfullWithGivenFootballMatchServiceModel()
+        {
+            var countryBG = new Country { Name = "Bulgaria" };
+            var countryES = new Country { Name = "Spain" };
+            var teams = new List<Team>()
+            {
+                new Team { Name = "Test Team 1", Id = 1, Country = countryBG, EmblemUrl = "emblem1" },
+                new Team { Name = "Test Team 2", Id = 2, Country = countryES, EmblemUrl = "emblem2" },
+                new Team { Name = "Barcelona", Id = 3, Country = countryES, EmblemUrl = "barca.png" },
+                new Team { Name = "Real Madrid", Id = 4, Country = countryES, EmblemUrl = "real.png" },
+            };
+            var tournaments = new List<Tournament>()
+            {
+                new Tournament { Id = 1, Country = countryBG, Name = "Test Tournament 1" },
+                new Tournament { Id = 2, Country = countryES, Name = "Test Tournament 2" },
+            };
+
+            this.mockTournamentRepository.Setup(x => x.AllAsNoTracking()).Returns(tournaments.AsQueryable());
+            var matches = new List<Match>()
+            {
+                new Match { Id = 1, StartTime = DateTime.Today.AddHours(2), Status = "NS", HomeTeam = teams[0], AwayTeam = teams[1], Tournament = tournaments[0] },
+                new Match { Id = 2, StartTime = DateTime.Today.AddHours(2), Status = "NS", HomeTeam = teams[2], AwayTeam = teams[3], Tournament = tournaments[1] },
+            };
+            var gameMatches = new List<GameMatch>()
+            {
+                new GameMatch { Match = matches[0] },
+                new GameMatch { Match = matches[1] },
+            };
+            var games = new List<Game>() { new Game { Id = 1, Matches = gameMatches, } };
+            this.mockGameRepository.Setup(x => x.All()).Returns(games.AsQueryable());
+
+            var matchesServiceModel = new List<FootballMatchServiceModel>
+            {
+                new FootballMatchServiceModel
+                {
+                    Tournament = "Test Tournament 2", Country = countryES.Name, HomeTeam = "Barcelona", AwayTeam = "Real Madrid", HomeTeamEmblemUrl = "barca.png", AwayTeamEmblemUrl = "real.png", HomeTeamCountry = "Spain", AwayTeamCountry = "Spain",
+                },
+            };
+            this.mockMatchRepository.Setup(x => x.AllAsNoTracking()).Returns(matches.AsQueryable());
+            this.mockMatchRepository.Setup(x => x.AddAsync(It.IsAny<Match>())).Callback((Match m) => matches.Add(m));
+
+            await this.service.AddMatches(1, matchesServiceModel);
+            Assert.Contains(matches, m => m.HomeTeam.Name == "Barcelona");
+
+            matchesServiceModel = new List<FootballMatchServiceModel>
+            {
+                new FootballMatchServiceModel
+                {
+                    Tournament = "Test Tournament 2", Country = countryES.Name, HomeTeam = "Barcelona", AwayTeam = "Real Madrid", HomeTeamEmblemUrl = "real.png", AwayTeamEmblemUrl = "barca.png", HomeTeamCountry = "Spain", AwayTeamCountry = "Spain",
+                    StartTimeUTC = DateTime.Today.AddHours(2),
+                },
+            };
+            matches.Add(new Match { Id = 3, StartTime = DateTime.Today.AddHours(2), Status = "NS", HomeTeamId = 3, AwayTeamId = 4, Tournament = tournaments[1] });
+
+            var mockTeamRepository = new Mock<IDeletableEntityRepository<Team>>();
+            var mockedService = new TeamsService(mockTeamRepository.Object, this.mockCountryRepository.Object);
+            mockTeamRepository.Setup(x => x.All()).Returns(teams.AsQueryable());
+            this.mockTeamService.Setup(x => x.Add(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(async (string a, string b, string c) => await mockedService.Add(a, b, c));
+
+            this.mockGameRepository.Setup(x => x.AddAsync(It.IsAny<Game>())).Callback((Game g) => games.Add(g));
+            await this.service.AddMatches(1, matchesServiceModel);
+            Assert.Contains(matches, m => m.HomeTeamId == 3 && m.AwayTeamId == 4);
+        }
+
+        [Fact]
+        public async Task AddTennisMatchesToGameAddedTennisMatchSuccesfullWithGivenTennisMatchServiceModel()
+        {
+            var countryBG = new Country { Name = "Bulgaria" };
+            var countryES = new Country { Name = "Spain" };
+            var players = new List<TennisPlayer>()
+            {
+                new TennisPlayer { Name = "Test Team 1", Id = 1, Country = countryBG, PictureUrl = "pic1" },
+                new TennisPlayer { Name = "Test Team 2", Id = 2, Country = countryES, PictureUrl = "pic2" },
+                new TennisPlayer { Name = "Grigor Dimitrov", Id = 3, Country = countryES, PictureUrl = "grisho.png" },
+                new TennisPlayer { Name = "Rafael Nadal", Id = 4, Country = countryES, PictureUrl = "nadal.png" },
+            };
+            var tournaments = new List<Tournament>()
+            {
+                new Tournament { Id = 1, Country = countryBG, Name = "Test Tournament 1" },
+                new Tournament { Id = 2, Country = countryES, Name = "Test Tournament 2" },
+            };
+
+            this.mockTournamentRepository.Setup(x => x.AllAsNoTracking()).Returns(tournaments.AsQueryable());
+            this.mockTournamentRepository.Setup(x => x.AddAsync(It.IsAny<Tournament>())).Callback((Tournament t) => tournaments.Add(t));
+            var tennisMatches = new List<TennisMatch>()
+            {
+                new TennisMatch { Id = 1, StartTime = DateTime.Today.AddHours(2), Status = "NS", HomePlayer = players[0], AwayPlayer = players[1], Tournament = tournaments[0] },
+                new TennisMatch { Id = 2, StartTime = DateTime.Today.AddHours(2), Status = "NS", HomePlayer = players[2], AwayPlayer = players[3], Tournament = tournaments[1] },
+            };
+            var gameTennisMatches = new List<GameTennisMatch>()
+            {
+                new GameTennisMatch { TennisMatch = tennisMatches[0] },
+                new GameTennisMatch { TennisMatch = tennisMatches[1] },
+            };
+            var games = new List<Game>() { new Game { Id = 1, TennisMatches = gameTennisMatches, } };
+            this.mockGameRepository.Setup(x => x.All()).Returns(games.AsQueryable());
+
+            var tennisMatchesServiceModel = new List<TennisMatchServiceModel>
+            {
+                new TennisMatchServiceModel
+                {
+                    Tournament = "Test Tournament 2", Country = countryES.Name, HomeTeam = "Grigor Dimitrov", AwayTeam = "Rafael Nadal", HomeTeamCountry = "Spain", AwayTeamCountry = "Spain",
+                },
+            };
+            this.mockTennisMatchRepository.Setup(x => x.AllAsNoTracking()).Returns(tennisMatches.AsQueryable());
+            this.mockTennisMatchRepository.Setup(x => x.AddAsync(It.IsAny<TennisMatch>())).Callback((TennisMatch m) => tennisMatches.Add(m));
+
+            await this.service.AddTennisMatches(1, tennisMatchesServiceModel);
+            Assert.Contains(tennisMatches, m => m.HomePlayer.Name == "Grigor Dimitrov");
+
+            tennisMatchesServiceModel = new List<TennisMatchServiceModel>
+            {
+                new TennisMatchServiceModel
+                {
+                    Tournament = "Test Tournament 2", Country = countryES.Name, HomeTeam = "Grigor Dimitrov", AwayTeam = "Rafael Nadal", HomeTeamCountry = "Spain", AwayTeamCountry = "Spain",
+                    StartTimeUTC = DateTime.Today.AddHours(2),
+                },
+            };
+            tennisMatches.Add(new TennisMatch { Id = 3, StartTime = DateTime.Today.AddHours(2), Status = "NS", HomePlayerId = 3, AwayPlayerId = 4, Tournament = tournaments[1] });
+
+            var mockPlayerRepository = new Mock<IDeletableEntityRepository<TennisPlayer>>();
+            var mockedService = new TennisPlayersService(mockPlayerRepository.Object, this.mockCountryRepository.Object, new Mock<ITennisExplorerScraperService>().Object);
+            mockPlayerRepository.Setup(x => x.All()).Returns(players.AsQueryable());
+            this.mockTennisPlayersService.Setup(x => x.Add(It.IsAny<string>(), It.IsAny<string>())).Returns(async (string a, string b) => await mockedService.Add(a, b));
+
+            this.mockGameRepository.Setup(x => x.AddAsync(It.IsAny<Game>())).Callback((Game g) => games.Add(g));
+            await this.service.AddTennisMatches(1, tennisMatchesServiceModel);
+            Assert.Contains(tennisMatches, m => m.HomePlayerId == 3 && m.AwayPlayerId == 4);
+
+            tennisMatchesServiceModel = new List<TennisMatchServiceModel>
+            {
+                new TennisMatchServiceModel
+                {
+                    Tournament = "Test Tournament 3", Country = countryES.Name, HomeTeam = "Grigor Dimitrov", AwayTeam = "Rafael Nadal", HomeTeamCountry = "Spain", AwayTeamCountry = "Spain",
+                    StartTimeUTC = DateTime.Today.AddHours(2),
+                },
+            };
+            var sports = new List<Sport>() { new Sport { Id = 1, Name = "Tennis" } };
+            this.mockSportRepository.Setup(x => x.AllAsNoTracking()).Returns(sports.AsQueryable());
+            var countries = new List<Country>() { countryBG, countryES };
+            this.mockCountryRepository.Setup(x => x.AllAsNoTracking()).Returns(countries.AsQueryable());
+            await this.service.AddTennisMatches(1, tennisMatchesServiceModel);
+
+            Assert.Contains(tournaments, t => t.Name == "Test Tournament 3");
+
+            tennisMatchesServiceModel = new List<TennisMatchServiceModel>
+            {
+                new TennisMatchServiceModel
+                {
+                    Tournament = "Test Tournament 2", Country = countryES.Name, HomeTeam = "Grigor Dimitrov", AwayTeam = "Rafael Nadal", HomeTeamCountry = "Spain", AwayTeamCountry = "Spain",
+                    StartTimeUTC = DateTime.Today.AddHours(3),
+                },
+            };
+            await this.service.AddTennisMatches(1, tennisMatchesServiceModel);
 
         }
 
