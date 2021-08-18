@@ -11,20 +11,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <Compile Remove="wwwroot\json\**" />
-	  <Content Remove="wwwroot\json\**" />
-	  <EmbeddedResource Remove="wwwroot\json\**" />
-	  <None Remove="wwwroot\json\**" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<MsDeploySkipRules Include="CustomSkipFolder">
-			<ObjectName>dirPath</ObjectName>
-			<AbsolutePath>wwwroot\json\</AbsolutePath>
-		</MsDeploySkipRules>
-	</ItemGroup>
-
-	<ItemGroup>
 		<AdditionalFiles Include="..\..\stylecop.json" />
 	</ItemGroup>
 
