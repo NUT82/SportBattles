@@ -25,6 +25,7 @@ Administrator dashboard:
 - Entity Framework 5.0
 - SendGrid
 - GoogleRecaptcha
+- Azure Blob Storage - to save json files det from API
 - LiveScore API - for getting matches results and fixtures
 - AngleSharp - for scraping tennis player info
 - Font awesome
