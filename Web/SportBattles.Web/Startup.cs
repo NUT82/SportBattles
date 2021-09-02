@@ -60,7 +60,7 @@
                     {
                         options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
                     }).AddRazorRuntimeCompilation();
-            services.AddServerSideBlazor();
+            services.AddServerSideBlazor().AddHubOptions(x => x.MaximumReceiveMessageSize = 131072);
             services.AddRazorPages();
             services.AddDatabaseDeveloperPageExceptionFilter();
 

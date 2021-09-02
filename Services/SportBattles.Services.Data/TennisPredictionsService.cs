@@ -65,6 +65,11 @@
                 return null;
             }
 
+            if (prediction.TennisMatch.Status != "FT")
+            {
+                return 0;
+            }
+
             var multiplier = this.tennisMatchesService.IsDoublePoint(prediction.GameId, prediction.TennisMatchId) ? 2 : 1;
             var maxResult = 0;
             foreach (var gamePoint in prediction.Game.GameType.GamePoints)

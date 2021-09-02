@@ -26,11 +26,18 @@
 
             if (tennisPlayer == null)
             {
-                var countryId = this.countryRepository.AllAsNoTracking().Where(c => c.Name == countryName).Select(c => c.Id).FirstOrDefault();
+                var country = this.countryRepository.AllAsNoTracking().Where(c => c.Name == countryName).FirstOrDefault();
+                if (country == null)
+                {
+                    country = new Country { Name = countryName };
+                    await this.countryRepository.AddAsync(country);
+                    await this.countryRepository.SaveChangesAsync();
+                }
+
                 tennisPlayer = new TennisPlayer
                 {
                     Name = name,
-                    CountryId = countryId,
+                    CountryId = country.Id,
                     PictureUrl = this.sofaScoreScraperService.GetTennisPlayerPictureUrl(name),
                 };
 

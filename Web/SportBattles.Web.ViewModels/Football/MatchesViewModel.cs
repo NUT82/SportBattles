@@ -17,7 +17,7 @@
 
         public DateTime MatchStartTime { get; set; }
 
-        public string MatchStartTimeLocalTime => this.MatchStartTime.ToLocalTime().ToString("dd.MM.yyyy HH:mm");
+        public string MatchStartTimeISO => this.MatchStartTime.ToString("s");
 
         public string MatchTournamentName { get; set; }
 

@@ -5,7 +5,7 @@
 @model SportBattles.Web.ViewModels.Game.GameInfoViewModel
 <!-- Schedule Section Begin -->
 <section class="schedule-section spad">
-    <div class="container">
+    <div class="container pt-2">
         <div class="row">
             <div class="col-lg-8 left-blog-pad">
                 <div class="schedule-text">
@@ -33,7 +33,7 @@
                                                 <td class="st-option">
                                                     <div class="so-text">@match.MatchTournamentCountryName - @match.MatchTournamentName</div>
                                                     <h4>VS</h4>
-                                                    <div class="so-text">@match.MatchStartTimeLocalTime</div>
+                                                    <div class="so-text startDate">@match.MatchStartTimeISO</div>
                                                 </td>
                                                 <td class="right-team">
                                                     <img src="@match.MatchAwayTeamEmblemUrl" style="width: 50px; height: 50px" alt="">
@@ -54,7 +54,7 @@
                                                 <td class="st-option">
                                                     <div class="so-text">@tennisMatch.TennisMatchTournamentCountryName - @tennisMatch.TennisMatchTournamentName</div>
                                                     <h4>VS</h4>
-                                                    <div class="so-text">@tennisMatch.TennisMatchStartTimeLocalTime</div>
+                                                    <div class="so-text startDate">@tennisMatch.TennisMatchStartTimeISO</div>
                                                 </td>
                                                 <td class="right-team">
                                                     <img src="@tennisMatch.TennisMatchAwayPlayerPictureUrl" style="width: 50px; height: 50px" alt="">
@@ -86,7 +86,7 @@
                             <h5>Scoring system</h5>
                         </div>
                         <ul>
-                            @foreach (var point in Model.GameTypeGamePoints)
+                            @foreach (var point in Model.GameTypeGamePointsOrdered)
                             {
                                 <li>@point.NameValue point <i data-toggle="tooltip" title="@point.GamePointDescription" class="fa fa-info-circle"></i></li>
                             }
@@ -110,6 +110,16 @@
     <script>
         $(function () {
             $('[data-toggle="tooltip"]').tooltip();
+        });
+        //DateTime Convert
+        $(function () {
+            var offset = luxon.DateTime.now().offset;
+            $(".startDate").each(function (index, e) {
+                var currentDateTime = e.innerText;
+                var dateTime = luxon.DateTime.fromISO(currentDateTime);
+                var dateToLocal = dateTime.plus({ minutes: offset }).toFormat("dd LLLL yyyy HH':'mm");
+                $(e).text(dateToLocal);
+            });
         });
     </script>
 }

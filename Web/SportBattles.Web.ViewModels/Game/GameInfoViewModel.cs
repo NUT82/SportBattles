@@ -19,6 +19,8 @@
 
         public ICollection<GamePointViewModel> GameTypeGamePoints { get; set; }
 
+        public ICollection<GamePointViewModel> GameTypeGamePointsOrdered => this.GameTypeGamePoints.OrderByDescending(gtgp => gtgp.Value).ToList();
+
         public string GameTypeSport => this.GameTypeName.Split()[0];
 
         public string GameTypeDescription { get; set; }

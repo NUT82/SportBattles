@@ -49,6 +49,10 @@
                                             <td class="st-option">
                                                 <div class="so-text">@match.TournamentCountryName - @match.TournamentName</div>
                                                 <h4>@match.HomeSets : @match.AwaySets</h4>
+                                                @if (match.Status != "FT")
+                                                {
+                                                    <h5>@match.Status</h5>
+                                                }
                                                 <div class="so-text time" value="@match.StartTimeISO"></div>
                                             </td>
                                             <td class="right-team">
@@ -162,7 +166,6 @@
         {
             isPreviousTournament = false;
         }
-        InvokeAsync(() => { StateHasChanged(); }).GetAwaiter().GetResult();
     }
 
     private bool IsNextTournamentHasMatches()
@@ -198,6 +201,7 @@
     protected override async Task OnInitializedAsync()
     {
         await Task.Delay(1);
+
         tournamentIndex = -1;
         NextTournament();
     }

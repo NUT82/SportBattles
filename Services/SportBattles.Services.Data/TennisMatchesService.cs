@@ -80,7 +80,7 @@
             foreach (var match in yesterdayMatches.Where(m => m.HomeSets == null || m.AwaySets == null))
             {
                 var currentMatch = matches.Where(m => m.HomeTeam == match.HomePlayer.Name && m.AwayTeam == match.AwayPlayer.Name).FirstOrDefault();
-                if (currentMatch == null || currentMatch.Status == "NS" || currentMatch.Status == "HT" || currentMatch.Status.Contains("'"))
+                if (currentMatch == null || currentMatch.Status.Contains("S"))
                 {
                     continue;
                 }

@@ -63,7 +63,7 @@
             }
 
             var start = document.DocumentElement.TextContent.IndexOf("[{") + 1;
-            if (start < 0)
+            if (start <= 0)
             {
                 return null;
             }
